@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_main"
+            android:icon="@drawable/menu_v2hot"
+            android:title="V2EX热帖" />
+        <item
+            android:id="@+id/nav_resource"
+            android:icon="@drawable/menu_v2new2"
+            android:title="V2EX新帖" />
+        <item
+            android:id="@+id/nav_climate"
+            android:icon="@drawable/ic_menu_share"
+            android:title="V2EX节点" />
+        <item
+            android:id="@+id/nav_transport"
+            android:icon="@drawable/menu_weather"
+            android:title="天气预报" />
+        <item
+            android:id="@+id/nav_disaster"
+            android:icon="@drawable/menu_map"
+            android:title="中国地图册" />
+    </group>
+
+    <item android:title="Others">
+    <menu>
+    <item
+    android:id="@+id/nav_world"
+    android:icon="@drawable/ic_menu_share"
+    android:title="世界及其他国家" />
+    <item
+    android:id="@+id/nav_history"
+    android:icon="@drawable/ic_menu_send"
+    android:title="中国历史地图" />
+    </menu>
+    </item>
+
+</menu>
