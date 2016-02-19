@@ -14,7 +14,8 @@ import android.view.MenuItem;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import shengtianyang.atlas.R;
-import shengtianyang.atlas.fragment.ChinaMainFragment;
+import shengtianyang.atlas.fragment.AtlasFragment;
+import shengtianyang.atlas.fragment.FlashFragment;
 import shengtianyang.atlas.fragment.V2HotFragment;
 import shengtianyang.atlas.fragment.V2NodeFragment;
 import shengtianyang.atlas.fragment.WeatherFragment;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity
     DrawerLayout drawer;
     @Bind(R.id.nav_view)
     NavigationView navigationView;
+    private long exitTime;
 
     private FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -43,12 +45,12 @@ public class MainActivity extends AppCompatActivity
 
     private void initView() {
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-
 
 
         fragmentManager.beginTransaction()
@@ -64,6 +66,12 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
     }
 
     @Override
@@ -94,6 +102,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        toolbar.setTitle(item.getTitle());
         if (id == R.id.nav_main) {
             fragmentManager.beginTransaction()
                     .replace(R.id.fg_main, new V2HotFragment(Constant.URL_V2_HOT), null)
@@ -115,12 +124,15 @@ public class MainActivity extends AppCompatActivity
                     .commit();
         } else if (id == R.id.nav_disaster) {
             fragmentManager.beginTransaction()
-                    .replace(R.id.fg_main, new ChinaMainFragment(new int[]{
+                    .replace(R.id.fg_main, new AtlasFragment(new int[]{
                             R.drawable.zhongguozhengqu, R.drawable.zhongguodixing,
                             R.drawable.zhongguodishi
                     }), null)
                     .commit();
         } else if (id == R.id.nav_world) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fg_main, new FlashFragment(), null)
+                    .commit();
 
         } else if (id == R.id.nav_history) {
 
@@ -131,4 +143,24 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (keyCode == KeyEvent.KEYCODE_BACK
+//                && event.getAction() == KeyEvent.ACTION_DOWN) {
+//            if ((System.currentTimeMillis() - exitTime) > 2000) {
+//                SuperToast(MainActivity.this,"再按一次退出程序");
+//                exitTime = System.currentTimeMillis();
+//            } else {
+//                finish();
+//            }
+//            return true;
+//        }
+//
+//        return super.onKeyDown(keyCode, event);
+//    }
+//    private void SuperToast(Context context,String content){
+//        SuperActivityToast.create((Activity) context,content,
+//                888, Style.getStyle(Style.BLUE, SuperToast.Animations.FLYIN)).show();
+//
+//    }
 }

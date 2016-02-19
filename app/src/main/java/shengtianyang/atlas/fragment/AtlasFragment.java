@@ -20,7 +20,7 @@ import shengtianyang.atlas.phtodraweeview.MultiTouchViewPager;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ChinaMainFragment extends Fragment {
+public class AtlasFragment extends Fragment {
 
     private int[] drawble;
     @Bind(R.id.vp_main)
@@ -31,7 +31,7 @@ public class ChinaMainFragment extends Fragment {
     TextView tv;
 
 
-    public ChinaMainFragment(int[] drawble) {
+    public AtlasFragment(int[] drawble) {
         this.drawble = drawble;
     }
 

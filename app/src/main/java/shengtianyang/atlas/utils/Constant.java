@@ -8,8 +8,8 @@ public class Constant {
     public static final String URL_V2_HOT = "https://www.v2ex.com/api/topics/hot.json";
     public static final String URL_V2_NODE = "https://www.v2ex.com/api/nodes/show.json?name=";
     public static final String URL_V2_MEMBER = "https://www.v2ex.com/api/members/show.json";
-        public static final String HF_WEATHER_APIKEY = "72242cee88b7717053de6a045245e582";
-        public static final String HF_WEATHER_API ="http://apis.baidu.com/heweather/weather/free";
+    public static final String HF_WEATHER_APIKEY = "72242cee88b7717053de6a045245e582";
+    public static final String HF_WEATHER_API = "http://apis.baidu.com/heweather/weather/free";
 
     public static final String URL_BAIDU_WEATHER = "http://api.map.baidu.com/telematics/v3/weather";
     public static final String BAIDU_AK = "EIBnkLNbPzLIrKZoWIMXhb37";
