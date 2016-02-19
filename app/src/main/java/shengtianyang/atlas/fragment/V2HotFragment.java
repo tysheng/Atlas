@@ -20,11 +20,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import shengtianyang.atlas.R;
-import shengtianyang.atlas.adapter.RecyclerAdapter;
+import shengtianyang.atlas.adapter.V2HotAdapter;
 import shengtianyang.atlas.app.AtlasApp;
 
 /**
@@ -36,7 +37,7 @@ public class V2HotFragment extends Fragment {
     RecyclerView rvV2;
     @Bind(R.id.swipe)
     SwipeRefreshLayout swipe;
-    private RecyclerAdapter mAdapter;
+    private V2HotAdapter mAdapter;
     private ArrayList<HashMap<String, String>> data;
 
     public V2HotFragment(String url) {
@@ -67,20 +68,37 @@ public class V2HotFragment extends Fragment {
                         JSONObject object = array.optJSONObject(i);
                         HashMap<String, String> map = new HashMap<String, String>();
                         map.put("title", object.optString("title"));
-                        map.put("member", object.optString("member"));
-                        map.put("node", object.optString("node"));
-                        map.put("last_touched", object.optString("last_touched"));
+                        map.put("avatar_normal", object.optJSONObject("member").optString("avatar_normal"));
+                        map.put("username", object.optJSONObject("member").optString("username"));
+                        map.put("node_title", object.optJSONObject("node").optString("title"));
+                        map.put("last_modified", object.optString("last_modified"));
                         map.put("url", object.optString("url"));
+                        map.put("id", object.optString("id"));
                         map.put("content", object.optString("content"));
+                        map.put("replies", object.optString("replies"));
                         data.add(map);
                     }
-                    mAdapter = new RecyclerAdapter(getContext(), data);
-                    mAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
+                    mAdapter = new V2HotAdapter(getContext(), data);
+                    mAdapter.setOnItemClickListener(new V2HotAdapter.OnItemClickListener() {
                         @Override
                         public void onClickListener(View view, int position) {
+//                            getFragmentManager().beginTransaction()
+//                                    .addToBackStack(null)
+//                                    .replace(R.id.fg_main, new WebviewFragment(data.get(position).get("url")))
+//                                    .commit();
+                            Map<String,String> map = data.get(position);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("avatar_normal",map.get("avatar_normal"));
+                            bundle.putString("username",map.get("username"));
+                            bundle.putString("node_title",map.get("node_title"));
+                            bundle.putString("content", map.get("content"));
+                            bundle.putString("title", map.get("title"));
+                            bundle.putString("last_modified", map.get("last_modified"));
+                            V2ThreadFragment v2ThreadFragment=new V2ThreadFragment(data.get(position).get("id"));
+                            v2ThreadFragment.setArguments(bundle);
                             getFragmentManager().beginTransaction()
                                     .addToBackStack(null)
-                                    .replace(R.id.fg_main, new WebviewFragment(data.get(position).get("url")))
+                                    .replace(R.id.fg_main,v2ThreadFragment)
                                     .commit();
                         }
                     });

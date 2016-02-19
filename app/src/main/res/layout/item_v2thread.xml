@@ -1,0 +1,52 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/drawee_reply"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="5dp" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tv_reply_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="sty"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_reply_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tv_reply_author"
+            android:text="4小时前"
+            android:textColor="#aaa" />
+
+
+        <TextView
+            android:id="@+id/tv_reply_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_reply_author"
+            android:paddingTop="10dp"
+            android:text="按照这种方法添加成功 已感谢"
+            android:textColor="@color/black"
+            android:textSize="7pt" />
+
+
+    </RelativeLayout>
+
+</LinearLayout>
+
+

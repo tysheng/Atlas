@@ -1,4 +1,4 @@
-package shengtianyang.atlas.adapter;
+package shengtianyang.atlas.utils;
 
 import android.annotation.TargetApi;
 import android.os.Build;
@@ -8,7 +8,7 @@ import android.view.View;
 /**
  * Created by shengtianyang on 16/1/31.
  */
-public class Transform implements ViewPager.PageTransformer {
+public class RecyclerTransformAnimation implements ViewPager.PageTransformer {
     private static final float MIN_SCALE = 0.75f;
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)

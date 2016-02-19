@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
 import me.relex.circleindicator.CircleIndicator;
 import shengtianyang.atlas.R;
 import shengtianyang.atlas.adapter.DraweePagerAdapter;
-import shengtianyang.atlas.adapter.Transform;
+import shengtianyang.atlas.utils.RecyclerTransformAnimation;
 import shengtianyang.atlas.phtodraweeview.MultiTouchViewPager;
 
 /**
@@ -41,7 +41,7 @@ public class AtlasFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_china_main, container, false);
         ButterKnife.bind(this, view);
-        viewPager.setPageTransformer(true, new Transform());
+        viewPager.setPageTransformer(true, new RecyclerTransformAnimation());
         viewPager.setAdapter(new DraweePagerAdapter(drawble));
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

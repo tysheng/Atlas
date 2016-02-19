@@ -4,13 +4,19 @@ package shengtianyang.atlas.utils;
  * Created by shengtianyang on 16/2/2.
  */
 public class Constant {
+    //V2EX
     public static final String URL_V2_LASTED = "https://www.v2ex.com/api/topics/latest.json";
     public static final String URL_V2_HOT = "https://www.v2ex.com/api/topics/hot.json";
+    public static final String URL_V2_TOPIC = "https://www.v2ex.com/api/topics/show.json";
+    public static final String URL_V2_REPLY = "https://www.v2ex.com/api/replies/show.json";
     public static final String URL_V2_NODE = "https://www.v2ex.com/api/nodes/show.json?name=";
     public static final String URL_V2_MEMBER = "https://www.v2ex.com/api/members/show.json";
+
+    //和风天气
     public static final String HF_WEATHER_APIKEY = "72242cee88b7717053de6a045245e582";
     public static final String HF_WEATHER_API = "http://apis.baidu.com/heweather/weather/free";
 
+    //百度车联网
     public static final String URL_BAIDU_WEATHER = "http://api.map.baidu.com/telematics/v3/weather";
     public static final String BAIDU_AK = "EIBnkLNbPzLIrKZoWIMXhb37";
 
