@@ -6,7 +6,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.facebook.drawee.backends.pipeline.Fresco;
 
-public class AtlasApp extends Application {
+public class MyApplication extends Application {
 public static RequestQueue requestQueue;
 
     @Override

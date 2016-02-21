@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/webp_background"
+    android:background="@drawable/menu_webp_background"
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -18,7 +18,7 @@
         android:layout_marginTop="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/myavatar"
+        android:src="@drawable/menu_myavatar"
         app:civ_border_width="1dp"
         app:civ_border_color="#FFFFFF"/>
 

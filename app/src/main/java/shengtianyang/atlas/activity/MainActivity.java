@@ -2,6 +2,7 @@ package shengtianyang.atlas.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -16,6 +17,7 @@ import butterknife.ButterKnife;
 import shengtianyang.atlas.R;
 import shengtianyang.atlas.fragment.AtlasFragment;
 import shengtianyang.atlas.fragment.FlashFragment;
+import shengtianyang.atlas.fragment.SettingFragment;
 import shengtianyang.atlas.fragment.V2HotFragment;
 import shengtianyang.atlas.fragment.V2NodeFragment;
 import shengtianyang.atlas.fragment.WeatherFragment;
@@ -103,43 +105,34 @@ public class MainActivity extends AppCompatActivity
 
         toolbar.setTitle(item.getTitle());
         if (id == R.id.nav_main) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fg_main, new V2HotFragment(Constant.URL_V2_HOT), null)
-                    .commit();
-
+            changeFragment(new V2HotFragment(Constant.URL_V2_HOT));
         } else if (id == R.id.nav_transport) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fg_main, new WeatherFragment(), null)
-                    .commit();
-
+            changeFragment(new WeatherFragment());
         } else if (id == R.id.nav_resource) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fg_main, new V2HotFragment(Constant.URL_V2_LASTED), null)
-                    .commit();
-
+            changeFragment(new V2HotFragment(Constant.URL_V2_LASTED));
         } else if (id == R.id.nav_climate) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fg_main, new V2NodeFragment(), null)
-                    .commit();
+            changeFragment(new V2NodeFragment());
         } else if (id == R.id.nav_disaster) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fg_main, new AtlasFragment(new int[]{
-                            R.drawable.zhongguozhengqu, R.drawable.zhongguodixing,
-                            R.drawable.zhongguodishi
-                    }), null)
-                    .commit();
+            changeFragment(new AtlasFragment(new int[]{
+                    R.drawable.zhongguozhengqu, R.drawable.zhongguodixing,
+                    R.drawable.zhongguodishi
+            }));
         } else if (id == R.id.nav_world) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fg_main, new FlashFragment(), null)
-                    .commit();
-
+            changeFragment(new FlashFragment());
         } else if (id == R.id.nav_history) {
+            changeFragment(new SettingFragment());
 
         }
 
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void changeFragment(Fragment fragment) {
+        fragmentManager.beginTransaction()
+                .replace(R.id.fg_main, fragment, null)
+                .commit();
     }
 //    @Override
 //    public boolean onKeyDown(int keyCode, KeyEvent event) {

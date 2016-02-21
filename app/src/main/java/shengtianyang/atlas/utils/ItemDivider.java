@@ -15,7 +15,7 @@ public class ItemDivider
         private Drawable mDivider;
 
         public ItemDivider(Context context) {
-            mDivider = context.getResources().getDrawable(R.drawable.linear);
+            mDivider = context.getResources().getDrawable(R.drawable.rv_linear);
         }
 
         @Override

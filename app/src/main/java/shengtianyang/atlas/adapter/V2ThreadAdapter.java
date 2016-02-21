@@ -22,17 +22,21 @@ import shengtianyang.atlas.utils.TimeStamp;
 /**
  * Created by shengtianyang on 16/1/28.
  */
-public class V2ThreadAdapter extends RecyclerView.Adapter<V2ThreadAdapter.mViewHolder> {
+public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final int TYPE_HEADER = 0;
+    private static final int TYPE_ITEM = 1;
 
     private LayoutInflater layoutInflater;
     private List<HashMap<String, String>> data;
+    private ThreadHeader threadHeader;
     private OnItemClickListener onItemClickListener;
 
 
-    public V2ThreadAdapter(Context context, List<HashMap<String, String>> data) {
+    public V2ThreadAdapter(Context context, List<HashMap<String, String>> data, ThreadHeader threadHeader) {
         this.data = data;
         this.layoutInflater = layoutInflater.from(context);
+        this.threadHeader = threadHeader;
     }
 
     public interface OnItemClickListener {
@@ -44,25 +48,37 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<V2ThreadAdapter.mViewH
     }
 
     @Override
-    public mViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.item_v2thread, parent, false);
-        mViewHolder viewHolder = new mViewHolder(view);
-        return viewHolder;
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == TYPE_HEADER) {
+            View view = layoutInflater.inflate(R.layout.thread_header, parent, false);
+            return new VHHeader(view);
+        } else if (viewType == TYPE_ITEM) {
+            View view = layoutInflater.inflate(R.layout.item_v2thread, parent, false);
+            return new VHItem(view);
+        }
+        throw new RuntimeException("No matches with " + viewType);
     }
 
     @Override
-    public void onBindViewHolder(final mViewHolder holder, final int position) {
-            Map<String, String> map = data.get(position);
-            holder.tvReplyContent.setText(map.get("content"));
-            holder.tvReplyAuthor.setText(map.get("username"));
-            holder.draweeReply.setImageURI(Uri.parse("http:" + map.get("avatar_normal")));
-            String time = TimeStamp.getTimeDifference(Integer.parseInt(map.get("last_modified")));
-            if (time.equals("0")) {
-                time = "刚刚";
-            } else if (time.equals("-1")) {
-                time = "很久很久前";
-            }
-            holder.tvReplyTime.setText(time);
+    public void onBindViewHolder(final RecyclerView.ViewHolder  holder, final int position) {
+        if(holder instanceof VHHeader){
+            VHHeader vhHeader = (VHHeader)holder;
+            vhHeader.draweeTopic.setImageURI(Uri.parse("http:" + threadHeader.getDraweeTopic()));
+            vhHeader.tvTopicAuthor.setText(threadHeader.getTvTopicAuthor());
+            vhHeader.tvTopicContent.setText(threadHeader.getTvTopicContent());
+            vhHeader.tvTopicNode.setText(threadHeader.getTvTopicNode());
+            vhHeader.tvTopicTitle.setText(threadHeader.getTvTopicTitle());
+            vhHeader.tvTopicTime.setText(TimeStamp.getFinalTimeDiffrence(threadHeader.getTvTopicTime()));
+        }else if (holder instanceof VHItem){
+            VHItem vhItem = (VHItem)holder;
+            Map<String, String> map = data.get(position-1);
+            vhItem.tvReplyContent.setText(map.get("content"));
+            vhItem.tvReplyAuthor.setText(map.get("username"));
+            vhItem.draweeReply.setImageURI(Uri.parse("http:" + map.get("avatar_normal")));
+            vhItem.tvReplyTime.setText(TimeStamp.getFinalTimeDiffrence(map.get("last_modified")));
+            vhItem.tvReplyFloor.setText(position+"");
+        }
+
 
 //        holder.tv_time.setText(data.get(position).get("content").equals("")
 //                ? "作者很懒,什么都没写~" : data.get(position).get("content"));
@@ -76,13 +92,22 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<V2ThreadAdapter.mViewH
             });
         }
     }
+    @Override
+    public int getItemViewType(int position) {
+        if(isPositionHeader(position))
+            return TYPE_HEADER;
 
+        return TYPE_ITEM;
+    }
+    private boolean isPositionHeader(int position){
+        return position == 0;
+    }
     @Override
     public int getItemCount() {
-        return data.size();
+        return data.size()+1;
     }
 //    public void addItem(int position){
-//        data.add(position,"new  "+String.format("%.2f",Math.random()*100));
+//        data.toolbar_add(position,"new  "+String.format("%.2f",Math.random()*100));
 //        notifyItemInserted(position);
 //    }
 //    public void deleteItem(int position){
@@ -91,7 +116,7 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<V2ThreadAdapter.mViewH
 //    }
 
 
-    static class mViewHolder extends RecyclerView.ViewHolder {
+    static class VHItem extends RecyclerView.ViewHolder {
         @Bind(R.id.drawee_reply)
         SimpleDraweeView draweeReply;
         @Bind(R.id.tv_reply_author)
@@ -100,11 +125,35 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<V2ThreadAdapter.mViewH
         TextView tvReplyTime;
         @Bind(R.id.tv_reply_content)
         TextView tvReplyContent;
+        @Bind(R.id.tv_reply_floor)
+        TextView tvReplyFloor;
 
-        public mViewHolder(View itemView) {
+        public VHItem(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
     }
+
+    static class VHHeader extends RecyclerView.ViewHolder {
+        @Bind(R.id.drawee_topic)
+        SimpleDraweeView draweeTopic;
+        @Bind(R.id.tv_topic_author)
+        TextView tvTopicAuthor;
+        @Bind(R.id.tv_topic_node)
+        TextView tvTopicNode;
+        @Bind(R.id.tv_topic_time)
+        TextView tvTopicTime;
+        @Bind(R.id.tv_topic_title)
+        TextView tvTopicTitle;
+        @Bind(R.id.tv_topic_content)
+        TextView tvTopicContent;
+
+        public VHHeader(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+    }
+
 }

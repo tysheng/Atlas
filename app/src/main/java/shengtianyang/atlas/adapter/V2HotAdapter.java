@@ -22,7 +22,7 @@ import shengtianyang.atlas.utils.TimeStamp;
 /**
  * Created by shengtianyang on 16/1/28.
  */
-public class V2HotAdapter extends RecyclerView.Adapter<V2HotAdapter.mViewHolder> {
+public class V2HotAdapter extends RecyclerView.Adapter<V2HotAdapter.MyViewHolder> {
 
 
 
@@ -45,14 +45,14 @@ public class V2HotAdapter extends RecyclerView.Adapter<V2HotAdapter.mViewHolder>
     }
 
     @Override
-    public mViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = layoutInflater.inflate(R.layout.item_v2hot, parent, false);
-        mViewHolder viewHolder = new mViewHolder(view);
+        MyViewHolder viewHolder = new MyViewHolder(view);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(final mViewHolder holder, final int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         Map<String, String> map = data.get(position);
         holder.tvTitle.setText(map.get("title"));
         holder.tvNode.setText(map.get("node_title"));
@@ -84,7 +84,7 @@ public class V2HotAdapter extends RecyclerView.Adapter<V2HotAdapter.mViewHolder>
         return data.size();
     }
 //    public void addItem(int position){
-//        data.add(position,"new  "+String.format("%.2f",Math.random()*100));
+//        data.toolbar_add(position,"new  "+String.format("%.2f",Math.random()*100));
 //        notifyItemInserted(position);
 //    }
 //    public void deleteItem(int position){
@@ -93,7 +93,7 @@ public class V2HotAdapter extends RecyclerView.Adapter<V2HotAdapter.mViewHolder>
 //    }
 
 
-    static class mViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.tv_title)
         TextView tvTitle;
@@ -108,7 +108,7 @@ public class V2HotAdapter extends RecyclerView.Adapter<V2HotAdapter.mViewHolder>
         @Bind(R.id.tv_replies)
         TextView tvReplies;
 
-        public mViewHolder(View itemView) {
+        public MyViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

@@ -1,7 +1,7 @@
 package shengtianyang.atlas.fragment;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,7 +26,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import shengtianyang.atlas.R;
 import shengtianyang.atlas.adapter.V2HotAdapter;
-import shengtianyang.atlas.app.AtlasApp;
+import shengtianyang.atlas.app.MyApplication;
 
 /**
  * Created by shengtianyang on 16/1/31.
@@ -82,23 +82,19 @@ public class V2HotFragment extends Fragment {
                     mAdapter.setOnItemClickListener(new V2HotAdapter.OnItemClickListener() {
                         @Override
                         public void onClickListener(View view, int position) {
-//                            getFragmentManager().beginTransaction()
-//                                    .addToBackStack(null)
-//                                    .replace(R.id.fg_main, new WebviewFragment(data.get(position).get("url")))
-//                                    .commit();
-                            Map<String,String> map = data.get(position);
+                            Map<String, String> map = data.get(position);
                             Bundle bundle = new Bundle();
-                            bundle.putString("avatar_normal",map.get("avatar_normal"));
-                            bundle.putString("username",map.get("username"));
-                            bundle.putString("node_title",map.get("node_title"));
+                            bundle.putString("avatar_normal", map.get("avatar_normal"));
+                            bundle.putString("username", map.get("username"));
+                            bundle.putString("node_title", map.get("node_title"));
                             bundle.putString("content", map.get("content"));
                             bundle.putString("title", map.get("title"));
                             bundle.putString("last_modified", map.get("last_modified"));
-                            V2ThreadFragment v2ThreadFragment=new V2ThreadFragment(data.get(position).get("id"));
+                            V2ThreadFragment v2ThreadFragment = new V2ThreadFragment(data.get(position).get("id"));
                             v2ThreadFragment.setArguments(bundle);
                             getFragmentManager().beginTransaction()
                                     .addToBackStack(null)
-                                    .replace(R.id.fg_main,v2ThreadFragment)
+                                    .replace(R.id.fg_main, v2ThreadFragment)
                                     .commit();
                         }
                     });
@@ -122,7 +118,7 @@ public class V2HotFragment extends Fragment {
             }
         });
         stringRequest.setTag("V2HotFragment");
-        AtlasApp.getRequestQueue().add(stringRequest);
+        MyApplication.getRequestQueue().add(stringRequest);
     }
 
     private void initView() {

@@ -23,7 +23,7 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import shengtianyang.atlas.R;
-import shengtianyang.atlas.app.AtlasApp;
+import shengtianyang.atlas.app.MyApplication;
 import shengtianyang.atlas.utils.Constant;
 
 /**
@@ -97,20 +97,20 @@ public class WeatherFragment extends Fragment {
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> header = new HashMap<String, String>();
+                HashMap<String, String> header = new HashMap<>();
                 header.put("apikey", Constant.HF_WEATHER_APIKEY);
                 return header;
             }
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> params = new HashMap<String, String>();
+                HashMap<String, String> params = new HashMap<>();
                 params.put("city", "shaoxing");
                 return params;
             }
         };
         stringRequest.setTag("WeatherFragment");
-        AtlasApp.getRequestQueue().add(stringRequest);
+        MyApplication.getRequestQueue().add(stringRequest);
 
 
         return view;

@@ -4,7 +4,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_main"
-            android:icon="@drawable/menu_v2hot"
+            android:icon="@drawable/menu_safari"
             android:title="Hot" />
         <item
             android:id="@+id/nav_resource"
@@ -12,7 +12,7 @@
             android:title="New" />
         <item
             android:id="@+id/nav_climate"
-            android:icon="@drawable/ic_menu_share"
+            android:icon="@drawable/menu_node"
             android:title="Node" />
         <item
             android:id="@+id/nav_transport"
@@ -24,7 +24,7 @@
             android:title="Atlas" />
         <item
             android:id="@+id/nav_world"
-            android:icon="@drawable/flashlight"
+            android:icon="@drawable/menu_lantern"
             android:title="Flash" />
     </group>
 
@@ -32,8 +32,8 @@
         <menu>
             <item
                 android:id="@+id/nav_history"
-                android:icon="@drawable/ic_menu_send"
-                android:title="History" />
+                android:icon="@drawable/menu_settings"
+                android:title="Settings" />
         </menu>
     </item>
 
