@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:showIn="@layout/fragment_v2thread">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/drawee_topic"
+            android:paddingStart="5dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/drawee_topic">
+
+            <TextView
+                android:id="@+id/tv_topic_author"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:textColor="#000"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_topic_node"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:paddingRight="5dp"
+                android:textColor="@color/colorPrimary" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_topic_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/drawee_topic"
+            android:layout_below="@+id/linearLayout"
+            android:layout_toRightOf="@+id/drawee_topic"
+            android:gravity="bottom"
+            android:paddingLeft="10dp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_topic_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:textColor="#000"
+        android:textSize="7pt" />
+
+    <TextView
+        android:id="@+id/tv_topic_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textColor="#000"
+        android:textSize="7pt" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray" />
+</LinearLayout>
