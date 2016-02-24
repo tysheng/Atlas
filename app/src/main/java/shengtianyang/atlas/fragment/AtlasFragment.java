@@ -1,28 +1,25 @@
 package shengtianyang.atlas.fragment;
 
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import me.relex.circleindicator.CircleIndicator;
 import shengtianyang.atlas.R;
 import shengtianyang.atlas.adapter.DraweePagerAdapter;
-import shengtianyang.atlas.utils.RecyclerTransformAnimation;
+import shengtianyang.atlas.base.BaseFragment;
 import shengtianyang.atlas.phtodraweeview.MultiTouchViewPager;
+import shengtianyang.atlas.utils.RecyclerTransformAnimation;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AtlasFragment extends Fragment {
+public class AtlasFragment extends BaseFragment {
 
     private int[] drawble;
+    private String[] stringsdrawble;
     @Bind(R.id.vp_main)
     MultiTouchViewPager viewPager;
     @Bind(R.id.indicator)
@@ -34,15 +31,18 @@ public class AtlasFragment extends Fragment {
     public AtlasFragment(int[] drawble) {
         this.drawble = drawble;
     }
-
+    public AtlasFragment(String[] drawble) {
+        this.stringsdrawble = drawble;
+    }
+    @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_china_main;
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_china_main, container, false);
-        ButterKnife.bind(this, view);
+    protected void initData() {
         viewPager.setPageTransformer(true, new RecyclerTransformAnimation());
-        viewPager.setAdapter(new DraweePagerAdapter(drawble));
+        viewPager.setAdapter(new DraweePagerAdapter(stringsdrawble));
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -71,12 +71,6 @@ public class AtlasFragment extends Fragment {
             }
         });
         indicator.setViewPager(viewPager);
-        return view;
-    }
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
     }
 
 }

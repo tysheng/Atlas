@@ -18,14 +18,19 @@ import shengtianyang.atlas.phtodraweeview.PhotoDraweeView;
  */
 public class DraweePagerAdapter extends PagerAdapter {
     private int[] mDrawables;
+    private String[] stringDrawbles;
 
-    public DraweePagerAdapter(int[] mDrawables){
+    public DraweePagerAdapter(int[] mDrawables) {
         this.mDrawables = mDrawables;
+    }
+
+    public DraweePagerAdapter(String[] mDrawables) {
+        this.stringDrawbles = mDrawables;
     }
 
     @Override
     public int getCount() {
-        return mDrawables.length;
+        return stringDrawbles.length;
     }
 
     @Override
@@ -42,7 +47,8 @@ public class DraweePagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup viewGroup, int position) {
         final PhotoDraweeView photoDraweeView = new PhotoDraweeView(viewGroup.getContext());
         PipelineDraweeControllerBuilder controller = Fresco.newDraweeControllerBuilder();
-        controller.setUri(Uri.parse("res:///" + mDrawables[position]));
+//            controller.setUri(Uri.parse("res:///" + mDrawables[position]));
+        controller.setUri(Uri.parse(stringDrawbles[position]));
         controller.setOldController(photoDraweeView.getController());
         controller.setControllerListener(new BaseControllerListener<ImageInfo>() {
             @Override

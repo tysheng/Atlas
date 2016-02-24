@@ -1,4 +1,4 @@
-package shengtianyang.atlas.utils;
+package shengtianyang.atlas.app;
 
 /**
  * Created by shengtianyang on 16/2/2.
@@ -19,6 +19,8 @@ public class Constant {
     //百度车联网
     public static final String URL_BAIDU_WEATHER = "http://api.map.baidu.com/telematics/v3/weather";
     public static final String BAIDU_AK = "EIBnkLNbPzLIrKZoWIMXhb37";
+
+    public static final String SP_NAME = "sp_name";
 
 }
 /*

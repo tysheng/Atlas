@@ -12,7 +12,7 @@ public static RequestQueue requestQueue;
     @Override
     public void onCreate() {
         super.onCreate();
-        Fresco.initialize(getApplicationContext());
+        Fresco.initialize(this);
         requestQueue = Volley.newRequestQueue(getApplicationContext());
     }
     public static RequestQueue getRequestQueue(){

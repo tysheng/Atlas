@@ -1,20 +1,15 @@
 package shengtianyang.atlas.fragment;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebView;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import shengtianyang.atlas.R;
+import shengtianyang.atlas.base.BaseFragment;
 
 /**
  * Created by shengtianyang on 16/2/1.
  */
-public class WebviewFragment extends Fragment {
+public class WebviewFragment extends BaseFragment {
     @Bind(R.id.webview)
     WebView webview;
 
@@ -24,17 +19,12 @@ public class WebviewFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_webview, container, false);
-        ButterKnife.bind(this, view);
-        webview.loadUrl(url);
-
-        return view;
+    protected int getLayoutId() {
+        return R.layout.fragment_webview;
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
+    protected void initData() {
+        webview.loadUrl(url);
     }
 }

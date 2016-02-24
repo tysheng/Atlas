@@ -1,11 +1,40 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+        <!--<item name="colorAccent">@color/colorAccent</item>-->
+        <item name="android:colorBackground">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="BlueTheme" parent="AppTheme">
+        <item name="themeColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="RedTheme" parent="AppTheme">
+        <item name="themeColor">@color/red</item>
+    </style>
+
+    <style name="YellowTheme" parent="AppTheme">
+        <item name="themeColor">@color/yellow</item>
+    </style>
+
+    <style name="BlackTheme" parent="AppTheme">
+        <item name="themeColor">@color/lightBlack</item>
+    </style>
+
+    <style name="GreenTheme" parent="AppTheme">
+        <item name="themeColor">@color/green</item>
+    </style>
+
+    <style name="PurpleTheme" parent="AppTheme">
+        <item name="themeColor">@color/purple</item>
+    </style>
+
+    <style name="PinkTheme" parent="AppTheme">
+        <item name="themeColor">@color/pink</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -16,5 +45,9 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="BlueTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="BlueTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

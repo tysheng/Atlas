@@ -1,10 +1,10 @@
-package shengtianyang.atlas.adapter;
+package shengtianyang.atlas.bean;
 
 /**
  * Created by shengtianyang on 16/2/21.
  */
-public class ThreadHeader {
-    public ThreadHeader() {
+public class HeaderBean {
+    public HeaderBean() {
     }
     private String draweeTopic;
     private String tvTopicAuthor;

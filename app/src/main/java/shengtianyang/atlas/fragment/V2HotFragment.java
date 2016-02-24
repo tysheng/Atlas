@@ -1,14 +1,11 @@
 package shengtianyang.atlas.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -23,15 +20,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import shengtianyang.atlas.R;
 import shengtianyang.atlas.adapter.V2HotAdapter;
 import shengtianyang.atlas.app.MyApplication;
+import shengtianyang.atlas.base.BaseFragment;
 
 /**
  * Created by shengtianyang on 16/1/31.
  */
-public class V2HotFragment extends Fragment {
+public class V2HotFragment extends BaseFragment {
 
     @Bind(R.id.rv_v2)
     RecyclerView rvV2;
@@ -45,17 +42,6 @@ public class V2HotFragment extends Fragment {
     }
 
     private String url;
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_v2hot, container, false);
-        ButterKnife.bind(this, view);
-        initView();
-        getHotThread();
-
-        return view;
-    }
 
     private void getHotThread() {
         data = new ArrayList<HashMap<String, String>>();
@@ -78,7 +64,7 @@ public class V2HotFragment extends Fragment {
                         map.put("replies", object.optString("replies"));
                         data.add(map);
                     }
-                    mAdapter = new V2HotAdapter(getContext(), data);
+                    mAdapter = new V2HotAdapter(frmContext, data);
                     mAdapter.setOnItemClickListener(new V2HotAdapter.OnItemClickListener() {
                         @Override
                         public void onClickListener(View view, int position) {
@@ -98,13 +84,9 @@ public class V2HotFragment extends Fragment {
                                     .commit();
                         }
                     });
-                    rvV2.setAdapter(mAdapter);
-//        设置布局
-                    rvV2.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-
-//        设置Item动画效果
+                    rvV2.setLayoutManager(new LinearLayoutManager(frmContext));
                     rvV2.setItemAnimator(new DefaultItemAnimator());
-
+                    rvV2.setAdapter(mAdapter);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -134,10 +116,14 @@ public class V2HotFragment extends Fragment {
         });
     }
 
+    @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_v2hot;
+    }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
+    protected void initData() {
+        initView();
+        getHotThread();
     }
 }

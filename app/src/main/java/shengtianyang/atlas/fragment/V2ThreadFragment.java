@@ -1,13 +1,8 @@
 package shengtianyang.atlas.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -22,18 +17,18 @@ import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import shengtianyang.atlas.R;
-import shengtianyang.atlas.adapter.ThreadHeader;
+import shengtianyang.atlas.bean.HeaderBean;
 import shengtianyang.atlas.adapter.V2ThreadAdapter;
 import shengtianyang.atlas.app.MyApplication;
-import shengtianyang.atlas.utils.Constant;
+import shengtianyang.atlas.base.BaseFragment;
+import shengtianyang.atlas.app.Constant;
 import shengtianyang.atlas.utils.ItemDivider;
 
 /**
  * Created by shengtianyang on 16/2/1.
  */
-public class V2ThreadFragment extends Fragment {
+public class V2ThreadFragment extends BaseFragment {
 
     @Bind(R.id.rc_thread)
     RecyclerView rcThread;
@@ -41,37 +36,25 @@ public class V2ThreadFragment extends Fragment {
     private String id;
     private List<HashMap<String, String>> data;
     private V2ThreadAdapter adapter;
-    private Context context;
     private Bundle bundle;
 
     public V2ThreadFragment(String id) {
         this.id = id;
     }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_v2thread, container, false);
-        ButterKnife.bind(this, view);
-        context = getContext();
-        bundle = getArguments();
-        getReply();
-
-        return view;
-    }
-    public ThreadHeader getHeader(){
-        ThreadHeader threadHeader = new ThreadHeader();
+    
+    public HeaderBean getHeader(){
+        HeaderBean headerBean = new HeaderBean();
         if (bundle != null) {
-            threadHeader.setDraweeTopic(bundle.getString("avatar_normal"));
-            threadHeader.setTvTopicAuthor(bundle.getString("username"));
-            threadHeader.setTvTopicNode(bundle.getString("node_title"));
-            threadHeader.setTvTopicContent(bundle.getString("content"));
-            threadHeader.setTvTopicTitle(bundle.getString("title"));
-            threadHeader.setTvTopicTime(bundle.getString("last_modified"));
+            headerBean.setDraweeTopic(bundle.getString("avatar_normal"));
+            headerBean.setTvTopicAuthor(bundle.getString("username"));
+            headerBean.setTvTopicNode(bundle.getString("node_title"));
+            headerBean.setTvTopicContent(bundle.getString("content"));
+            headerBean.setTvTopicTitle(bundle.getString("title"));
+            headerBean.setTvTopicTime(bundle.getString("last_modified"));
         }
-        return threadHeader;
+        return headerBean;
     }
-
-
+    
     private void getReply() {
         data = new ArrayList<>();
         StringRequest stringRequest = new StringRequest(Constant.URL_V2_REPLY + "?topic_id=" + id, new Response.Listener<String>() {
@@ -89,10 +72,10 @@ public class V2ThreadFragment extends Fragment {
                         map.put("content", object.optString("content"));
                         data.add(map);
                     }
-                    adapter = new V2ThreadAdapter(context, data,getHeader());
+                    adapter = new V2ThreadAdapter(frmContext, data,getHeader());
                     rcThread.setAdapter(adapter);
-                    rcThread.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-                    rcThread.addItemDecoration(new ItemDivider(context));
+                    rcThread.setLayoutManager(new LinearLayoutManager(frmContext, LinearLayoutManager.VERTICAL, false));
+                    rcThread.addItemDecoration(new ItemDivider(frmContext));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -108,45 +91,14 @@ public class V2ThreadFragment extends Fragment {
         MyApplication.getRequestQueue().add(stringRequest);
     }
 
-//    private void getTopic() {
-//        StringRequest stringRequest = new StringRequest(Constant.URL_V2_TOPIC + "?id=" + id, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                getReply();
-//                try {
-//                    JSONArray array = new JSONArray(response);
-//                    JSONObject object = array.optJSONObject(0);
-//                    JSONObject member = object.optJSONObject("member");
-//                    draweeTopic.setImageURI(Uri.parse("http:" + member.optString("avatar_normal")));
-//                    tvTopicAuthor.setText(member.optString("username"));
-//                    tvTopicNode.setText(object.optJSONObject("menu_node").optString("title"));
-//                    tvTopicContent.setText(object.optString("content"));
-//                    tvTopicTitle.setText(object.optString("title"));
-//                    String time = TimeStamp.getTimeDifference(Integer.parseInt(object.optString("last_modified")));
-//                    if (time.equals("0")) {
-//                        time = "刚刚";
-//                    } else if (time.equals("-1")) {
-//                        time = "很久很久前";
-//                    }
-//                    tvTopicTime.setText(time);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//
-//            }
-//        });
-//        stringRequest.setTag("V2ThreadFragment1");
-//        MyApplication.getRequestQueue().toolbar_add(stringRequest);
-//    }
+    @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_v2thread;
+    }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
+    protected void initData() {
+        bundle = getArguments();
+        getReply();
     }
 }

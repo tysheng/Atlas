@@ -6,4 +6,13 @@
     <color name="black">#000000</color>
     <color name="lightBlack">#202020</color>
     <color name="gray">#cec8c8</color>
+    <color name="red">#F44336</color>
+    <color name="pink">#F06292</color>
+    <color name="purple">#9C27B0</color>
+    <color name="green">#4CAF50</color>
+    <color name="yellow">#FFEB3B</color>
+    <color name="grey">#9E9E9E</color>
+    <color name="white">#ffffff</color>
+    <color name="press_grey">#F5F5F5</color>
+
 </resources>

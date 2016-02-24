@@ -1,13 +1,8 @@
 package shengtianyang.atlas.fragment;
 
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -22,33 +17,27 @@ import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import shengtianyang.atlas.R;
 import shengtianyang.atlas.adapter.V2NodeRecyclerAdapter;
 import shengtianyang.atlas.app.MyApplication;
+import shengtianyang.atlas.base.BaseFragment;
 
 /**
  * Created by shengtianyang on 16/2/2.
  */
-public class V2NodeFragment extends Fragment {
+public class V2NodeFragment extends BaseFragment {
     @Bind(R.id.rv_v2node)
     RecyclerView rvV2node;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
-
     V2NodeRecyclerAdapter mAdapter;
     List<HashMap<String, String>> data;
 
-
-
-
-
+    @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_v2node;
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_v2node, container, false);
-//        sharedPreferences = getContext().getSharedPreferences("userinfo", Context.MODE_PRIVATE);
-        ButterKnife.bind(this, view);
+    protected void initData() {
         data = new ArrayList<>();
         StringRequest request = new StringRequest("https://www.v2ex.com/api/nodes/all.json", new Response.Listener<String>() {
             @Override
@@ -66,7 +55,7 @@ public class V2NodeFragment extends Fragment {
                         map.put("url",object.optString("url"));
                         data.add(map);
                     }
-                    mAdapter = new V2NodeRecyclerAdapter(getContext(),data);
+                    mAdapter = new V2NodeRecyclerAdapter(frmContext,data);
                     mAdapter.setOnItemClickListener(new V2NodeRecyclerAdapter.OnItemClickListener() {
                         @Override
                         public void onClickListener(View view, int position) {
@@ -76,8 +65,8 @@ public class V2NodeFragment extends Fragment {
                                     .commit();
                         }
                     });
+                    rvV2node.setLayoutManager(new GridLayoutManager(frmContext,2));
                     rvV2node.setAdapter(mAdapter);
-                    rvV2node.setLayoutManager(new GridLayoutManager(getContext(),2));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -91,14 +80,6 @@ public class V2NodeFragment extends Fragment {
         });
         request.setTag("V2NodeFragment");
         MyApplication.getRequestQueue().add(request);
-
-        return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
     }
 
 }

@@ -17,6 +17,7 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import shengtianyang.atlas.R;
+import shengtianyang.atlas.bean.HeaderBean;
 import shengtianyang.atlas.utils.TimeStamp;
 
 /**
@@ -29,14 +30,14 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private LayoutInflater layoutInflater;
     private List<HashMap<String, String>> data;
-    private ThreadHeader threadHeader;
+    private HeaderBean headerBean;
     private OnItemClickListener onItemClickListener;
 
 
-    public V2ThreadAdapter(Context context, List<HashMap<String, String>> data, ThreadHeader threadHeader) {
+    public V2ThreadAdapter(Context context, List<HashMap<String, String>> data, HeaderBean headerBean) {
         this.data = data;
         this.layoutInflater = layoutInflater.from(context);
-        this.threadHeader = threadHeader;
+        this.headerBean = headerBean;
     }
 
     public interface OnItemClickListener {
@@ -63,12 +64,12 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(final RecyclerView.ViewHolder  holder, final int position) {
         if(holder instanceof VHHeader){
             VHHeader vhHeader = (VHHeader)holder;
-            vhHeader.draweeTopic.setImageURI(Uri.parse("http:" + threadHeader.getDraweeTopic()));
-            vhHeader.tvTopicAuthor.setText(threadHeader.getTvTopicAuthor());
-            vhHeader.tvTopicContent.setText(threadHeader.getTvTopicContent());
-            vhHeader.tvTopicNode.setText(threadHeader.getTvTopicNode());
-            vhHeader.tvTopicTitle.setText(threadHeader.getTvTopicTitle());
-            vhHeader.tvTopicTime.setText(TimeStamp.getFinalTimeDiffrence(threadHeader.getTvTopicTime()));
+            vhHeader.draweeTopic.setImageURI(Uri.parse("http:" + headerBean.getDraweeTopic()));
+            vhHeader.tvTopicAuthor.setText(headerBean.getTvTopicAuthor());
+            vhHeader.tvTopicContent.setText(headerBean.getTvTopicContent());
+            vhHeader.tvTopicNode.setText(headerBean.getTvTopicNode());
+            vhHeader.tvTopicTitle.setText(headerBean.getTvTopicTitle());
+            vhHeader.tvTopicTime.setText(TimeStamp.getFinalTimeDiffrence(headerBean.getTvTopicTime()));
         }else if (holder instanceof VHItem){
             VHItem vhItem = (VHItem)holder;
             Map<String, String> map = data.get(position-1);
