@@ -75,10 +75,10 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
         tbSetting.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                jumpActivity(MainActivity.class, true);
+                finish();
             }
         });
-        intent = getIntent();
+        intent = new Intent(this,MainActivity.class);
         primaryPreselect = DialogUtils.resolveColor(this, R.attr.themeColor);
 
 
@@ -93,7 +93,7 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        jumpActivity(MainActivity.class, true);
+        finish();
     }
 }
 

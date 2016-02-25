@@ -20,6 +20,10 @@ public class FlashFragment extends BaseFragment {
 
     public FlashFragment() {
     }
+
+    public static FlashFragment getInstance() {
+        return new FlashFragment();
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();

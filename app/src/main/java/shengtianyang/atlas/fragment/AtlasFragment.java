@@ -34,6 +34,9 @@ public class AtlasFragment extends BaseFragment {
     public AtlasFragment(String[] drawble) {
         this.stringsdrawble = drawble;
     }
+    public static AtlasFragment getInstance(String[] drawble){
+        return new AtlasFragment(drawble);
+    }
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_china_main;

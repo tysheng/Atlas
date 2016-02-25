@@ -23,7 +23,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTheme(SPHelper.getTheme(this));
         setContentView(getLayoutId());
-
         actContext = this;
         ButterKnife.bind(this);
         initData();
@@ -41,7 +40,9 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 初始化数据
      */
     public abstract void initData();
-
+    /**
+     * setContentView
+     */
     public abstract int getLayoutId();
 
     /**

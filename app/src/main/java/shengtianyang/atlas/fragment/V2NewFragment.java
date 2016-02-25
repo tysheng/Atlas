@@ -31,7 +31,7 @@ import shengtianyang.atlas.base.BaseFragment;
 /**
  * Created by shengtianyang on 16/1/31.
  */
-public class V2HotFragment extends BaseFragment {
+public class V2NewFragment extends BaseFragment {
 
     @Bind(R.id.rv_v2)
     RecyclerView rvV2;
@@ -41,12 +41,12 @@ public class V2HotFragment extends BaseFragment {
     private ArrayList<HashMap<String, String>> data;
     Fragment fragment;
 
-    public V2HotFragment(String url) {
+    public V2NewFragment(String url) {
         this.url = url;
     }
 
-    public static V2HotFragment getInstance(String url) {
-        return new V2HotFragment(url);
+    public static V2NewFragment getInstance(String url) {
+        return new V2NewFragment(url);
     }
 
     private String url;
@@ -88,7 +88,7 @@ public class V2HotFragment extends BaseFragment {
                             v2ThreadFragment.setArguments(bundle);
                             FragmentManager manager = getActivity().getSupportFragmentManager();
                             FragmentTransaction transaction = manager.beginTransaction();
-                            fragment = manager.findFragmentByTag("hot");
+                            fragment = manager.findFragmentByTag("new");
                             transaction.hide(fragment)
                                     .addToBackStack(null)
                                     .add(R.id.fg_main, v2ThreadFragment, "thread" + position)
@@ -110,7 +110,7 @@ public class V2HotFragment extends BaseFragment {
 
             }
         });
-        stringRequest.setTag("V2HotFragment");
+        stringRequest.setTag("V2NewFragment");
         MyApplication.getRequestQueue().add(stringRequest);
     }
 

@@ -9,7 +9,8 @@
         android:id="@+id/flashlightButton"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:textOn="点击关闭"
-        android:textOff="点击开启"/>
+        android:textOn=""
+        android:textOff=""
+        android:background="@drawable/menu_lantern"/>
 
 </LinearLayout>

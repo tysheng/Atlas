@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,12 +52,16 @@ public class WeatherFragment extends BaseFragment {
     TextView tvTmp;
     @Bind(R.id.tv_cond)
     TextView tvCond;
+    @Bind(R.id.tv_textaqi)
+    TextView tv_textaqi;
     @Bind(R.id.drawee_weather_city)
     SimpleDraweeView drawee_weather_city;
     @Bind(R.id.scrollView)
     ObservableScrollView mScrollView;
     @Bind(R.id.et_search_city)
     EditText etSearchCity;
+    @Bind(R.id.ll_aqi)
+    LinearLayout ll_aqi;
     private String cityname;
     private String city_url;
 
@@ -117,27 +122,35 @@ public class WeatherFragment extends BaseFragment {
                     JSONObject object1 = array.optJSONObject(0);
                     if (object1.optString("status").equals("ok")) {
                         JSONObject object2 = object1.optJSONObject("aqi");
+                        if(object2 != null){
+                            JSONObject object3 = object2.optJSONObject("city");
+                            String aqi = object3.optString("aqi");
+                            String qlty = object3.optString("qlty");
+                            tvAqi.setText(aqi);
+                            tcQlty.setText(qlty);
+                            tv_textaqi.setText("AQI");
+                        } else {
+                            ll_aqi.setVisibility(View.GONE);
+                        }
                         JSONObject basic = object1.optJSONObject("basic");
                         JSONObject now = object1.optJSONObject("now");
                         JSONObject suggestion = object1.optJSONObject("suggestion");
                         JSONObject comf = suggestion.optJSONObject("comf");
                         JSONArray hourly_forecast = object1.optJSONArray("hourly_forecast");
                         JSONObject hourforecast = hourly_forecast.getJSONObject(0);
-                        JSONObject object3 = object2.optJSONObject("city");
-                        String aqi = object3.optString("aqi");
-                        String qlty = object3.optString("qlty");
+
                         String brf = comf.optString("brf");
                         String txt = comf.optString("txt");
                         String tmp = hourforecast.optString("tmp");
                         String city_name = basic.optString("city");
                         String cond = now.optJSONObject("cond").optString("txt");
-                        tvAqi.setText(aqi);
+
                         tvBrf.setText(brf);
                         tvCity.setText(city_name);
                         tvTmp.setText(tmp + "°");
                         tvTxt.setText(txt);
-                        tcQlty.setText(qlty);
                         tvCond.setText(cond);
+
                     } else {
                         Toast.makeText(getActivity(), "请输入正确的城市名", Toast.LENGTH_SHORT).show();
                     }

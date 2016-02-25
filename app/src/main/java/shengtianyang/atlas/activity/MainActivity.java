@@ -17,6 +17,7 @@ import shengtianyang.atlas.base.BaseActivity;
 import shengtianyang.atlas.fragment.AtlasFragment;
 import shengtianyang.atlas.fragment.FlashFragment;
 import shengtianyang.atlas.fragment.V2HotFragment;
+import shengtianyang.atlas.fragment.V2NewFragment;
 import shengtianyang.atlas.fragment.V2NodeFragment;
 
 public class MainActivity extends BaseActivity
@@ -31,6 +32,13 @@ public class MainActivity extends BaseActivity
     //    private long exitTime;
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private String nowItemTtile = "";
+    AtlasFragment atlasFragment;
+    FlashFragment flashFragment;
+    V2HotFragment v2HotFragment;
+    V2NewFragment v2NewFragment;
+    V2NodeFragment v2NodeFragment;
+    Fragment currentFragment;
+
 
     @Override
     public void initData() {
@@ -40,17 +48,23 @@ public class MainActivity extends BaseActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-
-
-        fragmentManager.beginTransaction()
-                .replace(R.id.fg_main, new V2HotFragment(Constant.URL_V2_HOT), "")
-                .commit();
+        atlasFragment = AtlasFragment.getInstance(getResources().getStringArray(R.array.atlas_drawbles));
+        flashFragment = FlashFragment.getInstance();
+        v2HotFragment = V2HotFragment.getInstance(Constant.URL_V2_HOT);
+        v2NewFragment = V2NewFragment.getInstance(Constant.URL_V2_LASTED);
+        v2NodeFragment = V2NodeFragment.getInstance();
+        
+        currentFragment = v2HotFragment;
+        jumpFragment(null, v2HotFragment, R.id.fg_main, "hot");
+//        fragmentManager.beginTransaction()
+//                .replace(R.id.fg_main, V2HotFragment.getInstance(Constant.URL_V2_HOT), "V2HotFragment")
+//                .commit();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(!toolbar.getTitle().equals(""))
+        if (!toolbar.getTitle().equals(""))
             toolbar.setTitle(nowItemTtile);
     }
 
@@ -99,33 +113,73 @@ public class MainActivity extends BaseActivity
             nowItemTtile = (String) item.getTitle();
             toolbar.setTitle(nowItemTtile);
         }
-
-        if (id == R.id.nav_main) {
-            changeFragment(new V2HotFragment(Constant.URL_V2_HOT));
-        } else if (id == R.id.nav_transport) {
-            jumpActivity(WeatherActivity.class, false);
-//            changeFragment(new WeatherFragment());
-        } else if (id == R.id.nav_resource) {
-            changeFragment(new V2HotFragment(Constant.URL_V2_LASTED));
-        } else if (id == R.id.nav_climate) {
-            changeFragment(new V2NodeFragment());
-        } else if (id == R.id.nav_disaster) {
-//            changeFragment(new AtlasFragment(new int[]{
-//                    R.drawable.zhongguozhengqu, R.drawable.zhongguodixing,
-//                    R.drawable.zhongguodishi
-//            }));
-            changeFragment(new AtlasFragment(getResources().getStringArray(R.array.atlas_drawbles)));
-        } else if (id == R.id.nav_world) {
-            changeFragment(new FlashFragment());
-        } else if (id == R.id.nav_history) {
-            jumpActivity(SettingActivity.class, false);
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        switch (id) {
+            case R.id.nav_main:
+                if (v2HotFragment == null) {
+                    v2HotFragment = V2HotFragment.getInstance(Constant.URL_V2_HOT);
+                }
+                if (currentFragment instanceof V2HotFragment) {
+                } else {
+                    jumpFragment(currentFragment, v2HotFragment, R.id.fg_main, "hot");
+                }
+                currentFragment = v2HotFragment;
+                break;
+            case R.id.nav_resource:
+                if (v2NewFragment == null) {
+                    v2NewFragment = V2NewFragment.getInstance(Constant.URL_V2_LASTED);
+                }
+                if (currentFragment instanceof V2NewFragment) {
+                } else {
+                    jumpFragment(currentFragment, v2NewFragment, R.id.fg_main, "new");
+                }
+                currentFragment = v2NewFragment;
+                break;
+            case R.id.nav_climate:
+                if (v2NodeFragment == null) {
+                    v2NodeFragment = V2NodeFragment.getInstance();
+                }
+                if (currentFragment instanceof V2NodeFragment) {
+                } else {
+                    jumpFragment(currentFragment, v2NodeFragment, R.id.fg_main, "node");
+                }
+                currentFragment = v2NodeFragment;
+                break;
+            case R.id.nav_disaster:
+                if (atlasFragment == null) {
+                    atlasFragment = AtlasFragment.getInstance(getResources().getStringArray(R.array.atlas_drawbles));
+                }
+                if (currentFragment instanceof AtlasFragment) {
+                } else {
+                    jumpFragment(currentFragment, atlasFragment, R.id.fg_main, "atlas");
+                }
+                currentFragment = atlasFragment;
+                break;
+            case R.id.nav_world:
+                if (flashFragment == null) {
+                    flashFragment = FlashFragment.getInstance();
+                }
+                if (currentFragment instanceof FlashFragment) {
+                } else {
+                    jumpFragment(currentFragment, flashFragment, R.id.fg_main, "flash");
+                }
+                currentFragment = flashFragment;
+                break;
+            case R.id.nav_transport:
+                jumpActivity(WeatherActivity.class, false);
+                break;
+            case R.id.nav_history:
+                jumpActivity(SettingActivity.class, false);
+                break;
+            default:
+                break;
         }
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void changeFragment(Fragment fragment) {
+    private void replaceFragment(Fragment fragment) {
         fragmentManager.beginTransaction()
                 .replace(R.id.fg_main, fragment, null)
                 .commit();
