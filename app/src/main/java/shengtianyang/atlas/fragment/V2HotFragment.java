@@ -10,23 +10,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSON;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import butterknife.Bind;
 import shengtianyang.atlas.R;
 import shengtianyang.atlas.adapter.V2HotAdapter;
 import shengtianyang.atlas.app.MyApplication;
 import shengtianyang.atlas.base.BaseFragment;
+import shengtianyang.atlas.bean.V2HotBean;
+import shengtianyang.atlas.net.VolleyIF;
+import shengtianyang.atlas.net.VolleyUtils;
 
 /**
  * Created by shengtianyang on 16/1/31.
@@ -37,8 +33,7 @@ public class V2HotFragment extends BaseFragment {
     RecyclerView rvV2;
     @Bind(R.id.swipe)
     SwipeRefreshLayout swipe;
-    private V2HotAdapter mAdapter;
-    private ArrayList<HashMap<String, String>> data;
+    private List<V2HotBean> data;
     Fragment fragment;
 
     public V2HotFragment(String url) {
@@ -52,66 +47,61 @@ public class V2HotFragment extends BaseFragment {
     private String url;
 
     private void getHotThread() {
-        data = new ArrayList<HashMap<String, String>>();
-        StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
+        data = new ArrayList<V2HotBean>();
+        final V2HotAdapter mAdapter = new V2HotAdapter(frmContext, data);
+        mAdapter.setOnItemClickListener(new V2HotAdapter.OnItemClickListener() {
             @Override
-            public void onResponse(String response) {
-                try {
-                    JSONArray array = new JSONArray(response);
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject object = array.optJSONObject(i);
-                        HashMap<String, String> map = new HashMap<String, String>();
-                        map.put("title", object.optString("title"));
-                        map.put("avatar_normal", object.optJSONObject("member").optString("avatar_normal"));
-                        map.put("username", object.optJSONObject("member").optString("username"));
-                        map.put("node_title", object.optJSONObject("node").optString("title"));
-                        map.put("last_modified", object.optString("last_modified"));
-                        map.put("url", object.optString("url"));
-                        map.put("id", object.optString("id"));
-                        map.put("content", object.optString("content"));
-                        map.put("replies", object.optString("replies"));
-                        data.add(map);
-                    }
-                    mAdapter = new V2HotAdapter(frmContext, data);
-                    mAdapter.setOnItemClickListener(new V2HotAdapter.OnItemClickListener() {
-                        @Override
-                        public void onClickListener(View view, int position) {
-                            Map<String, String> map = data.get(position);
-                            Bundle bundle = new Bundle();
-                            bundle.putString("avatar_normal", map.get("avatar_normal"));
-                            bundle.putString("username", map.get("username"));
-                            bundle.putString("node_title", map.get("node_title"));
-                            bundle.putString("content", map.get("content"));
-                            bundle.putString("title", map.get("title"));
-                            bundle.putString("last_modified", map.get("last_modified"));
-                            V2ThreadFragment v2ThreadFragment = new V2ThreadFragment(data.get(position).get("id"));
-                            v2ThreadFragment.setArguments(bundle);
-                            FragmentManager manager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction transaction = manager.beginTransaction();
-                            fragment = manager.findFragmentByTag("hot");
-                            transaction.hide(fragment)
-                                    .addToBackStack(null)
-                                    .add(R.id.fg_main, v2ThreadFragment, "thread" + position)
-                                    .commitAllowingStateLoss();
-                        }
-                    });
-                    rvV2.setLayoutManager(new LinearLayoutManager(frmContext));
-                    rvV2.setItemAnimator(new DefaultItemAnimator());
-                    rvV2.setAdapter(mAdapter);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            public void onClickListener(View view, int position) {
+                Bundle bundle = new Bundle();
+                bundle.putString("avatar_normal", data.get(position).getMember().getAvatar_normal());
+                bundle.putString("username", data.get(position).getMember().getUsername());
+                bundle.putString("node_title", data.get(position).getNode().getTitle());
+                bundle.putString("content", data.get(position).getContent());
+                bundle.putString("title", data.get(position).getTitle());
+                bundle.putInt("last_modified", data.get(position).getLast_modified());
+                V2ThreadFragment v2ThreadFragment = new V2ThreadFragment(data.get(position).getId());
+                v2ThreadFragment.setArguments(bundle);
+                FragmentManager manager = getActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                fragment = manager.findFragmentByTag("hot");
+                transaction.hide(fragment)
+                        .addToBackStack(null)
+                        .add(R.id.fg_main, v2ThreadFragment, "thread" + position)
+                        .commitAllowingStateLoss();
+            }
+        });
+        rvV2.setLayoutManager(new LinearLayoutManager(frmContext));
+        rvV2.setItemAnimator(new DefaultItemAnimator());
+        rvV2.setAdapter(mAdapter);
+        VolleyUtils.Get(url, "V2HotFragment", new VolleyIF(VolleyIF.mListener) {
+            @Override
+            public void onMyResponse(String response) {
+                data.addAll(JSON.parseArray(response, V2HotBean.class));
+                mAdapter.notifyDataSetChanged();
+//                try {
+//                    JSONArray array = new JSONArray(response);
+//                    for (int i = 0; i < array.length(); i++) {
+//                        JSONObject object = array.optJSONObject(i);
+//                        HashMap<String, String> map = new HashMap<String, String>();
+//                        map.put("title", object.optString("title"));
+//                        map.put("avatar_normal", object.optJSONObject("member").optString("avatar_normal"));
+//                        map.put("username", object.optJSONObject("member").optString("username"));
+//                        map.put("node_title", object.optJSONObject("node").optString("title"));
+//                        map.put("last_modified", object.optString("last_modified"));
+//                        map.put("url", object.optString("url"));
+//                        map.put("id", object.optString("id"));
+//                        map.put("content", object.optString("content"));
+//                        map.put("replies", object.optString("replies"));
+//                        data.add(map);
+//                    }
+//                    mAdapter.notifyDataSetChanged();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
                 if (swipe.isRefreshing())
                     swipe.setRefreshing(false);
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
         });
-        stringRequest.setTag("V2HotFragment");
-        MyApplication.getRequestQueue().add(stringRequest);
     }
 
     private void initView() {
@@ -125,6 +115,12 @@ public class V2HotFragment extends BaseFragment {
                 getHotThread();
             }
         });
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        MyApplication.getRequestQueue().cancelAll("V2HotFragment");
     }
 
     @Override

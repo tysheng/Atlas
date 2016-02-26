@@ -9,6 +9,7 @@ public class Constant {
     public static final String URL_V2_HOT = "https://www.v2ex.com/api/topics/hot.json";
     public static final String URL_V2_TOPIC = "https://www.v2ex.com/api/topics/show.json";
     public static final String URL_V2_REPLY = "https://www.v2ex.com/api/replies/show.json";
+    public static final String URL_V2_NODE_ALL = "https://www.v2ex.com/api/nodes/all.json";
     public static final String URL_V2_NODE = "https://www.v2ex.com/api/nodes/show.json?name=";
     public static final String URL_V2_MEMBER = "https://www.v2ex.com/api/members/show.json";
 

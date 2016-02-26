@@ -13,9 +13,6 @@ import shengtianyang.atlas.R;
  * Created by shengtianyang on 16/2/23.
  */
 
-/**
- * Created by florentchampigny on 24/04/15.
- */
 public class TestRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     List<Object> contents;

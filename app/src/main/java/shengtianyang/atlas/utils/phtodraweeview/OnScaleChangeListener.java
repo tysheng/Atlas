@@ -1,4 +1,4 @@
-package shengtianyang.atlas.phtodraweeview;
+package shengtianyang.atlas.utils.phtodraweeview;
 
 /**
  * Interface definition for callback to be invoked when attached ImageView scale changes

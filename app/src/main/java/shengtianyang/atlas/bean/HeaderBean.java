@@ -9,7 +9,7 @@ public class HeaderBean {
     private String draweeTopic;
     private String tvTopicAuthor;
     private String tvTopicNode;
-    private String tvTopicTime;
+    private int tvTopicTime;
     private String tvTopicContent;
     private String tvTopicTitle;
 
@@ -37,11 +37,11 @@ public class HeaderBean {
         this.tvTopicNode = tvTopicNode;
     }
 
-    public String getTvTopicTime() {
+    public int getTvTopicTime() {
         return tvTopicTime;
     }
 
-    public void setTvTopicTime(String tvTopicTime) {
+    public void setTvTopicTime(int tvTopicTime) {
         this.tvTopicTime = tvTopicTime;
     }
 

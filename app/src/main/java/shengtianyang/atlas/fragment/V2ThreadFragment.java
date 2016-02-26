@@ -4,25 +4,21 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSON;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
 import shengtianyang.atlas.R;
-import shengtianyang.atlas.bean.HeaderBean;
 import shengtianyang.atlas.adapter.V2ThreadAdapter;
+import shengtianyang.atlas.app.Constant;
 import shengtianyang.atlas.app.MyApplication;
 import shengtianyang.atlas.base.BaseFragment;
-import shengtianyang.atlas.app.Constant;
+import shengtianyang.atlas.bean.HeaderBean;
+import shengtianyang.atlas.bean.V2ReplyBean;
+import shengtianyang.atlas.net.VolleyIF;
+import shengtianyang.atlas.net.VolleyUtils;
 import shengtianyang.atlas.utils.ItemDivider;
 
 /**
@@ -33,16 +29,17 @@ public class V2ThreadFragment extends BaseFragment {
     @Bind(R.id.rc_thread)
     RecyclerView rcThread;
 
-    private String id;
-    private List<HashMap<String, String>> data;
+    private int id;
+    //    private List<HashMap<String, String>> data;
     private V2ThreadAdapter adapter;
     private Bundle bundle;
+    private List<V2ReplyBean> data;
 
-    public V2ThreadFragment(String id) {
+    public V2ThreadFragment(int id) {
         this.id = id;
     }
-    
-    public HeaderBean getHeader(){
+
+    public HeaderBean getHeader() {
         HeaderBean headerBean = new HeaderBean();
         if (bundle != null) {
             headerBean.setDraweeTopic(bundle.getString("avatar_normal"));
@@ -50,45 +47,32 @@ public class V2ThreadFragment extends BaseFragment {
             headerBean.setTvTopicNode(bundle.getString("node_title"));
             headerBean.setTvTopicContent(bundle.getString("content"));
             headerBean.setTvTopicTitle(bundle.getString("title"));
-            headerBean.setTvTopicTime(bundle.getString("last_modified"));
+            headerBean.setTvTopicTime(bundle.getInt("last_modified"));
         }
         return headerBean;
     }
-    
+
     private void getReply() {
         data = new ArrayList<>();
-        StringRequest stringRequest = new StringRequest(Constant.URL_V2_REPLY + "?topic_id=" + id, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONArray array = new JSONArray(response);
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject object = array.optJSONObject(i);
-                        HashMap<String, String> map = new HashMap<String, String>();
-                        JSONObject member = object.optJSONObject("member");
-                        map.put("avatar_normal", member.optString("avatar_normal"));
-                        map.put("username", member.optString("username"));
-                        map.put("last_modified", object.optString("last_modified"));
-                        map.put("content", object.optString("content"));
-                        data.add(map);
-                    }
-                    adapter = new V2ThreadAdapter(frmContext, data,getHeader());
-                    rcThread.setAdapter(adapter);
-                    rcThread.setLayoutManager(new LinearLayoutManager(frmContext, LinearLayoutManager.VERTICAL, false));
-                    rcThread.addItemDecoration(new ItemDivider(frmContext));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+        adapter = new V2ThreadAdapter(frmContext, data, getHeader());
+        rcThread.setAdapter(adapter);
+        rcThread.setLayoutManager(new LinearLayoutManager(frmContext));
+        rcThread.addItemDecoration(new ItemDivider(frmContext));
 
-            }
-        }, new Response.ErrorListener() {
+        VolleyUtils.Get(Constant.URL_V2_REPLY + "?topic_id=" + id, "V2ThreadFragment", new VolleyIF(VolleyIF.mListener) {
             @Override
-            public void onErrorResponse(VolleyError error) {
-
+            public void onMyResponse(String response) {
+                data.addAll(JSON.parseArray(response, V2ReplyBean.class));
+                adapter.notifyDataSetChanged();
             }
         });
-        stringRequest.setTag("V2ThreadFragment2");
-        MyApplication.getRequestQueue().add(stringRequest);
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        MyApplication.getRequestQueue().cancelAll("V2ThreadFragment");
     }
 
     @Override

@@ -1,4 +1,4 @@
-package shengtianyang.atlas.phtodraweeview;
+package shengtianyang.atlas.utils.phtodraweeview;
 
 /**
  * ****************************************************************************

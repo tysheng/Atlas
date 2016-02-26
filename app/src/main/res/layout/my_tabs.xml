@@ -11,7 +11,7 @@
     app:pstsIndicatorHeight="2dp"
     app:pstsShouldExpand="true"
     app:pstsTabTextColor="@color/white"
-    app:pstsTabPaddingLeftRight="10dp"
+    app:pstsTabPaddingLeftRight="40dp"
     app:pstsTabTextAllCaps="true"
     tools:background="#A333"
     />

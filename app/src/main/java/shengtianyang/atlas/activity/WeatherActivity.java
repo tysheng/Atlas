@@ -14,7 +14,6 @@ import butterknife.Bind;
 import butterknife.BindString;
 import shengtianyang.atlas.R;
 import shengtianyang.atlas.base.BaseActivity;
-import shengtianyang.atlas.fragment.VPWeatherFragment;
 import shengtianyang.atlas.fragment.WeatherFragment;
 
 /**
@@ -90,7 +89,7 @@ public class WeatherActivity extends BaseActivity {
                     case 3:
                         return new WeatherFragment("","");
                     default:
-                        return VPWeatherFragment.getInstance();
+                        return new WeatherFragment("","");
                 }
             }
 

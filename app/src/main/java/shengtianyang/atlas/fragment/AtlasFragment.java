@@ -10,7 +10,7 @@ import me.relex.circleindicator.CircleIndicator;
 import shengtianyang.atlas.R;
 import shengtianyang.atlas.adapter.DraweePagerAdapter;
 import shengtianyang.atlas.base.BaseFragment;
-import shengtianyang.atlas.phtodraweeview.MultiTouchViewPager;
+import shengtianyang.atlas.utils.phtodraweeview.MultiTouchViewPager;
 import shengtianyang.atlas.utils.RecyclerTransformAnimation;
 
 /**

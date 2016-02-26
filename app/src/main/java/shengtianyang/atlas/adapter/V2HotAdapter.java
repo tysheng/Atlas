@@ -10,13 +10,12 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import shengtianyang.atlas.R;
+import shengtianyang.atlas.bean.V2HotBean;
 import shengtianyang.atlas.utils.TimeStamp;
 
 /**
@@ -27,11 +26,11 @@ public class V2HotAdapter extends RecyclerView.Adapter<V2HotAdapter.MyViewHolder
 
 
     private LayoutInflater layoutInflater;
-    private List<HashMap<String, String>> data;
+    private List<V2HotBean> data;
     private OnItemClickListener onItemClickListener;
 
 
-    public V2HotAdapter(Context context, List<HashMap<String, String>> data) {
+    public V2HotAdapter(Context context, List<V2HotBean> data) {
         this.data = data;
         this.layoutInflater = layoutInflater.from(context);
     }
@@ -53,21 +52,12 @@ public class V2HotAdapter extends RecyclerView.Adapter<V2HotAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        Map<String, String> map = data.get(position);
-        holder.tvTitle.setText(map.get("title"));
-        holder.tvNode.setText(map.get("node_title"));
-        holder.tvAuthor.setText(map.get("username"));
-        holder.tvReplies.setText(map.get("replies"));
-        holder.draweePortrait.setImageURI(Uri.parse("http:" + map.get("avatar_normal")));
-        String time = TimeStamp.getTimeDifference(Integer.parseInt(map.get("last_modified")));
-        if (time.equals("0")) {
-            time = "刚刚";
-        } else if (time.equals("-1")) {
-            time = "很久很久前";
-        }
-        holder.tvTime.setText(time);
-//        holder.tv_time.setText(data.get(position).get("content").equals("")
-//                ? "作者很懒,什么都没写~" : data.get(position).get("content"));
+        holder.tvTitle.setText(data.get(position).getTitle());
+        holder.tvNode.setText(data.get(position).getNode().getTitle());
+        holder.tvAuthor.setText(data.get(position).getMember().getUsername());
+        holder.tvReplies.setText(data.get(position).getReplies()+"");
+        holder.draweePortrait.setImageURI(Uri.parse("http:" + data.get(position).getMember().getAvatar_normal()));
+        holder.tvTime.setText(TimeStamp.getFinalTimeDiffrence(data.get(position).getLast_modified()));
 
         if (onItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {

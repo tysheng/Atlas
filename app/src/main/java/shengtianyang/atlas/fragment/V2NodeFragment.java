@@ -7,23 +7,20 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSON;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
 import shengtianyang.atlas.R;
 import shengtianyang.atlas.adapter.V2NodeRecyclerAdapter;
+import shengtianyang.atlas.app.Constant;
 import shengtianyang.atlas.app.MyApplication;
 import shengtianyang.atlas.base.BaseFragment;
+import shengtianyang.atlas.bean.V2NodesBean;
+import shengtianyang.atlas.net.VolleyIF;
+import shengtianyang.atlas.net.VolleyUtils;
 
 /**
  * Created by shengtianyang on 16/2/2.
@@ -32,7 +29,7 @@ public class V2NodeFragment extends BaseFragment {
     @Bind(R.id.rv_v2node)
     RecyclerView rvV2node;
     V2NodeRecyclerAdapter mAdapter;
-    List<HashMap<String, String>> data;
+    List<V2NodesBean> data;
     Fragment v2NodeFragment;
 
     @Override
@@ -44,61 +41,38 @@ public class V2NodeFragment extends BaseFragment {
         return new V2NodeFragment();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        MyApplication.getRequestQueue().cancelAll("V2NodeFragment");
+    }
 
     @Override
     protected void initData() {
-
         data = new ArrayList<>();
-        StringRequest request = new StringRequest("https://www.v2ex.com/api/nodes/all.json", new Response.Listener<String>() {
+        mAdapter = new V2NodeRecyclerAdapter(frmContext, data);
+        mAdapter.setOnItemClickListener(new V2NodeRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onResponse(String response) {
-                try {
-                    JSONArray array = new JSONArray(response);
-                    for (int i = 0; i < 120; i++) {
-                        JSONObject object = array.optJSONObject(i);
-                        HashMap<String, String> map = new HashMap<>();
-//                        map.put("name",object.optString("name"));
-                        map.put("title_alternative", object.optString("title_alternative"));
-//                        map.put("topics",object.optString("topics"));
-//                        map.put("header",object.optString("header"));
-                        map.put("url", object.optString("url"));
-                        data.add(map);
-                    }
-                    mAdapter = new V2NodeRecyclerAdapter(frmContext, data);
-                    mAdapter.setOnItemClickListener(new V2NodeRecyclerAdapter.OnItemClickListener() {
-                        @Override
-                        public void onClickListener(View view, int position) {
-//                            getFragmentManager().beginTransaction()
-//                                    .addToBackStack(null)
-//                                    .add(R.id.fg_main, new WebviewFragment(data.get(position).get("url")))
-//                                    .commit();
-                            FragmentManager manager = getActivity().getSupportFragmentManager();
-                            FragmentTransaction transaction = manager.beginTransaction();
-                            v2NodeFragment = manager.findFragmentByTag("node");
-                            WebviewFragment webviewFragment = new WebviewFragment(data.get(position).get("url"));
-                            transaction.hide(v2NodeFragment)
-                                    .addToBackStack(null)
-                                    .add(R.id.fg_main, webviewFragment, "nodeweb" + position)
-                                    .commitAllowingStateLoss();
-
-
-                        }
-                    });
-                    rvV2node.setLayoutManager(new GridLayoutManager(frmContext, 2));
-                    rvV2node.setAdapter(mAdapter);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
+            public void onClickListener(View view, int position) {
+                FragmentManager manager = getActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                v2NodeFragment = manager.findFragmentByTag("node");
+                WebviewFragment webviewFragment = new WebviewFragment(data.get(position).getUrl());
+                transaction.hide(v2NodeFragment)
+                        .addToBackStack(null)
+                        .add(R.id.fg_main, webviewFragment, "nodeweb" + position)
+                        .commitAllowingStateLoss();
             }
         });
-        request.setTag("V2NodeFragment");
-        MyApplication.getRequestQueue().add(request);
+        rvV2node.setLayoutManager(new GridLayoutManager(frmContext, 2));
+        rvV2node.setAdapter(mAdapter);
+        VolleyUtils.Get(Constant.URL_V2_NODE_ALL, "V2NodeFragment", new VolleyIF(VolleyIF.mListener) {
+            @Override
+            public void onMyResponse(String response) {
+                data.addAll(JSON.parseArray(response, V2NodesBean.class));
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
 }

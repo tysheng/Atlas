@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@drawable/seletor_background"
+        android:background="?android:attr/selectableItemBackground"
         android:paddingLeft="12dp"
         android:clickable="true"
         android:paddingRight="12dp">

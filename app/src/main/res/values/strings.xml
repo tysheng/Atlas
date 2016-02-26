@@ -12,6 +12,9 @@
     <string name="title_activity_setting">Setting</string>
     <string name="color_palette">Pick the color</string>
     <string name="colors">Colors</string>
+    <string name="please_wait">Please wait…</string>
+
+
     <string-array name="atlas_drawbles">
         <item>http://ww4.sinaimg.cn/large/a823bdcdgw1f1ad0n7ohzj21hc118h8x.jpg</item>
         <item>http://ww3.sinaimg.cn/large/a823bdcdgw1f1ad0ls8wpj21hc11u7s1.jpg</item>

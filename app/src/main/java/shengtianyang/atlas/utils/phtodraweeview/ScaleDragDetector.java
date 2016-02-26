@@ -1,4 +1,4 @@
-package shengtianyang.atlas.phtodraweeview;
+package shengtianyang.atlas.utils.phtodraweeview;
 
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;

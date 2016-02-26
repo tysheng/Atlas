@@ -11,7 +11,7 @@ import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.imagepipeline.image.ImageInfo;
 
-import shengtianyang.atlas.phtodraweeview.PhotoDraweeView;
+import shengtianyang.atlas.utils.phtodraweeview.PhotoDraweeView;
 
 /**
  * Created by shengtianyang on 16/1/31.

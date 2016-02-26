@@ -11,11 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
@@ -25,13 +20,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.Bind;
 import shengtianyang.atlas.R;
 import shengtianyang.atlas.app.Constant;
 import shengtianyang.atlas.app.MyApplication;
 import shengtianyang.atlas.base.BaseFragment;
+import shengtianyang.atlas.net.VolleyIF;
+import shengtianyang.atlas.net.VolleyUtils;
 
 /**
  * Created by shengtianyang on 16/1/31.
@@ -65,7 +61,7 @@ public class WeatherFragment extends BaseFragment {
     private String cityname;
     private String city_url;
 
-    public WeatherFragment(String cityname,String city_url) {
+    public WeatherFragment(String cityname, String city_url) {
         this.cityname = cityname;
         this.city_url = city_url;
     }
@@ -83,7 +79,7 @@ public class WeatherFragment extends BaseFragment {
                 @Override
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        InputMethodManager inputMethodManager =(InputMethodManager) getContext().
+                        InputMethodManager inputMethodManager = (InputMethodManager) getContext().
                                 getSystemService(Context.INPUT_METHOD_SERVICE);
                         inputMethodManager.hideSoftInputFromWindow(etSearchCity.getWindowToken(), 0);
                         getWeather(etSearchCity.getText().toString());
@@ -107,49 +103,65 @@ public class WeatherFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        MyApplication.getRequestQueue().cancelAll("WeatherFragment" + cityname);
+    }
+
     private void getWeather(final String cityname) {
-        if (!city_url.equals("")){
+        if (!city_url.equals("")) {
             drawee_weather_city.setImageURI(Uri.parse(city_url));
         } else {
             drawee_weather_city.setVisibility(View.GONE);
         }
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constant.HF_WEATHER_API, new Response.Listener<String>() {
+        HashMap<String, String> header = new HashMap<>();
+        header.put("apikey", Constant.HF_WEATHER_APIKEY);
+        HashMap<String, String> params = new HashMap<>();
+        params.put("city", cityname);
+        VolleyUtils.Post(Constant.HF_WEATHER_API, "WeatherFragment" + cityname, header, params, new VolleyIF(VolleyIF.mListener) {
             @Override
-            public void onResponse(String response) {
+            public void onMyResponse(String response) {
                 try {
                     JSONObject object = new JSONObject(response);
                     JSONArray array = object.optJSONArray("HeWeather data service 3.0");
                     JSONObject object1 = array.optJSONObject(0);
                     if (object1.optString("status").equals("ok")) {
-                        JSONObject object2 = object1.optJSONObject("aqi");
-                        if(object2 != null){
-                            JSONObject object3 = object2.optJSONObject("city");
-                            String aqi = object3.optString("aqi");
-                            String qlty = object3.optString("qlty");
-                            tvAqi.setText(aqi);
-                            tcQlty.setText(qlty);
-                            tv_textaqi.setText("AQI");
-                        } else {
-                            ll_aqi.setVisibility(View.GONE);
-                        }
                         JSONObject basic = object1.optJSONObject("basic");
-                        JSONObject now = object1.optJSONObject("now");
-                        JSONObject suggestion = object1.optJSONObject("suggestion");
-                        JSONObject comf = suggestion.optJSONObject("comf");
-                        JSONArray hourly_forecast = object1.optJSONArray("hourly_forecast");
-                        JSONObject hourforecast = hourly_forecast.getJSONObject(0);
+                        if (basic.optString("cnty").equals("中国")) {
+                            JSONObject object2 = object1.optJSONObject("aqi");
+                            if (object2 != null) {
+                                JSONObject object3 = object2.optJSONObject("city");
+                                String aqi = object3.optString("aqi");
+                                String qlty = object3.optString("qlty");
+                                tvAqi.setText(aqi);
+                                tcQlty.setText(qlty);
+                                tv_textaqi.setText("AQI");
+                            } else {
+                                ll_aqi.setVisibility(View.GONE);
+                            }
 
-                        String brf = comf.optString("brf");
-                        String txt = comf.optString("txt");
-                        String tmp = hourforecast.optString("tmp");
-                        String city_name = basic.optString("city");
-                        String cond = now.optJSONObject("cond").optString("txt");
+                            JSONObject now = object1.optJSONObject("now");
+                            JSONObject suggestion = object1.optJSONObject("suggestion");
+                            JSONObject comf = suggestion.optJSONObject("comf");
+                            JSONArray hourly_forecast = object1.optJSONArray("hourly_forecast");
+                            JSONObject hourforecast = hourly_forecast.getJSONObject(0);
 
-                        tvBrf.setText(brf);
-                        tvCity.setText(city_name);
-                        tvTmp.setText(tmp + "°");
-                        tvTxt.setText(txt);
-                        tvCond.setText(cond);
+                            String brf = comf.optString("brf");
+                            String txt = comf.optString("txt");
+                            String tmp = hourforecast.optString("tmp");
+                            String city_name = basic.optString("city");
+                            String cond = now.optJSONObject("cond").optString("txt");
+
+                            tvBrf.setText(brf);
+                            tvCity.setText(city_name);
+                            tvTmp.setText(tmp + "°");
+                            tvTxt.setText(txt);
+                            tvCond.setText(cond);
+                        } else {
+                            Toast.makeText(getActivity(), "外国城市懒得解析~", Toast.LENGTH_SHORT).show();
+                        }
+
 
                     } else {
                         Toast.makeText(getActivity(), "请输入正确的城市名", Toast.LENGTH_SHORT).show();
@@ -158,30 +170,8 @@ public class WeatherFragment extends BaseFragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> header = new HashMap<>();
-                header.put("apikey", Constant.HF_WEATHER_APIKEY);
-                return header;
-            }
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> params = new HashMap<>();
-                params.put("city", cityname);
-                return params;
-            }
-        };
-        stringRequest.setTag("WeatherFragment" + cityname);
-        MyApplication.getRequestQueue().add(stringRequest);
+        });
     }
 
 }

@@ -13,6 +13,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import shengtianyang.atlas.R;
+import shengtianyang.atlas.bean.V2NodesBean;
 
 /**
  * Created by shengtianyang on 16/1/28.
@@ -20,13 +21,13 @@ import shengtianyang.atlas.R;
 public class V2NodeRecyclerAdapter extends RecyclerView.Adapter<V2NodeRecyclerAdapter.MyViewHolder> {
 
     private LayoutInflater layoutInflater;
-    private List<HashMap<String, String>> data;
+    private List<V2NodesBean> data;
     private OnItemClickListener onItemClickListener;
 
 
-    public V2NodeRecyclerAdapter(Context context, List<HashMap<String, String>> data) {
+    public V2NodeRecyclerAdapter(Context context, List<V2NodesBean> data) {
         this.data = data;
-        this.layoutInflater = layoutInflater.from(context);
+        this.layoutInflater = LayoutInflater.from(context);
     }
 
     public interface OnItemClickListener {
@@ -40,13 +41,12 @@ public class V2NodeRecyclerAdapter extends RecyclerView.Adapter<V2NodeRecyclerAd
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = layoutInflater.inflate(R.layout.item_v2node, parent, false);
-        MyViewHolder viewHolder = new MyViewHolder(view);
-        return viewHolder;
+        return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        holder.tvNodeTitle.setText(data.get(position).get("title_alternative"));
+        holder.tvNodeTitle.setText(data.get(position).getTitle_alternative());
 
 
         if (onItemClickListener != null) {

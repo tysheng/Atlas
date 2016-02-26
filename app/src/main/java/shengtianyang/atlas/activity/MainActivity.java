@@ -1,5 +1,6 @@
 package shengtianyang.atlas.activity;
 
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import shengtianyang.atlas.R;
 import shengtianyang.atlas.app.Constant;
 import shengtianyang.atlas.base.BaseActivity;
@@ -29,6 +31,7 @@ public class MainActivity extends BaseActivity
     DrawerLayout drawer;
     @Bind(R.id.nav_view)
     NavigationView navigationView;
+
     //    private long exitTime;
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private String nowItemTtile = "";
@@ -42,6 +45,9 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initData() {
+
+
+
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -53,12 +59,13 @@ public class MainActivity extends BaseActivity
         v2HotFragment = V2HotFragment.getInstance(Constant.URL_V2_HOT);
         v2NewFragment = V2NewFragment.getInstance(Constant.URL_V2_LASTED);
         v2NodeFragment = V2NodeFragment.getInstance();
-        
+
         currentFragment = v2HotFragment;
         jumpFragment(null, v2HotFragment, R.id.fg_main, "hot");
-//        fragmentManager.beginTransaction()
-//                .replace(R.id.fg_main, V2HotFragment.getInstance(Constant.URL_V2_HOT), "V2HotFragment")
-//                .commit();
+
+
+
+
     }
 
     @Override
@@ -183,6 +190,13 @@ public class MainActivity extends BaseActivity
         fragmentManager.beginTransaction()
                 .replace(R.id.fg_main, fragment, null)
                 .commit();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 //    @Override
 //    public boolean onKeyDown(int keyCode, KeyEvent event) {

@@ -10,14 +10,13 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import shengtianyang.atlas.R;
 import shengtianyang.atlas.bean.HeaderBean;
+import shengtianyang.atlas.bean.V2ReplyBean;
 import shengtianyang.atlas.utils.TimeStamp;
 
 /**
@@ -29,24 +28,29 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int TYPE_ITEM = 1;
 
     private LayoutInflater layoutInflater;
-    private List<HashMap<String, String>> data;
+//    private List<HashMap<String, String>> data;
+    private List<V2ReplyBean> data;
     private HeaderBean headerBean;
-    private OnItemClickListener onItemClickListener;
+//    private OnItemClickListener onItemClickListener;
 
 
-    public V2ThreadAdapter(Context context, List<HashMap<String, String>> data, HeaderBean headerBean) {
+    public V2ThreadAdapter(Context context, List<V2ReplyBean> data, HeaderBean headerBean) {
         this.data = data;
-        this.layoutInflater = layoutInflater.from(context);
+        this.layoutInflater = LayoutInflater.from(context);
         this.headerBean = headerBean;
     }
-
-    public interface OnItemClickListener {
-        void onClickListener(View view, int position);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.onItemClickListener = listener;
-    }
+//       public V2ThreadAdapter(Context context, List<V2ReplyBean> data, HeaderBean headerBean) {
+//        this.data = data;
+//        this.layoutInflater = layoutInflater.from(context);
+//        this.headerBean = headerBean;
+//    }
+//    public interface OnItemClickListener {
+//        void onClickListener(View view, int position);
+//    }
+//
+//    public void setOnItemClickListener(OnItemClickListener listener) {
+//        this.onItemClickListener = listener;
+//    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -61,7 +65,7 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder  holder, final int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder,int position) {
         if(holder instanceof VHHeader){
             VHHeader vhHeader = (VHHeader)holder;
             vhHeader.draweeTopic.setImageURI(Uri.parse("http:" + headerBean.getDraweeTopic()));
@@ -72,11 +76,10 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             vhHeader.tvTopicTime.setText(TimeStamp.getFinalTimeDiffrence(headerBean.getTvTopicTime()));
         }else if (holder instanceof VHItem){
             VHItem vhItem = (VHItem)holder;
-            Map<String, String> map = data.get(position-1);
-            vhItem.tvReplyContent.setText(map.get("content"));
-            vhItem.tvReplyAuthor.setText(map.get("username"));
-            vhItem.draweeReply.setImageURI(Uri.parse("http:" + map.get("avatar_normal")));
-            vhItem.tvReplyTime.setText(TimeStamp.getFinalTimeDiffrence(map.get("last_modified")));
+            vhItem.tvReplyContent.setText(data.get(position-1).getContent());
+            vhItem.tvReplyAuthor.setText(data.get(position-1).getMember().getUsername());
+            vhItem.draweeReply.setImageURI(Uri.parse("http:" + data.get(position-1).getMember().getAvatar_normal()));
+            vhItem.tvReplyTime.setText(TimeStamp.getFinalTimeDiffrence(data.get(position-1).getLast_modified()));
             vhItem.tvReplyFloor.setText(position+"");
         }
 
@@ -84,25 +87,25 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //        holder.tv_time.setText(data.get(position).get("content").equals("")
 //                ? "作者很懒,什么都没写~" : data.get(position).get("content"));
 
-        if (onItemClickListener != null) {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemClickListener.onClickListener(v, holder.getLayoutPosition());
-                }
-            });
-        }
+//        if (onItemClickListener != null) {
+//            holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    onItemClickListener.onClickListener(v, holder.getLayoutPosition());
+//                }
+//            });
+//        }
     }
     @Override
     public int getItemViewType(int position) {
-        if(isPositionHeader(position))
-            return TYPE_HEADER;
+        switch (position) {
+            case 0:
+                return TYPE_HEADER;
+            default:
+                return TYPE_ITEM;
+        }
+    }
 
-        return TYPE_ITEM;
-    }
-    private boolean isPositionHeader(int position){
-        return position == 0;
-    }
     @Override
     public int getItemCount() {
         return data.size()+1;
