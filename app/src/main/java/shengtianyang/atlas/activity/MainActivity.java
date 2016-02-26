@@ -1,6 +1,5 @@
 package shengtianyang.atlas.activity;
 
-import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import shengtianyang.atlas.R;
 import shengtianyang.atlas.app.Constant;
 import shengtianyang.atlas.base.BaseActivity;
@@ -45,9 +43,6 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initData() {
-
-
-
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -62,10 +57,6 @@ public class MainActivity extends BaseActivity
 
         currentFragment = v2HotFragment;
         jumpFragment(null, v2HotFragment, R.id.fg_main, "hot");
-
-
-
-
     }
 
     @Override
@@ -111,7 +102,6 @@ public class MainActivity extends BaseActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -192,12 +182,6 @@ public class MainActivity extends BaseActivity
                 .commit();
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 //    @Override
 //    public boolean onKeyDown(int keyCode, KeyEvent event) {
 //        if (keyCode == KeyEvent.KEYCODE_BACK

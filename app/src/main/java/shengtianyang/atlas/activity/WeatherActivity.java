@@ -55,19 +55,19 @@ public class WeatherActivity extends BaseActivity {
                     case 0:
                         return HeaderDesign.fromColorResAndDrawable(
                                 R.color.blue,
-                                getDrawable(R.drawable.menu_webp_background));
+                                getResources().getDrawable(R.drawable.menu_webp_background));
                     case 1:
                         return HeaderDesign.fromColorResAndDrawable(
                                 R.color.green,
-                                getDrawable(R.drawable.menu_webp_background));
+                                getResources().getDrawable(R.drawable.menu_webp_background));
                     case 2:
                         return HeaderDesign.fromColorResAndDrawable(
                                 R.color.cyan,
-                                getDrawable(R.drawable.menu_webp_background));
+                                getResources().getDrawable(R.drawable.menu_webp_background));
                     case 3:
                         return HeaderDesign.fromColorResAndDrawable(
                                 R.color.red,
-                                getDrawable(R.drawable.menu_webp_background));
+                                getResources().getDrawable(R.drawable.menu_webp_background));
                 }
 
                 //execute others actions if needed (ex : modify your header logo)
