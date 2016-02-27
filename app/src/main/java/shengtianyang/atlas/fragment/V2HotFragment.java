@@ -4,13 +4,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 import com.alibaba.fastjson.JSON;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +34,7 @@ public class V2HotFragment extends BaseFragment {
     @Bind(R.id.rv_v2)
     RecyclerView rvV2;
     @Bind(R.id.swipe)
-    SwipeRefreshLayout swipe;
+    SwipyRefreshLayout swipe;
     private List<V2HotBean> data;
     Fragment fragment;
 
@@ -73,31 +75,16 @@ public class V2HotFragment extends BaseFragment {
         rvV2.setLayoutManager(new LinearLayoutManager(frmContext));
         rvV2.setItemAnimator(new DefaultItemAnimator());
         rvV2.setAdapter(mAdapter);
+        rvV2.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            }
+        });
         VolleyUtils.Get(url, "V2HotFragment", new VolleyIF(VolleyIF.mListener) {
             @Override
             public void onMyResponse(String response) {
                 data.addAll(JSON.parseArray(response, V2HotBean.class));
                 mAdapter.notifyDataSetChanged();
-//                try {
-//                    JSONArray array = new JSONArray(response);
-//                    for (int i = 0; i < array.length(); i++) {
-//                        JSONObject object = array.optJSONObject(i);
-//                        HashMap<String, String> map = new HashMap<String, String>();
-//                        map.put("title", object.optString("title"));
-//                        map.put("avatar_normal", object.optJSONObject("member").optString("avatar_normal"));
-//                        map.put("username", object.optJSONObject("member").optString("username"));
-//                        map.put("node_title", object.optJSONObject("node").optString("title"));
-//                        map.put("last_modified", object.optString("last_modified"));
-//                        map.put("url", object.optString("url"));
-//                        map.put("id", object.optString("id"));
-//                        map.put("content", object.optString("content"));
-//                        map.put("replies", object.optString("replies"));
-//                        data.add(map);
-//                    }
-//                    mAdapter.notifyDataSetChanged();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
                 if (swipe.isRefreshing())
                     swipe.setRefreshing(false);
             }
@@ -109,10 +96,12 @@ public class V2HotFragment extends BaseFragment {
                 android.R.color.holo_green_light,
                 android.R.color.holo_red_light,
                 android.R.color.holo_blue_light);
-        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipe.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh() {
-                getHotThread();
+            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+                if (direction == SwipyRefreshLayoutDirection.TOP) {
+                    getHotThread();
+                }
             }
         });
     }
@@ -131,6 +120,13 @@ public class V2HotFragment extends BaseFragment {
     @Override
     protected void initData() {
         initView();
-        getHotThread();
+        swipe.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                swipe.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                swipe.setRefreshing(true);
+                getHotThread();
+            }
+        });
     }
 }

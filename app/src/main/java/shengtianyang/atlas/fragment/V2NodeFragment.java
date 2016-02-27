@@ -6,8 +6,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 import com.alibaba.fastjson.JSON;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +29,17 @@ import shengtianyang.atlas.net.VolleyUtils;
  * Created by shengtianyang on 16/2/2.
  */
 public class V2NodeFragment extends BaseFragment {
+    @Bind(R.id.srl_node)
+    SwipyRefreshLayout srlNode;
     @Bind(R.id.rv_v2node)
     RecyclerView rvV2node;
     V2NodeRecyclerAdapter mAdapter;
     List<V2NodesBean> data;
     Fragment v2NodeFragment;
+    List<V2NodesBean> list;
+    int total = 0;
+    int used = 0;
+
 
     @Override
     protected int getLayoutId() {
@@ -49,6 +58,7 @@ public class V2NodeFragment extends BaseFragment {
 
     @Override
     protected void initData() {
+        initswipe();
         data = new ArrayList<>();
         mAdapter = new V2NodeRecyclerAdapter(frmContext, data);
         mAdapter.setOnItemClickListener(new V2NodeRecyclerAdapter.OnItemClickListener() {
@@ -66,11 +76,56 @@ public class V2NodeFragment extends BaseFragment {
         });
         rvV2node.setLayoutManager(new GridLayoutManager(frmContext, 2));
         rvV2node.setAdapter(mAdapter);
+        srlNode.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                srlNode.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                srlNode.setRefreshing(true);
+                getData();
+            }
+        });
+    }
+
+    private void getData() {
         VolleyUtils.Get(Constant.URL_V2_NODE_ALL, "V2NodeFragment", new VolleyIF(VolleyIF.mListener) {
             @Override
             public void onMyResponse(String response) {
-                data.addAll(JSON.parseArray(response, V2NodesBean.class));
+                list = JSON.parseArray(response, V2NodesBean.class);
+                total = list.size();
+                for (int i = 0; i < 30; i++) {
+                    data.add(list.get(i));
+                }
+                used += 30;
+//                data.addAll(JSON.parseArray(response, V2NodesBean.class));
                 mAdapter.notifyDataSetChanged();
+                if (srlNode.isRefreshing())
+                    srlNode.setRefreshing(false);
+            }
+        });
+    }
+
+    private void initswipe() {
+        srlNode.setColorSchemeResources(android.R.color.holo_purple,
+                android.R.color.holo_green_light,
+                android.R.color.holo_red_light,
+                android.R.color.holo_blue_light);
+        srlNode.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+                if (direction == SwipyRefreshLayoutDirection.TOP) {
+                    used = 0;
+                    data.clear();
+                    getData();
+                } else if (direction == SwipyRefreshLayoutDirection.BOTTOM) {
+                    int wtf = (total - used) < 30 ? total - used : 30;
+                    for (int i = used; i < wtf+used; i++) {
+                        data.add(list.get(i));
+                    }
+                    used += 30;
+                    mAdapter.notifyDataSetChanged();
+                    if (srlNode.isRefreshing())
+                        srlNode.setRefreshing(false);
+                }
             }
         });
     }

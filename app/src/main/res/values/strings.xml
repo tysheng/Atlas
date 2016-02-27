@@ -23,4 +23,5 @@
     <string name="weather_city_shaoxing_url">http://ww3.sinaimg.cn/large/a823bdcdgw1f1agjq8nouj20rs0ijdky.jpg</string>
     <string name="weather_city_ningbo_url">http://ww4.sinaimg.cn/mw690/a823bdcdgw1f1ahae2mwdj21kw0siaj2.jpg</string>
     <string name="weather_city_xian_url">http://ww2.sinaimg.cn/large/a823bdcdgw1f1agjspcycj21ok14egym.jpg</string>
+    <string name="app_loading_more">loading...</string>
 </resources>

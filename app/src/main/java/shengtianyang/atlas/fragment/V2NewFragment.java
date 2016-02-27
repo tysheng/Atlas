@@ -4,13 +4,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 import com.alibaba.fastjson.JSON;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +34,7 @@ public class V2NewFragment extends BaseFragment {
     @Bind(R.id.rv_v2)
     RecyclerView rvV2;
     @Bind(R.id.swipe)
-    SwipeRefreshLayout swipe;
-
+    SwipyRefreshLayout swipe;
     private List<V2HotBean> data;
     Fragment fragment;
 
@@ -94,10 +95,12 @@ public class V2NewFragment extends BaseFragment {
                 android.R.color.holo_green_light,
                 android.R.color.holo_red_light,
                 android.R.color.holo_blue_light);
-        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipe.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh() {
-                getHotThread();
+            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+                if (direction == SwipyRefreshLayoutDirection.TOP){
+                    getHotThread();
+                }
             }
         });
     }
@@ -110,6 +113,13 @@ public class V2NewFragment extends BaseFragment {
     @Override
     protected void initData() {
         initView();
-        getHotThread();
+        swipe.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                swipe.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                swipe.setRefreshing(true);
+                getHotThread();
+            }
+        });
     }
 }
