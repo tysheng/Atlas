@@ -1,6 +1,5 @@
 package shengtianyang.atlas.fragment;
 
-import android.annotation.SuppressLint;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -29,7 +28,6 @@ import shengtianyang.atlas.net.VolleyUtils;
 /**
  * Created by shengtianyang on 16/2/2.
  */
-@SuppressLint("ValidFragment")
 public class V2NodeFragment extends BaseFragment {
     @Bind(R.id.srl_node)
     SwipyRefreshLayout srlNode;
@@ -42,6 +40,8 @@ public class V2NodeFragment extends BaseFragment {
     int total = 0;
     int used = 0;
 
+    public V2NodeFragment() {
+    }
 
     @Override
     protected int getLayoutId() {

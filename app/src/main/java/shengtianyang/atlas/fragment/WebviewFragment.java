@@ -1,13 +1,16 @@
 package shengtianyang.atlas.fragment;
 
 import android.annotation.SuppressLint;
+import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 import shengtianyang.atlas.R;
 import shengtianyang.atlas.base.BaseFragment;
 
@@ -19,7 +22,9 @@ public class WebviewFragment extends BaseFragment {
     @Bind(R.id.webview)
     WebView webview;
 
+
     private String url;
+
     public WebviewFragment(String url) {
         this.url = url;
     }
@@ -42,17 +47,43 @@ public class WebviewFragment extends BaseFragment {
         dialog.show();
         webview.getSettings().setJavaScriptEnabled(true);
         webview.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-        webview.setWebChromeClient(new WebChromeClient(){
+        webview.setWebViewClient(new WebViewClient(){
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+        });
+        webview.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                if (newProgress>=60){
+                if (newProgress >= 60) {
                     dialog.dismiss();
                 }
 
             }
-            
+
         });
         webview.loadUrl(url);
+    }
+
+
+
+    @OnClick({R.id.ib_web_refresh, R.id.ib_web_back, R.id.ib_web_go})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.ib_web_refresh:
+                webview.reload();
+                break;
+            case R.id.ib_web_back:
+                if (webview.canGoBack())
+                    webview.goBack();
+                break;
+            case R.id.ib_web_go:
+                if (webview.canGoForward())
+                    webview.goForward();
+                break;
+        }
     }
 
 
