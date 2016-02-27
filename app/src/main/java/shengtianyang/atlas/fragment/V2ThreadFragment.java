@@ -1,5 +1,6 @@
 package shengtianyang.atlas.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +25,7 @@ import shengtianyang.atlas.utils.ItemDivider;
 /**
  * Created by shengtianyang on 16/2/1.
  */
+@SuppressLint("ValidFragment")
 public class V2ThreadFragment extends BaseFragment {
 
     @Bind(R.id.rc_thread)

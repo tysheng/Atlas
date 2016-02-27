@@ -1,5 +1,6 @@
 package shengtianyang.atlas.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -29,6 +30,7 @@ import shengtianyang.atlas.net.VolleyUtils;
 /**
  * Created by shengtianyang on 16/1/31.
  */
+@SuppressLint("ValidFragment")
 public class V2NewFragment extends BaseFragment {
 
     @Bind(R.id.rv_v2)

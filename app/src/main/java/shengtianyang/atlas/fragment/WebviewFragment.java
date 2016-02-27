@@ -1,5 +1,6 @@
 package shengtianyang.atlas.fragment;
 
+import android.annotation.SuppressLint;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -13,6 +14,7 @@ import shengtianyang.atlas.base.BaseFragment;
 /**
  * Created by shengtianyang on 16/2/1.
  */
+@SuppressLint("ValidFragment")
 public class WebviewFragment extends BaseFragment {
     @Bind(R.id.webview)
     WebView webview;

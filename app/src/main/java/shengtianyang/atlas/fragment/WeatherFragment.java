@@ -1,5 +1,6 @@
 package shengtianyang.atlas.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.view.KeyEvent;
@@ -32,6 +33,7 @@ import shengtianyang.atlas.net.VolleyUtils;
 /**
  * Created by shengtianyang on 16/1/31.
  */
+@SuppressLint("ValidFragment")
 public class WeatherFragment extends BaseFragment {
 
     @Bind(R.id.tv_aqi)

@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.getkeepsafe.dexcount'
 
 android {
     compileSdkVersion 23
@@ -16,6 +17,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
 }
 def androidSupportVersion = "23.1.1"//"22.2.1"
@@ -42,5 +49,4 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.7.4'
     compile files('src/main/res/fastjson-1.1.46.android.jar')
     compile 'com.github.orangegangsters:swipy:1.2.2@aar'
-
 }

@@ -1,5 +1,6 @@
 package shengtianyang.atlas.fragment;
 
+import android.annotation.SuppressLint;
 import android.widget.ToggleButton;
 
 import butterknife.Bind;
@@ -12,6 +13,7 @@ import shengtianyang.atlas.utils.Flash;
 /**
  * Created by shengtianyang on 16/2/1.
  */
+@SuppressLint("ValidFragment")
 public class FlashFragment extends BaseFragment {
 
     private Flash flash = new Flash();

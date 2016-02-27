@@ -1,6 +1,7 @@
 package shengtianyang.atlas.fragment;
 
 
+import android.annotation.SuppressLint;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.widget.TextView;
@@ -16,9 +17,9 @@ import shengtianyang.atlas.utils.RecyclerTransformAnimation;
 /**
  * A simple {@link Fragment} subclass.
  */
+@SuppressLint("ValidFragment")
 public class AtlasFragment extends BaseFragment {
 
-    private int[] drawble;
     private String[] stringsdrawble;
     @Bind(R.id.vp_main)
     MultiTouchViewPager viewPager;
@@ -28,9 +29,8 @@ public class AtlasFragment extends BaseFragment {
     TextView tv;
 
 
-    public AtlasFragment(int[] drawble) {
-        this.drawble = drawble;
-    }
+
+
     public AtlasFragment(String[] drawble) {
         this.stringsdrawble = drawble;
     }
