@@ -30,6 +30,11 @@
             android:label="@string/title_activity_setting">
 
         </activity>
+        <activity
+            android:name="tysheng.atlas.activity.WeatherTabActivity"
+            android:label="@string/title_activity_weather">
+
+        </activity>
 
         <activity
             android:name="tysheng.atlas.activity.WeatherActivity"

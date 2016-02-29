@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="?attr/themeColor">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/tb_weathertab"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        <com.ogaclejapan.smarttablayout.SmartTabLayout
+            android:id="@+id/stl_weathertab"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tab_height"
+            android:paddingBottom="4dp"
+            app:stl_defaultTabBackground="?attr/selectableItemBackground"
+            app:stl_defaultTabTextColor="@color/white"
+            app:stl_defaultTabTextHorizontalPadding="30dp"
+            app:stl_indicatorColor="@color/accent"
+            app:stl_indicatorCornerRadius="1.5dp"
+            app:stl_indicatorInterpolation="smart"
+            app:stl_indicatorThickness="3dp"
+            app:stl_underlineColor="@color/transparent"
+            />
+    </LinearLayout>
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_weathertab"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+</LinearLayout>

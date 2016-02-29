@@ -25,7 +25,6 @@ public final class SPHelper {
 
     }
 
-
     /**
      * 得到主题
      *
@@ -36,4 +35,20 @@ public final class SPHelper {
         SharedPreferences sharedPreferences = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getInt("theme", R.style.BlueTheme);
     }
+    /**
+     * 切换天气模式
+     * 0 : weathertab
+     * 1 : weather
+     */
+    public static void SwitchWeatherMode(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
+        if (sharedPreferences.getInt("weather",0) == 0){
+            sharedPreferences.edit().putInt("weather", 1).commit();
+        } else if (sharedPreferences.getInt("weather",0) == 1){
+            sharedPreferences.edit().putInt("weather", 0).commit();
+        }
+
+    }
+
+
 }

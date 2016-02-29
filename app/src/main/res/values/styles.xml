@@ -18,7 +18,7 @@
     </style>
 
     <style name="YellowTheme" parent="AppTheme">
-        <item name="themeColor">@color/yellow</item>
+        <item name="themeColor">@color/smart_tab</item>
     </style>
 
     <style name="BlackTheme" parent="AppTheme">

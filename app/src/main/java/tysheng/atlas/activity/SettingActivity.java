@@ -35,12 +35,17 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
                 .show();
     }
 
+    @OnClick(R.id.ll_switch_weather)
+    public void onClick() {
+        SPHelper.SwitchWeatherMode(actContext);
+        ShowToast("天气模式已改变");
+    }
     @Override
     public void onColorSelection(@NonNull ColorChooserDialog dialog, @ColorInt int color) {
         primaryPreselect = color;
         String s = String.format("#%06X", (0xFFFFFF & color));
-        switch(s){
-            case "#FFEB3B":
+        switch (s) {
+            case "#3C515C":
                 SPHelper.setTheme(SettingActivity.this, R.style.YellowTheme);
                 break;
             case "#F44336":
@@ -78,7 +83,7 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
                 finish();
             }
         });
-        intent = new Intent(this,MainActivity.class);
+        intent = new Intent(this, MainActivity.class);
         primaryPreselect = DialogUtils.resolveColor(this, R.attr.themeColor);
 
 
@@ -95,6 +100,7 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
         super.onBackPressed();
         finish();
     }
+
 }
 
 

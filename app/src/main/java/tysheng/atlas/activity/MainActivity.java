@@ -1,5 +1,6 @@
 package tysheng.atlas.activity;
 
+import android.content.Context;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -40,7 +41,6 @@ public class MainActivity extends BaseActivity
     V2NewFragment v2NewFragment;
     V2NodeFragment v2NodeFragment;
     Fragment currentFragment;
-
 
     @Override
     public void initData() {
@@ -164,7 +164,12 @@ public class MainActivity extends BaseActivity
                 currentFragment = flashFragment;
                 break;
             case R.id.nav_transport:
-                jumpActivity(WeatherActivity.class, false);
+                switch(getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE).getInt("weather",0)){
+                    case 0:jumpActivity(WeatherTabActivity.class, false);
+                        break;
+                    case 1:jumpActivity(WeatherActivity.class, false);
+                        break;
+                }
                 break;
             case R.id.nav_history:
                 jumpActivity(SettingActivity.class, false);

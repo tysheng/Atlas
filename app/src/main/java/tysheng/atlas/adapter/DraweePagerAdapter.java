@@ -17,12 +17,8 @@ import tysheng.atlas.utils.phtodraweeview.PhotoDraweeView;
  * Created by shengtianyang on 16/1/31.
  */
 public class DraweePagerAdapter extends PagerAdapter {
-    private int[] mDrawables;
     private String[] stringDrawbles;
 
-    public DraweePagerAdapter(int[] mDrawables) {
-        this.mDrawables = mDrawables;
-    }
 
     public DraweePagerAdapter(String[] mDrawables) {
         this.stringDrawbles = mDrawables;
@@ -41,6 +37,19 @@ public class DraweePagerAdapter extends PagerAdapter {
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        switch (position % 3) {
+            case 0:
+                return "政区";
+            case 1:
+                return "地形";
+            case 2:
+                return "地势";
+        }
+        return "";
     }
 
     @Override
