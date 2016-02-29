@@ -13,7 +13,7 @@
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"/>
 
-    <shengtianyang.atlas.utils.phtodraweeview.MultiTouchViewPager
+    <tysheng.atlas.utils.phtodraweeview.MultiTouchViewPager
         android:id="@+id/vp_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
