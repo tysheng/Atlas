@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
-
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.flash" />
 
@@ -16,6 +15,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/BlackTheme">
+        <meta-data
+            android:name="tysheng.atlas.weixin"
+            android:value="85e31053269d6d5dba4cc3d37c9d33eb"/>
         <activity
             android:name="tysheng.atlas.activity.MainActivity"
             android:label="@string/app_name">
@@ -35,13 +37,11 @@
             android:label="@string/title_activity_weather">
 
         </activity>
-
         <activity
-            android:name="tysheng.atlas.activity.WeatherActivity"
-            android:label="@string/title_activity_weather"
-            android:windowSoftInputMode="adjustPan">
-
+            android:name="tysheng.atlas.activity.WeatherListActivity"
+            android:label="@string/title_activity_weather">
         </activity>
+
     </application>
 
 </manifest>

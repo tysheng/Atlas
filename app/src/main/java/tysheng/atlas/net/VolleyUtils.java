@@ -14,12 +14,12 @@ import tysheng.atlas.app.MyApplication;
  */
 public class VolleyUtils {
     public static void Get(String url, String tag, VolleyIF vif) {
-        StringRequest stringRequest = new StringRequest(url, vif.getmListener(), vif.getmErrorListener());
-        stringRequest.setTag(tag);
-        MyApplication.getRequestQueue().add(stringRequest);
+        StringRequest r = new StringRequest(url, vif.getmListener(), vif.getmErrorListener());
+        r.setTag(tag);
+        MyApplication.getRequestQueue().add(r);
     }
     public static void Post(String url, String tag, final HashMap<String, String> header, final HashMap<String, String> params,VolleyIF vif) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, vif.getmListener(), vif.getmErrorListener()){
+        StringRequest r = new StringRequest(Request.Method.POST, url, vif.getmListener(), vif.getmErrorListener()){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 return header;
@@ -30,7 +30,7 @@ public class VolleyUtils {
                 return params;
             }
         };
-        stringRequest.setTag(tag);
-        MyApplication.getRequestQueue().add(stringRequest);
+        r.setTag(tag);
+        MyApplication.getRequestQueue().add(r);
     }
 }

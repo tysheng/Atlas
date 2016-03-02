@@ -26,6 +26,12 @@ public class FlashFragment extends BaseFragment {
     public static FlashFragment getInstance() {
         return new FlashFragment();
     }
+
+    @Override
+    protected void setTitle() {
+        getActivity().setTitle(R.string.fm_flash);
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

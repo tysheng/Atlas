@@ -49,5 +49,15 @@
     <style name="BlueTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="BlueTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.TabLayout" parent="Widget.Design.TabLayout">
+        <item name="android:background">?colorPrimary</item>
+        <item name="tabMinWidth">0dp</item>
+        <item name="tabIndicatorColor">@android:color/white</item>
+        <item name="tabSelectedTextColor">@android:color/white</item>
+        <item name="tabTextAppearance">@style/AppTheme.TabLayout.TextAppearance</item>
+    </style>
 
+    <style name="AppTheme.TabLayout.TextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textColor">#6fff</item>
+    </style>
 </resources>

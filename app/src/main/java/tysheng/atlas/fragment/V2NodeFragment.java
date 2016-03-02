@@ -45,6 +45,11 @@ public class V2NodeFragment extends BaseFragment {
     }
 
     @Override
+    protected void setTitle() {
+        getActivity().setTitle(R.string.fm_node);
+    }
+
+    @Override
     protected int getLayoutId() {
         return R.layout.fragment_v2node;
     }
@@ -73,6 +78,7 @@ public class V2NodeFragment extends BaseFragment {
                 WebviewFragment webviewFragment = new WebviewFragment(data.get(position).getUrl());
                 transaction.hide(v2NodeFragment)
                         .addToBackStack(null)
+                        .setCustomAnimations(0, 0, R.anim.abc_fade_in, R.anim.abc_fade_out)
                         .add(R.id.fg_main, webviewFragment, "nodeweb" + position)
                         .commitAllowingStateLoss();
             }
@@ -100,7 +106,6 @@ public class V2NodeFragment extends BaseFragment {
                     data.add(list.get(i));
                 }
                 used += 30;
-//                data.addAll(JSON.parseArray(response, V2NodesBean.class));
                 mAdapter.notifyDataSetChanged();
                 if (swipe.isRefreshing())
                     swipe.setRefreshing(false);

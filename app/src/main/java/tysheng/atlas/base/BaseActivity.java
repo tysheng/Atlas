@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
+import tysheng.atlas.R;
 import tysheng.atlas.utils.SPHelper;
 
 /**
@@ -42,6 +43,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 初始化数据
      */
     public abstract void initData();
+
     /**
      * setContentView
      */
@@ -85,9 +87,11 @@ public abstract class BaseActivity extends AppCompatActivity {
                 transaction.add(id, to, tag);
             }
         }
-        transaction.commitAllowingStateLoss();
+        transaction.setCustomAnimations(0, 0, R.anim.abc_fade_in, R.anim.abc_fade_out)
+                .commitAllowingStateLoss();
     }
-    protected void ShowToast(String msg){
+
+    protected void ShowToast(String msg) {
         if (toast == null) {
             toast = Toast.makeText(actContext, msg, Toast.LENGTH_SHORT);
         } else {

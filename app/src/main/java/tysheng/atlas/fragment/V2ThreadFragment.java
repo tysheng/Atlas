@@ -32,8 +32,10 @@ public class V2ThreadFragment extends BaseFragment {
     @Bind(R.id.rc_thread)
     RecyclerView rcThread;
 
+    public V2ThreadFragment() {
+    }
+
     private int id;
-    //    private List<HashMap<String, String>> data;
     private V2ThreadAdapter adapter;
     private Bundle bundle;
     private List<V2ReplyBean> data;
@@ -81,6 +83,11 @@ public class V2ThreadFragment extends BaseFragment {
     public void onStop() {
         super.onStop();
         MyApplication.getRequestQueue().cancelAll("V2ThreadFragment");
+    }
+
+    @Override
+    protected void setTitle() {
+
     }
 
     @Override

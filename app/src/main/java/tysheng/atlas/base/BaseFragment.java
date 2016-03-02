@@ -32,6 +32,15 @@ public abstract class BaseFragment extends Fragment{
         initData();
         return rootView;
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setTitle();
+    }
+
+    protected abstract void setTitle();
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

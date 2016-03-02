@@ -13,8 +13,6 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,8 +52,6 @@ public class WeatherFragment extends BaseFragment {
     TextView tv_textaqi;
     @Bind(R.id.drawee_weather_city)
     SimpleDraweeView drawee_weather_city;
-    @Bind(R.id.scrollView)
-    ObservableScrollView mScrollView;
     @Bind(R.id.et_search_city)
     EditText etSearchCity;
     @Bind(R.id.ll_aqi)
@@ -68,9 +64,19 @@ public class WeatherFragment extends BaseFragment {
         this.city_url = city_url;
     }
 
+
+    public WeatherFragment() {
+    }
+
+    @Override
+    protected void setTitle() {
+
+    }
+
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_weather;
+
+            return R.layout.fragment_weathertab;
     }
 
     @Override
@@ -101,7 +107,7 @@ public class WeatherFragment extends BaseFragment {
             getWeather(cityname);
         }
 
-        MaterialViewPagerHelper.registerScrollView(getActivity(), mScrollView, null);
+
 
     }
 

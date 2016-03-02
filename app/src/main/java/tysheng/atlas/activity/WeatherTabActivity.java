@@ -1,13 +1,13 @@
 package tysheng.atlas.activity;
 
-import android.graphics.Color;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
-
-import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 import butterknife.Bind;
 import butterknife.BindString;
@@ -19,25 +19,31 @@ import tysheng.atlas.fragment.WeatherFragment;
  * Created by shengtianyang on 16/2/29.
  */
 public class WeatherTabActivity extends BaseActivity {
-    @Bind(R.id.stl_weathertab)
-    SmartTabLayout stlWeathertab;
+    @Bind(R.id.tablayout)
+    TabLayout tabLayout;
     @Bind(R.id.vp_weathertab)
-    ViewPager vpWeathertab;
+    ViewPager viewPager;
     @BindString(R.string.weather_city_shaoxing_url)
     String weather_city_shaoxing_url;
     @BindString(R.string.weather_city_ningbo_url)
     String weather_city_ningbo_url;
     @BindString(R.string.weather_city_xian_url)
     String weather_city_xian_url;
+    @BindString(R.string.shaoxing)
+    String shaoxing;
+    @BindString(R.string.ningbo)
+    String ningbo;
+    @BindString(R.string.xian)
+    String xian;
     @Bind(R.id.tb_weathertab)
-    Toolbar tbWeathertab;
+    Toolbar toolbar;
 
     @Override
     public void initData() {
-        tbWeathertab.setTitleTextColor(Color.WHITE);
-        setSupportActionBar(tbWeathertab);
-        tbWeathertab.setNavigationIcon(R.drawable.ic_arrow_back_24dp);
-        tbWeathertab.setNavigationOnClickListener(new View.OnClickListener() {
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -48,11 +54,11 @@ public class WeatherTabActivity extends BaseActivity {
             public Fragment getItem(int position) {
                 switch (position % 4) {
                     case 0:
-                        return new WeatherFragment("shaoxing", weather_city_shaoxing_url);
+                        return new WeatherFragment(shaoxing, weather_city_shaoxing_url);
                     case 1:
-                        return new WeatherFragment("ningbo", weather_city_ningbo_url);
+                        return new WeatherFragment(ningbo, weather_city_ningbo_url);
                     case 2:
-                        return new WeatherFragment("xian", weather_city_xian_url);
+                        return new WeatherFragment(xian, weather_city_xian_url);
                     case 3:
                         return new WeatherFragment("", "");
                     default:
@@ -69,27 +75,33 @@ public class WeatherTabActivity extends BaseActivity {
             public CharSequence getPageTitle(int position) {
                 switch (position % 4) {
                     case 0:
-                        return "绍兴";
+                        return shaoxing;
                     case 1:
-                        return "宁波";
+                        return ningbo;
                     case 2:
-                        return "西安";
+                        return xian;
                     case 3:
-                        return "其他";
+                        return "自定义";
                 }
                 return "";
             }
         };
 
 
-        vpWeathertab.setAdapter(adapter);
+        viewPager.setAdapter(adapter);
+        ViewCompat.setElevation(tabLayout, getResources().getDimension(R.dimen.appbar_elevation));
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tabLayout.setupWithViewPager(viewPager);
 
-        stlWeathertab.setViewPager(vpWeathertab);
     }
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_weathertab;
+        return R.layout.activity_weathertab;
     }
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
 }

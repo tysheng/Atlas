@@ -1,10 +1,12 @@
 package tysheng.atlas.activity;
 
 import android.content.Intent;
+import android.provider.MediaStore;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v4.content.IntentCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
 
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
@@ -18,6 +20,7 @@ import tysheng.atlas.utils.SPHelper;
 
 public class SettingActivity extends BaseActivity implements ColorChooserDialog.ColorCallback {
 
+    private static final int RESULT_LOAD_IMAGE = 100;
     private int primaryPreselect;
     Intent intent;
     @Bind(R.id.tl_setting)
@@ -37,9 +40,21 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
 
     @OnClick(R.id.ll_switch_weather)
     public void onClick() {
-        SPHelper.SwitchWeatherMode(actContext);
-        ShowToast("天气模式已改变");
+//        SPHelper.SwitchWeatherMode(actContext);
+//        ShowToast("天气模式已改变");
+        Intent i = new Intent(Intent.ACTION_PICK,null);
+        i.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
+        startActivityForResult(i, RESULT_LOAD_IMAGE);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == RESULT_LOAD_IMAGE){
+            String uri = data.getData().toString();
+            SPHelper.setAvatar(actContext,uri);
+        }
+    }
+
     @Override
     public void onColorSelection(@NonNull ColorChooserDialog dialog, @ColorInt int color) {
         primaryPreselect = color;
@@ -88,7 +103,11 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
 
 
     }
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
     @Override
     public int getLayoutId() {
         return R.layout.activity_setting;

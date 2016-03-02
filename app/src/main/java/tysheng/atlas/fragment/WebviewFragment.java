@@ -21,12 +21,19 @@ import tysheng.atlas.base.BaseFragment;
 public class WebviewFragment extends BaseFragment {
     @Bind(R.id.webview)
     WebView webview;
-
+    private MaterialDialog dialog;
+    public WebviewFragment() {
+    }
 
     private String url;
 
     public WebviewFragment(String url) {
         this.url = url;
+    }
+
+    @Override
+    protected void setTitle() {
+
     }
 
     @Override
@@ -39,10 +46,9 @@ public class WebviewFragment extends BaseFragment {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(frmContext)
                 .progress(true, 0)
                 .content(R.string.please_wait)
-
                 .progressIndeterminateStyle(false);
 
-        final MaterialDialog dialog = builder.build();
+        dialog = builder.build();
 //        dialog.setCancelable(false);
         dialog.show();
         webview.getSettings().setJavaScriptEnabled(true);
@@ -86,14 +92,5 @@ public class WebviewFragment extends BaseFragment {
         }
     }
 
-
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if ((keyCode == KeyEvent.KEYCODE_BACK) && webview.canGoBack()) {
-//            webview.goBack();
-//            return true;
-//        }
-//        return super.onKeyDown(keyCode, event);
-//    }
 
 }

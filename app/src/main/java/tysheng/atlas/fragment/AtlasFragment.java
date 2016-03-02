@@ -2,8 +2,8 @@ package tysheng.atlas.fragment;
 
 
 import android.annotation.SuppressLint;
-
-import com.ogaclejapan.smarttablayout.SmartTabLayout;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewCompat;
 
 import butterknife.Bind;
 import tysheng.atlas.R;
@@ -16,20 +16,26 @@ import tysheng.atlas.utils.phtodraweeview.MultiTouchViewPager;
 @SuppressLint("ValidFragment")
 public class AtlasFragment extends BaseFragment {
 
-    @Bind(R.id.stl_atlas)
-    SmartTabLayout stlAtlas;
-    private String[] stringsdrawble;
+    @Bind(R.id.tablayout)
+    TabLayout tablayout;
+    private String[] drawbles;
     @Bind(R.id.vp_main)
     MultiTouchViewPager viewPager;
 
-
+    public AtlasFragment() {
+    }
 
     public AtlasFragment(String[] drawble) {
-        this.stringsdrawble = drawble;
+        this.drawbles = drawble;
     }
 
     public static AtlasFragment getInstance(String[] drawble) {
         return new AtlasFragment(drawble);
+    }
+
+    @Override
+    protected void setTitle() {
+        getActivity().setTitle(R.string.fm_atlas);
     }
 
     @Override
@@ -40,9 +46,9 @@ public class AtlasFragment extends BaseFragment {
     @Override
     protected void initData() {
         viewPager.setPageTransformer(true, new RecyclerTransformAnimation());
-        viewPager.setAdapter(new DraweePagerAdapter(stringsdrawble));
-
-        stlAtlas.setViewPager(viewPager);
+        viewPager.setAdapter(new DraweePagerAdapter(drawbles));
+        ViewCompat.setElevation(tablayout, getResources().getDimension(R.dimen.appbar_elevation));
+        tablayout.setupWithViewPager(viewPager);
     }
 
 }

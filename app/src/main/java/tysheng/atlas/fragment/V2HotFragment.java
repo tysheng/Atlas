@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,8 +14,6 @@ import android.view.ViewTreeObserver;
 
 import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
-import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
-import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +33,16 @@ import tysheng.atlas.net.VolleyUtils;
 @SuppressLint("ValidFragment")
 public class V2HotFragment extends BaseFragment {
 
-
     @Bind(R.id.rv_v2)
     RecyclerView rvV2;
     @Bind(R.id.swipe)
-    SwipyRefreshLayout swipe;
+    SwipeRefreshLayout swipe;
     private List<V2HotBean> data;
     Fragment fragment;
+    private V2HotAdapter mAdapter;
+
+    public V2HotFragment() {
+    }
 
     public V2HotFragment(String url) {
         this.url = url;
@@ -53,8 +55,36 @@ public class V2HotFragment extends BaseFragment {
     private String url;
 
     private void getHotThread() {
-        data = new ArrayList<V2HotBean>();
-        final V2HotAdapter mAdapter = new V2HotAdapter(frmContext, data);
+        VolleyUtils.Get(url, "V2HotFragment", new VolleyIF(VolleyIF.mListener,VolleyIF.mErrorListener) {
+            @Override
+            public void onMyResponse(String response) {
+                data.addAll(JSON.parseArray(response, V2HotBean.class));
+                mAdapter.notifyDataSetChanged();
+                if (swipe.isRefreshing())
+                    swipe.setRefreshing(false);
+            }
+            @Override
+            public void onMyErrorResponse(VolleyError error) {
+                if (swipe.isRefreshing())
+                    swipe.setRefreshing(false);
+            }
+        });
+    }
+
+    private void initView() {
+        swipe.setColorSchemeResources(android.R.color.holo_purple,
+                android.R.color.holo_green_light,
+                android.R.color.holo_red_light,
+                android.R.color.holo_blue_light);
+        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                data.clear();
+                getHotThread();
+            }
+        });
+        data = new ArrayList<>();
+        mAdapter = new V2HotAdapter(frmContext, data);
         mAdapter.setOnItemClickListener(new V2HotAdapter.OnItemClickListener() {
             @Override
             public void onClickListener(View view, int position) {
@@ -79,47 +109,17 @@ public class V2HotFragment extends BaseFragment {
         rvV2.setLayoutManager(new LinearLayoutManager(frmContext));
         rvV2.setItemAnimator(new DefaultItemAnimator());
         rvV2.setAdapter(mAdapter);
-        rvV2.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            }
-        });
-        VolleyUtils.Get(url, "V2HotFragment", new VolleyIF(VolleyIF.mListener,VolleyIF.mErrorListener) {
-            @Override
-            public void onMyResponse(String response) {
-                data.addAll(JSON.parseArray(response, V2HotBean.class));
-                mAdapter.notifyDataSetChanged();
-                if (swipe.isRefreshing())
-                    swipe.setRefreshing(false);
-            }
-
-            @Override
-            public void onMyErrorResponse(VolleyError error) {
-                if (swipe.isRefreshing())
-                    swipe.setRefreshing(false);
-            }
-        });
-    }
-
-    private void initView() {
-        swipe.setColorSchemeResources(android.R.color.holo_purple,
-                android.R.color.holo_green_light,
-                android.R.color.holo_red_light,
-                android.R.color.holo_blue_light);
-        swipe.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh(SwipyRefreshLayoutDirection direction) {
-                if (direction == SwipyRefreshLayoutDirection.TOP) {
-                    getHotThread();
-                }
-            }
-        });
     }
 
     @Override
     public void onStop() {
         super.onStop();
         MyApplication.getRequestQueue().cancelAll("V2HotFragment");
+    }
+
+    @Override
+    protected void setTitle() {
+        getActivity().setTitle(R.string.fm_hot);
     }
 
     @Override

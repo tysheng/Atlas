@@ -3,35 +3,46 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_main"
+            android:id="@+id/nav_hot"
             android:icon="@drawable/menu_safari"
             android:title="Hot" />
         <item
-            android:id="@+id/nav_resource"
+            android:id="@+id/nav_new"
             android:icon="@drawable/menu_v2new2"
             android:title="New" />
         <item
-            android:id="@+id/nav_climate"
+            android:id="@+id/nav_node"
             android:icon="@drawable/menu_node"
             android:title="Node" />
+
         <item
-            android:id="@+id/nav_transport"
-            android:icon="@drawable/menu_weather"
-            android:title="Weather" />
-        <item
-            android:id="@+id/nav_disaster"
+            android:id="@+id/nav_atals"
             android:icon="@drawable/menu_atlas"
             android:title="Atlas" />
         <item
-            android:id="@+id/nav_world"
+            android:id="@+id/nav_flash"
             android:icon="@drawable/menu_lantern"
             android:title="Flash" />
+
     </group>
+    <item android:title="Weather">
+        <menu>
+            <item
+                android:id="@+id/nav_weather"
+                android:icon="@drawable/menu_tab"
+                android:title="Tab Mode" />
+            <item
+                android:id="@+id/nav_weather2"
+                android:icon="@drawable/menu_weather_list"
+                android:title="List Mode" />
+        </menu>
+
+    </item>
 
     <item android:title="Others">
         <menu>
             <item
-                android:id="@+id/nav_history"
+                android:id="@+id/nav_setting"
                 android:icon="@drawable/menu_settings"
                 android:title="Settings" />
         </menu>
