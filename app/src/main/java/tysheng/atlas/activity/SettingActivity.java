@@ -15,7 +15,10 @@ import com.afollestad.materialdialogs.util.DialogUtils;
 import butterknife.Bind;
 import butterknife.OnClick;
 import tysheng.atlas.R;
+import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseActivity;
+import tysheng.atlas.greendao.DaoSession;
+import tysheng.atlas.greendao.NoteDao;
 import tysheng.atlas.utils.SPHelper;
 
 public class SettingActivity extends BaseActivity implements ColorChooserDialog.ColorCallback {
@@ -25,6 +28,7 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
     Intent intent;
     @Bind(R.id.tl_setting)
     Toolbar tbSetting;
+    DaoSession session;
 
 
     @OnClick(R.id.ll_color_chooser)
@@ -42,16 +46,16 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
     public void onClick() {
 //        SPHelper.SwitchWeatherMode(actContext);
 //        ShowToast("天气模式已改变");
-        Intent i = new Intent(Intent.ACTION_PICK,null);
-        i.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
+        Intent i = new Intent(Intent.ACTION_PICK, null);
+        i.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
         startActivityForResult(i, RESULT_LOAD_IMAGE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == RESULT_LOAD_IMAGE){
+        if (resultCode == RESULT_OK && requestCode == RESULT_LOAD_IMAGE) {
             String uri = data.getData().toString();
-            SPHelper.setAvatar(actContext,uri);
+            SPHelper.setAvatar(actContext, uri);
         }
     }
 
@@ -100,14 +104,22 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
         });
         intent = new Intent(this, MainActivity.class);
         primaryPreselect = DialogUtils.resolveColor(this, R.attr.themeColor);
-
+        initDao();
 
     }
+
+    private void initDao() {
+        session = MyApplication.getSession();
+        NoteDao notedao = session.getNoteDao();
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_setting;

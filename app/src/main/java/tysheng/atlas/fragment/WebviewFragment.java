@@ -1,7 +1,9 @@
 package tysheng.atlas.fragment;
 
 import android.annotation.SuppressLint;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -10,7 +12,6 @@ import android.webkit.WebViewClient;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import butterknife.Bind;
-import butterknife.OnClick;
 import tysheng.atlas.R;
 import tysheng.atlas.base.BaseFragment;
 
@@ -22,6 +23,7 @@ public class WebviewFragment extends BaseFragment {
     @Bind(R.id.webview)
     WebView webview;
     private MaterialDialog dialog;
+
     public WebviewFragment() {
     }
 
@@ -41,8 +43,10 @@ public class WebviewFragment extends BaseFragment {
         return R.layout.fragment_webview;
     }
 
+
     @Override
     protected void initData() {
+        setHasOptionsMenu(true);
         MaterialDialog.Builder builder = new MaterialDialog.Builder(frmContext)
                 .progress(true, 0)
                 .content(R.string.please_wait)
@@ -53,7 +57,7 @@ public class WebviewFragment extends BaseFragment {
         dialog.show();
         webview.getSettings().setJavaScriptEnabled(true);
         webview.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-        webview.setWebViewClient(new WebViewClient(){
+        webview.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
@@ -74,23 +78,46 @@ public class WebviewFragment extends BaseFragment {
     }
 
 
+//    @OnClick({R.id.ib_web_refresh, R.id.ib_web_back, R.id.ib_web_go})
+//    public void onClick(View view) {
+//        switch (view.getId()) {
+//            case R.id.ib_web_refresh:
+//                webview.reload();
+//                break;
+//            case R.id.ib_web_back:
+//                if (webview.canGoBack())
+//                    webview.goBack();
+//                break;
+//            case R.id.ib_web_go:
+//                if (webview.canGoForward())
+//                    webview.goForward();
+//                break;
+//        }
+//    }
 
-    @OnClick({R.id.ib_web_refresh, R.id.ib_web_back, R.id.ib_web_go})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.ib_web_refresh:
-                webview.reload();
-                break;
-            case R.id.ib_web_back:
-                if (webview.canGoBack())
-                    webview.goBack();
-                break;
-            case R.id.ib_web_go:
-                if (webview.canGoForward())
-                    webview.goForward();
-                break;
-        }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_webview, menu);
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_back:
+                if (webview.canGoBack())
+                    webview.goBack();
+                return true;
+            case R.id.action_go:
+                if (webview.canGoForward())
+                    webview.goForward();
+                return true;
+            case R.id.action_refresh:
+                webview.reload();
+                return true;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

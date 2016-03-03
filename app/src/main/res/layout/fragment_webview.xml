@@ -2,6 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/scrollView"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
@@ -9,34 +10,34 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_gravity="start"
-            android:background="@color/white"
-            android:orientation="horizontal">
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="35dp"-->
+            <!--android:layout_gravity="start"-->
+            <!--android:background="@color/white"-->
+            <!--android:orientation="horizontal">-->
 
-            <ImageView
-                android:id="@+id/ib_web_refresh"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/ic_refresh_black_24dp" />
+            <!--<ImageView-->
+                <!--android:id="@+id/ib_web_refresh"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:src="@drawable/ic_refresh_black_24dp" />-->
 
-            <ImageView
-                android:id="@+id/ib_web_back"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/ic_chevron_left_black_24dp" />
+            <!--<ImageView-->
+                <!--android:id="@+id/ib_web_back"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:src="@drawable/ic_chevron_left_black_24dp" />-->
 
-            <ImageView
-                android:id="@+id/ib_web_go"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/ic_chevron_right_black_24dp" />
-        </LinearLayout>
+            <!--<ImageView-->
+                <!--android:id="@+id/ib_web_go"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:src="@drawable/ic_chevron_right_black_24dp" />-->
+        <!--</LinearLayout>-->
         <WebView
             android:id="@+id/webview"
             android:layout_width="match_parent"

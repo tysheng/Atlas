@@ -21,6 +21,7 @@ import tysheng.atlas.R;
 public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.MyViewHolder> {
 
 
+
     private LayoutInflater layoutInflater;
     private List<HashMap<String, String>> data;
     private OnItemClickListener onItemClickListener;
@@ -28,7 +29,7 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.MyVi
 
     public WeatherRVAdapter(Context context, List<HashMap<String, String>> data) {
         this.data = data;
-        this.layoutInflater = layoutInflater.from(context);
+        this.layoutInflater = LayoutInflater.from(context);
     }
 
     public interface OnItemClickListener {
@@ -98,6 +99,7 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.MyVi
         TextView tvTmp;
         @Bind(R.id.tv_cond)
         TextView tvCond;
+
 
 
         public MyViewHolder(View itemView) {

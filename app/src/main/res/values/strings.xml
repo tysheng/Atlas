@@ -6,14 +6,14 @@
 
     <string name="action_settings">Settings</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_weather">Weather</string>
     <string name="title_activity_setting">Settings</string>
     <string name="color_palette">Pick the color</string>
     <string name="colors">Colors</string>
     <string name="please_wait">Please wait…</string>
-    <string name="app_loading_more">loading...</string>
+    <string name="app_loading_more">loading…</string>
+    <string name="loading_chn">正在加载…</string>
     <!--fragment name-->
     <string name="fm_new">New</string>
     <string name="fm_hot">Hot</string>
@@ -35,6 +35,7 @@
     <string name="shaoxing">绍兴</string>
     <string name="ningbo">宁波</string>
     <string name="xian">西安</string>
+    <string name="action_info">Info</string>
 
 
 </resources>

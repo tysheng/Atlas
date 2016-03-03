@@ -41,13 +41,13 @@ import tysheng.atlas.utils.SPHelper;
 public class WeatherListActivity extends BaseActivity {
     @Bind(R.id.rv_v2)
     RecyclerView recyclerView;
-
-    List<HashMap<String, String>> list;
-    WeatherRVAdapter adapter;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+    MaterialDialog dialog;
+    List<HashMap<String, String>> list;
+    WeatherRVAdapter adapter;
     int sum;
-    int sequence;
+    int count;
     ArrayList<String> cities;
     private long exitTime = 0;
 
@@ -62,11 +62,10 @@ public class WeatherListActivity extends BaseActivity {
                 finish();
             }
         });
-        sequence = 0;
+        count = 0;
         sum = SPHelper.getCitySum(actContext);
         cities = SPHelper.getCities(actContext, sum);
-
-        list = new ArrayList<>();
+        initList();
         adapter = new WeatherRVAdapter(actContext, list);
         adapter.setOnItemClickListener(new WeatherRVAdapter.OnItemClickListener() {
             @Override
@@ -89,10 +88,18 @@ public class WeatherListActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(actContext));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+
         reGetData();
+
     }
 
     private void reGetData() {
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(actContext)
+                .progress(true, 0)
+                .content(R.string.loading_chn)
+                .progressIndeterminateStyle(false);
+        dialog = builder.build();
+        dialog.show();
         for (int i = 0; i < sum; i++) {
             getData(cities.get(i), 0);
         }
@@ -136,10 +143,23 @@ public class WeatherListActivity extends BaseActivity {
                             map.put("tmp", tmp + "°");
                             map.put("txt", txt);
                             map.put("cond", cond);
-                            if (type == 1)
+                            if (type == 1){
                                 cities.add(cityname);
-                            list.add(map);
-                            adapter.notifyItemChanged(list.size());
+                                list.add(map);
+                                adapter.notifyItemChanged(list.size());
+                            } else {
+                                for (int i = 0; i < cities.size(); i++) {
+                                    if (cities.get(i).equals(cityname)){
+                                        list.remove(i);
+                                        list.add(i,map);
+                                        count++;
+                                        if (count >= sum){
+                                            dialog.dismiss();
+                                            adapter.notifyDataSetChanged();
+                                        }
+                                    }
+                                }
+                            }
                         } else {
                             ShowToast("请输入正确的城市名");
                         }
@@ -169,14 +189,17 @@ public class WeatherListActivity extends BaseActivity {
                 return params;
             }
         };
-        request.setTag("WeatherListActivity" + cityname);
-        request.setSequence(sequence++);
+        request.setTag(cityname);
         MyApplication.getRequestQueue().add(request);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        saveData();
+    }
+
+    private void saveData() {
         SPHelper.setCitySum(actContext, cities.size());
         SPHelper.setCities(actContext, cities);
     }
@@ -205,7 +228,7 @@ public class WeatherListActivity extends BaseActivity {
                         .positiveText("OK")
                         .input("", "", false, new MaterialDialog.InputCallback() {
                             @Override
-                            public void onInput(MaterialDialog dialog, CharSequence input) {
+                            public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
                                 if (cities.size() < 10)
                                     getData(input.toString(), 1);
                                 else
@@ -213,17 +236,35 @@ public class WeatherListActivity extends BaseActivity {
                             }
                         }).show();
                 return true;
-//            case R.id.action_refresh:
-//                if ((exitTime == 0 || System.currentTimeMillis() - exitTime > 8000)) {
-//                    reGetData();
-//                    exitTime = System.currentTimeMillis();
-//                }
-//                return true;
+            case R.id.action_refresh:
+                if ((exitTime == 0 || System.currentTimeMillis() - exitTime > 8000)) {
+                    sum = cities.size();
+                    initList();
+                    saveData();
+                    reGetData();
+                    exitTime = System.currentTimeMillis();
+                }
+                return true;
+            case R.id.action_info:
+                new MaterialDialog.Builder(actContext)
+                        .title("提示")
+                        .content("某些城市暂无AQI信息查询\n刷新后间隔8秒才能进行下一次刷新")
+                        .positiveText("知道了")
+                        .show();
+                return true;
             default:
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initList() {
+        list = new ArrayList<>();
+        for (int i = 0; i < sum; i++) {
+            HashMap<String, String> map = new HashMap<>();
+            list.add(map);
+        }
     }
 
 }

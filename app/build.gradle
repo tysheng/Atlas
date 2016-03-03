@@ -24,6 +24,11 @@ android {
     packagingOptions {
         exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java', 'src/main/java-gen']
+        }
+    }
 }
 def androidSupportVersion = "23.1.1"//"22.2.1"
 dependencies {
