@@ -11,6 +11,7 @@ public class Constant {
     public static final String URL_V2_REPLY = "https://www.v2ex.com/api/replies/show.json";
     public static final String URL_V2_NODE_ALL = "https://www.v2ex.com/api/nodes/all.json";
     public static final String URL_V2_NODE = "https://www.v2ex.com/api/nodes/show.json?name=";
+    public static final String URL_V2_NODE_GO = "https://www.v2ex.com/go/";
     public static final String URL_V2_MEMBER = "https://www.v2ex.com/api/members/show.json";
 
     //和风天气
@@ -22,6 +23,10 @@ public class Constant {
     public static final String BAIDU_AK = "EIBnkLNbPzLIrKZoWIMXhb37";
 
     public static final String SP_NAME = "sp_name";
+
+    //微信
+    public static final String WX_APP_ID = "wx029d7cfe5492d0c3";
+    public static final String WX_APP_SECRET = "5ee73f83b047053ea4f773add5a3025d";
 
 }
 /*

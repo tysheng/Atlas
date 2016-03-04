@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import butterknife.Bind;
 import lib.lhh.fiv.library.FrescoImageView;
@@ -28,7 +29,6 @@ import tysheng.atlas.utils.SPHelper;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final int RESULT_LOAD_IMAGE = 10;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.drawer_layout)
@@ -45,6 +45,8 @@ public class MainActivity extends BaseActivity
     V2NodeFragment v2NodeFragment;
     Fragment currentFragment;
 
+
+
     @Override
     public void initData() {
         setSupportActionBar(toolbar);
@@ -53,6 +55,7 @@ public class MainActivity extends BaseActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         initNav();
+
 
         fragmentManager = getSupportFragmentManager();
         atlasFragment = AtlasFragment.getInstance(getResources().getStringArray(R.array.atlas_drawbles));
@@ -65,13 +68,19 @@ public class MainActivity extends BaseActivity
         jumpFragment(null, v2HotFragment, R.id.fg_main, "hot");
     }
 
+
+
     private void initNav() {
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
         FrescoImageView imageView = (FrescoImageView) headerView.findViewById(R.id.imageView);
+        TextView name = (TextView) headerView.findViewById(R.id.tv_name);
+        TextView email = (TextView) headerView.findViewById(R.id.tv_email);
 
         imageView.setImageURI(Uri.parse(SPHelper.getAvatar(actContext)),null);
         imageView.asCircle();
+        name.setText(SPHelper.getName(actContext));
+        email.setText(SPHelper.getEmail(actContext));
     }
 
 

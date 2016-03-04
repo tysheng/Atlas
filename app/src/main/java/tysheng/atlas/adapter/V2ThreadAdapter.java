@@ -39,11 +39,7 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.layoutInflater = LayoutInflater.from(context);
         this.headerBean = headerBean;
     }
-//       public V2ThreadAdapter(Context context, List<V2ReplyBean> data, HeaderBean headerBean) {
-//        this.data = data;
-//        this.layoutInflater = layoutInflater.from(context);
-//        this.headerBean = headerBean;
-//    }
+
 //    public interface OnItemClickListener {
 //        void onClickListener(View view, int position);
 //    }
@@ -84,9 +80,6 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
 
-//        holder.tv_time.setText(data.get(position).get("content").equals("")
-//                ? "作者很懒,什么都没写~" : data.get(position).get("content"));
-
 //        if (onItemClickListener != null) {
 //            holder.itemView.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -110,14 +103,6 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public int getItemCount() {
         return data.size()+1;
     }
-//    public void addItem(int position){
-//        data.toolbar_add(position,"new  "+String.format("%.2f",Math.random()*100));
-//        notifyItemInserted(position);
-//    }
-//    public void deleteItem(int position){
-//        data.remove(position);
-//        notifyItemRemoved(position);
-//    }
 
 
     static class VHItem extends RecyclerView.ViewHolder {

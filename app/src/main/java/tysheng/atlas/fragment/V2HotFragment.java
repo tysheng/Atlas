@@ -95,6 +95,7 @@ public class V2HotFragment extends BaseFragment {
                 bundle.putString("content", data.get(position).getContent());
                 bundle.putString("title", data.get(position).getTitle());
                 bundle.putInt("last_modified", data.get(position).getLast_modified());
+                bundle.putString("url",data.get(position).getUrl());
                 V2ThreadFragment v2ThreadFragment = new V2ThreadFragment(data.get(position).getId());
                 v2ThreadFragment.setArguments(bundle);
                 FragmentManager manager = getActivity().getSupportFragmentManager();

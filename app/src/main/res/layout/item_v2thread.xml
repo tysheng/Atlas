@@ -2,7 +2,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="5dp">
+    android:background="#eeeeee"
+    android:padding="13dp">
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/drawee_reply"
@@ -35,7 +36,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimary"
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true" />
 
         <TextView
             android:id="@+id/tv_reply_content"

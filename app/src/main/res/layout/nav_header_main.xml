@@ -24,7 +24,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Tianyang Sheng"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/white" />
 
@@ -32,7 +31,6 @@
         android:id="@+id/tv_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="tyshengsx@gmail.com"
         android:textColor="@color/white" />
 
 </LinearLayout>

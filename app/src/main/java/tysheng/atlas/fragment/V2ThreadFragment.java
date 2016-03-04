@@ -4,9 +4,15 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
+import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +37,12 @@ public class V2ThreadFragment extends BaseFragment {
 
     @Bind(R.id.rc_thread)
     RecyclerView rcThread;
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        MyApplication.getRequestQueue().cancelAll("V2ThreadFragment");
+    }
 
     public V2ThreadFragment() {
     }
@@ -64,7 +76,7 @@ public class V2ThreadFragment extends BaseFragment {
         rcThread.setLayoutManager(new LinearLayoutManager(frmContext));
         rcThread.addItemDecoration(new ItemDivider(frmContext));
 
-        VolleyUtils.Get(Constant.URL_V2_REPLY + "?topic_id=" + id, "V2ThreadFragment", new VolleyIF(VolleyIF.mListener,VolleyIF.mErrorListener) {
+        VolleyUtils.Get(Constant.URL_V2_REPLY + "?topic_id=" + id, "V2ThreadFragment", new VolleyIF(VolleyIF.mListener, VolleyIF.mErrorListener) {
             @Override
             public void onMyResponse(String response) {
                 data.addAll(JSON.parseArray(response, V2ReplyBean.class));
@@ -80,11 +92,28 @@ public class V2ThreadFragment extends BaseFragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        MyApplication.getRequestQueue().cancelAll("V2ThreadFragment");
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_wxshare, menu);
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_session:
+                sendToWx(bundle.getString("url"),bundle.getString("title"),bundle.getString("content"),0);
+                return true;
+            case R.id.action_timeline:
+                sendToWx(bundle.getString("url"),bundle.getString("title"),bundle.getString("content"),1);
+                return true;
+            case R.id.action_favorite:
+                sendToWx(bundle.getString("url"),bundle.getString("title"),bundle.getString("content"),2);
+                return true;
 
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
     @Override
     protected void setTitle() {
 
@@ -97,7 +126,26 @@ public class V2ThreadFragment extends BaseFragment {
 
     @Override
     protected void initData() {
+        setHasOptionsMenu(true);
         bundle = getArguments();
         getReply();
+    }
+
+    private void sendToWx(String url,String title,String content, int mode)  {
+        WXWebpageObject web = new WXWebpageObject(url);
+        final WXMediaMessage msg = new WXMediaMessage(web);
+        msg.title=title;
+        msg.description = content;
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = String.valueOf(System.currentTimeMillis());
+        req.message = msg;
+        if (mode == 0)
+            req.scene = SendMessageToWX.Req.WXSceneSession;
+        else if (mode == 1)
+            req.scene = SendMessageToWX.Req.WXSceneTimeline;
+        else if (mode == 2)
+            req.scene = SendMessageToWX.Req.WXSceneFavorite;
+
+        MyApplication.getWxApi().sendReq(req);
     }
 }

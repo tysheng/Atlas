@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="tysheng.atlas.activity.SettingActivity">
+   >
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -25,72 +24,49 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:padding="10dp"
         android:text="基本设置"
         android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold" />
 
-    <LinearLayout
+    <tysheng.atlas.diy.SettingItem
         android:id="@+id/ll_color_chooser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="?android:attr/selectableItemBackground"
-        android:paddingLeft="12dp"
-        android:clickable="true"
-        android:paddingRight="12dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:text="主题"
-            android:textSize="7pt" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingTop="2dp"
-            android:text="选择主题颜色"
-            android:textColor="@color/grey"
-            android:textSize="5pt" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/gray" />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ll_switch_weather"
+        app:setting_title_main="主题"
+        app:setting_title_sub="选择主题颜色" />
+    <!---->
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="?android:attr/selectableItemBackground"
-        android:paddingLeft="12dp"
-        android:clickable="true"
-        android:paddingRight="12dp">
+        android:layout_marginBottom="5dp"
+        android:padding="10dp"
+        android:paddingTop="10dp"
+        android:text="账号设置"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:text="天气"
-            android:textSize="7pt" />
+    <tysheng.atlas.diy.SettingItem
+        android:id="@+id/info_avatar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:setting_title_main="头像"
+        app:setting_title_sub="修改头像" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingTop="2dp"
-            android:text="切换天气模式"
-            android:textColor="@color/grey"
-            android:textSize="5pt" />
+    <tysheng.atlas.diy.SettingItem
+        android:id="@+id/info_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:setting_title_main="姓名"
+        app:setting_title_sub="修改信息" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/gray" />
-    </LinearLayout>
+    <tysheng.atlas.diy.SettingItem
+        android:id="@+id/info_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:setting_title_main="邮箱"
+        app:setting_title_sub="修改邮箱" />
+
 
 </LinearLayout>

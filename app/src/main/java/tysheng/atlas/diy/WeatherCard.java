@@ -1,4 +1,4 @@
-package tysheng.atlas.model;
+package tysheng.atlas.diy;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -79,7 +79,7 @@ public class WeatherCard extends LinearLayout {
     }
 
     private void initView(Context context) {
-        View.inflate(context, R.layout.item_weathercard, this);
+        View.inflate(context, R.layout.weather_card, this);
         ButterKnife.bind(this);
     }
 

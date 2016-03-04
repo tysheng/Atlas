@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_session"
+        android:orderInCategory="100"
+        android:title="分享给朋友"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_timeline"
+        android:orderInCategory="100"
+        android:title="分享到朋友圈"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_favorite"
+        android:orderInCategory="100"
+        android:title="添加到收藏"
+        app:showAsAction="never" />
+
+</menu>

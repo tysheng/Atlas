@@ -1,13 +1,19 @@
 package tysheng.atlas.fragment;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
@@ -66,6 +72,7 @@ public class V2NodeFragment extends BaseFragment {
 
     @Override
     protected void initData() {
+        setHasOptionsMenu(true);
         initswipe();
         data = new ArrayList<>();
         mAdapter = new V2NodeRecyclerAdapter(frmContext, data);
@@ -144,5 +151,40 @@ public class V2NodeFragment extends BaseFragment {
             }
         });
     }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_choosenode, menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_node:
+                new MaterialDialog.Builder(frmContext)
+                        .title("请输入节点名")
+                        .inputType(InputType.TYPE_CLASS_TEXT)
+                        .inputRange(2, 20)
+                        .positiveText("OK")
+                        .input("", "", false, new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                                FragmentManager manager = getActivity().getSupportFragmentManager();
+                                FragmentTransaction transaction = manager.beginTransaction();
+                                v2NodeFragment = manager.findFragmentByTag("node");
+                                WebviewFragment webviewFragment = new WebviewFragment(Constant.URL_V2_NODE_GO+input.toString());
+                                transaction.hide(v2NodeFragment)
+                                        .addToBackStack(null)
+                                        .setCustomAnimations(0, 0, R.anim.abc_fade_in, R.anim.abc_fade_out)
+                                        .add(R.id.fg_main, webviewFragment, "choose")
+                                        .commitAllowingStateLoss();
+                            }
+                        }).show();
+                return true;
+
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
