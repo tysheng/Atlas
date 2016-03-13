@@ -1,6 +1,5 @@
 package tysheng.atlas.fragment;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,23 +23,24 @@ import tysheng.atlas.adapter.V2HotAdapter;
 import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseFragment;
 import tysheng.atlas.bean.V2HotBean;
-import tysheng.atlas.net.VolleyIF;
-import tysheng.atlas.net.VolleyUtils;
+import tysheng.atlas.presenter.HotPresenter;
+import tysheng.atlas.presenter.HotPresenterImpl;
+import tysheng.atlas.presenter.HotView;
 
 /**
  * Created by shengtianyang on 16/1/31.
  */
-@SuppressLint("ValidFragment")
-public class V2NewFragment extends BaseFragment {
+public class V2NewFragment extends BaseFragment implements HotView {
 
     @Bind(R.id.rv_v2)
     RecyclerView rvV2;
     @Bind(R.id.swipe)
     SwipeRefreshLayout swipe;
+
     private List<V2HotBean> data;
     Fragment fragment;
     private V2HotAdapter mAdapter;
-
+    private HotPresenter presenter;
     public V2NewFragment() {
     }
 
@@ -55,29 +55,37 @@ public class V2NewFragment extends BaseFragment {
     private String url;
 
     private void getHotThread() {
-        VolleyUtils.Get(url, "V2NewFragment", new VolleyIF(VolleyIF.mListener, VolleyIF.mErrorListener) {
-            @Override
-            public void onMyResponse(String response) {
-                data.addAll(JSON.parseArray(response, V2HotBean.class));
-                mAdapter.notifyDataSetChanged();
-                if (swipe.isRefreshing())
-                    swipe.setRefreshing(false);
-            }
+        presenter.getData(url,getClass().getSimpleName());
+    }
 
-            @Override
-            public void onMyErrorResponse(VolleyError error) {
-                if (swipe.isRefreshing())
-                    swipe.setRefreshing(false);
-            }
-        });
+    @Override
+    public void onSuccessResponse(String response) {
+        data.addAll(JSON.parseArray(response, V2HotBean.class));
+        mAdapter.notifyDataSetChanged();
+        stopSwipe();
+    }
+
+    @Override
+    public void onFailResponse(VolleyError error) {
+        stopSwipe();
+    }
+
+
+    private void stopSwipe() {
+        if (swipe.isRefreshing())
+            swipe.setRefreshing(false);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        MyApplication.getRequestQueue().cancelAll("V2NewFragment");
+        MyApplication.getRequestQueue().cancelAll(getClass().getSimpleName());
     }
-
+    @Override
+    public void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
+    }
     private void initView() {
         swipe.setColorSchemeResources(android.R.color.holo_purple,
                 android.R.color.holo_green_light,
@@ -117,6 +125,7 @@ public class V2NewFragment extends BaseFragment {
         rvV2.setLayoutManager(new LinearLayoutManager(frmContext));
         rvV2.setItemAnimator(new DefaultItemAnimator());
         rvV2.setAdapter(mAdapter);
+        presenter = new HotPresenterImpl(this);
     }
 
     @Override
