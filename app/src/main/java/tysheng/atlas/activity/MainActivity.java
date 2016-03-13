@@ -14,8 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
+
 import butterknife.Bind;
-import lib.lhh.fiv.library.FrescoImageView;
 import tysheng.atlas.R;
 import tysheng.atlas.app.Constant;
 import tysheng.atlas.base.BaseActivity;
@@ -73,12 +74,11 @@ public class MainActivity extends BaseActivity
     private void initNav() {
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
-        FrescoImageView imageView = (FrescoImageView) headerView.findViewById(R.id.imageView);
+        SimpleDraweeView imageView = (SimpleDraweeView) headerView.findViewById(R.id.imageView);
         TextView name = (TextView) headerView.findViewById(R.id.tv_name);
         TextView email = (TextView) headerView.findViewById(R.id.tv_email);
 
         imageView.setImageURI(Uri.parse(SPHelper.getAvatar(actContext)),null);
-        imageView.asCircle();
         name.setText(SPHelper.getName(actContext));
         email.setText(SPHelper.getEmail(actContext));
     }

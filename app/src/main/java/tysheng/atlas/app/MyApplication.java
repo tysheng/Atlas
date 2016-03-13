@@ -8,8 +8,6 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
-import tysheng.atlas.net.OkHttpStack;
-
 public class MyApplication extends Application {
     public static RequestQueue requestQueue;
 //    SQLiteDatabase db;
@@ -22,7 +20,7 @@ public class MyApplication extends Application {
         super.onCreate();
 
         Fresco.initialize(this);
-        requestQueue = Volley.newRequestQueue(this, new OkHttpStack());
+        requestQueue = Volley.newRequestQueue(this);
 //        setupDatabase();
         regTowX();
 

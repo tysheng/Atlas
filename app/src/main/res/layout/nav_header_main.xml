@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/menu_webp_background"
     android:gravity="bottom"
     android:id="@+id/nav_header"
@@ -13,11 +14,15 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
 
-    <lib.lhh.fiv.library.FrescoImageView
+    <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/imageView"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        fresco:roundAsCircle="true"
+        fresco:roundingBorderWidth="1dp"
+        fresco:roundingBorderColor="@color/white"
+        />
 
     <TextView
         android:id="@+id/tv_name"
