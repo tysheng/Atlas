@@ -35,10 +35,11 @@ import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseActivity;
 import tysheng.atlas.utils.SPHelper;
 
+
 /**
  * Created by shengtianyang on 16/2/29.
  */
-public class WeatherListActivity extends BaseActivity {
+public class WeatherListActivity extends BaseActivity  {
     @Bind(R.id.rv_v2)
     RecyclerView recyclerView;
     @Bind(R.id.toolbar)
@@ -106,6 +107,7 @@ public class WeatherListActivity extends BaseActivity {
     }
 
     private void getData(final String cityname, final int type) {
+
         StringRequest request = new StringRequest(Request.Method.POST, Constant.HF_WEATHER_API, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -224,7 +226,7 @@ public class WeatherListActivity extends BaseActivity {
                         .title("请输入城市名")
                         .content("中文或者拼音,仅支持国内城市")
                         .inputType(InputType.TYPE_CLASS_TEXT)
-                        .inputRange(2, 8)
+                        .inputRange(2, 18)
                         .positiveText("OK")
                         .input("", "", false, new MaterialDialog.InputCallback() {
                             @Override

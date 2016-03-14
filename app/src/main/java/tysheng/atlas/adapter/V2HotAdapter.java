@@ -73,15 +73,6 @@ public class V2HotAdapter extends RecyclerView.Adapter<V2HotAdapter.MyViewHolder
     public int getItemCount() {
         return data.size();
     }
-//    public void addItem(int position){
-//        data.toolbar_add(position,"new  "+String.format("%.2f",Math.random()*100));
-//        notifyItemInserted(position);
-//    }
-//    public void deleteItem(int position){
-//        data.remove(position);
-//        notifyItemRemoved(position);
-//    }
-
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
 

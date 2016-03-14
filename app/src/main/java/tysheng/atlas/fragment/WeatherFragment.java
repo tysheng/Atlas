@@ -1,6 +1,5 @@
 package tysheng.atlas.fragment;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.view.KeyEvent;
@@ -25,15 +24,14 @@ import tysheng.atlas.R;
 import tysheng.atlas.app.Constant;
 import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseFragment;
-import tysheng.atlas.presenter.WeatherPresenter;
-import tysheng.atlas.presenter.WeatherPresenterImpl;
-import tysheng.atlas.presenter.WeatherView;
+import tysheng.atlas.presenter.VolleyView;
+import tysheng.atlas.presenter.PostPresenter;
+import tysheng.atlas.presenter.PostPresenterImpl;
 
 /**
  * Created by shengtianyang on 16/1/31.
  */
-@SuppressLint("ValidFragment")
-public class WeatherFragment extends BaseFragment implements WeatherView{
+public class WeatherFragment extends BaseFragment implements VolleyView {
 
     @Bind(R.id.tv_aqi)
     TextView tvAqi;
@@ -59,7 +57,7 @@ public class WeatherFragment extends BaseFragment implements WeatherView{
     LinearLayout ll_aqi;
     private String cityname;
     private String city_url;
-    private WeatherPresenter presenter;
+    private PostPresenter presenter;
 
     public WeatherFragment(String cityname, String city_url) {
         this.cityname = cityname;
@@ -80,7 +78,7 @@ public class WeatherFragment extends BaseFragment implements WeatherView{
 
     @Override
     protected void initData() {
-        presenter = new WeatherPresenterImpl(this);
+        presenter = new PostPresenterImpl(this);
         if (cityname.equals("")) {
             etSearchCity.setVisibility(View.VISIBLE);
             etSearchCity.setOnEditorActionListener(new TextView.OnEditorActionListener() {

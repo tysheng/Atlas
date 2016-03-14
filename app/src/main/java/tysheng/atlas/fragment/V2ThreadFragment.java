@@ -1,6 +1,5 @@
 package tysheng.atlas.fragment;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,23 +24,24 @@ import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseFragment;
 import tysheng.atlas.bean.HeaderBean;
 import tysheng.atlas.bean.V2ReplyBean;
-import tysheng.atlas.net.VolleyIF;
-import tysheng.atlas.net.VolleyUtils;
+import tysheng.atlas.presenter.GetPresenter;
+import tysheng.atlas.presenter.GetPresenterImpl;
+import tysheng.atlas.presenter.VolleyView;
 import tysheng.atlas.utils.ItemDivider;
+
 
 /**
  * Created by shengtianyang on 16/2/1.
  */
-@SuppressLint("ValidFragment")
-public class V2ThreadFragment extends BaseFragment {
+public class V2ThreadFragment extends BaseFragment implements VolleyView {
 
     @Bind(R.id.rc_thread)
     RecyclerView rcThread;
-
+    private GetPresenter presenter;
     @Override
     public void onStop() {
         super.onStop();
-        MyApplication.getRequestQueue().cancelAll("V2ThreadFragment");
+        MyApplication.getRequestQueue().cancelAll(getClass().getSimpleName());
     }
 
     public V2ThreadFragment() {
@@ -76,21 +76,13 @@ public class V2ThreadFragment extends BaseFragment {
         rcThread.setLayoutManager(new LinearLayoutManager(frmContext));
         rcThread.addItemDecoration(new ItemDivider(frmContext));
 
-        VolleyUtils.Get(Constant.URL_V2_REPLY + "?topic_id=" + id, "V2ThreadFragment", new VolleyIF(VolleyIF.mListener, VolleyIF.mErrorListener) {
-            @Override
-            public void onMyResponse(String response) {
-                data.addAll(JSON.parseArray(response, V2ReplyBean.class));
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onMyErrorResponse(VolleyError error) {
-
-            }
-        });
-
+        presenter.getData(Constant.URL_V2_REPLY + "?topic_id=" + id,getClass().getSimpleName());
     }
-
+    @Override
+    public void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
+    }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -127,6 +119,7 @@ public class V2ThreadFragment extends BaseFragment {
     @Override
     protected void initData() {
         setHasOptionsMenu(true);
+        presenter = new GetPresenterImpl(this);
         bundle = getArguments();
         getReply();
     }
@@ -147,5 +140,16 @@ public class V2ThreadFragment extends BaseFragment {
             req.scene = SendMessageToWX.Req.WXSceneFavorite;
 
         MyApplication.getWxApi().sendReq(req);
+    }
+
+    @Override
+    public void onSuccessResponse(String response) {
+        data.addAll(JSON.parseArray(response, V2ReplyBean.class));
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onFailResponse(VolleyError error) {
+
     }
 }

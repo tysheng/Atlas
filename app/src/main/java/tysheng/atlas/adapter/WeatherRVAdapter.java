@@ -49,28 +49,31 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.MyVi
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        if (data.get(position).get("ll_aqi") == null) {
-            holder.tvAqi.setText(data.get(position).get("aqi"));
-            holder.tcQlty.setText(data.get(position).get("qlty"));
-            holder.tvTextaqi.setText("AQI");
-        } else {
-            holder.llAqi.setVisibility(View.GONE);
-        }
-        holder.tvBrf.setText(data.get(position).get("brf"));
-        holder.tvCity.setText(data.get(position).get("city_name"));
-        holder.tvTmp.setText(data.get(position).get("tmp"));
-        holder.tvTxt.setText(data.get(position).get("txt"));
-        holder.tvCond.setText(data.get(position).get("cond"));
+        if (!data.get(position).isEmpty()){
+            if (data.get(position).get("ll_aqi") == null) {
+                holder.tvAqi.setText(data.get(position).get("aqi"));
+                holder.tcQlty.setText(data.get(position).get("qlty"));
+                holder.tvTextaqi.setText("AQI");
+            } else {
+                holder.llAqi.setVisibility(View.GONE);
+            }
+            holder.tvBrf.setText(data.get(position).get("brf"));
+            holder.tvCity.setText(data.get(position).get("city_name"));
+            holder.tvTmp.setText(data.get(position).get("tmp"));
+            holder.tvTxt.setText(data.get(position).get("txt"));
+            holder.tvCond.setText(data.get(position).get("cond"));
 
-        if (onItemClickListener != null) {
-            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    onItemClickListener.onClickListener(v, position);
-                    return true;
-                }
-            });
+            if (onItemClickListener != null) {
+                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        onItemClickListener.onClickListener(v, position);
+                        return true;
+                    }
+                });
+            }
         }
+
     }
 
     @Override

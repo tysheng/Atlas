@@ -13,7 +13,6 @@ import tysheng.atlas.utils.RecyclerTransformAnimation;
 import tysheng.atlas.utils.phtodraweeview.MultiTouchViewPager;
 
 
-@SuppressLint("ValidFragment")
 public class AtlasFragment extends BaseFragment {
 
     @Bind(R.id.tablayout)

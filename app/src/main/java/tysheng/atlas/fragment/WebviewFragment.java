@@ -1,6 +1,5 @@
 package tysheng.atlas.fragment;
 
-import android.annotation.SuppressLint;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,7 +17,6 @@ import tysheng.atlas.base.BaseFragment;
 /**
  * Created by shengtianyang on 16/2/1.
  */
-@SuppressLint("ValidFragment")
 public class WebviewFragment extends BaseFragment {
     @Bind(R.id.webview)
     WebView webview;

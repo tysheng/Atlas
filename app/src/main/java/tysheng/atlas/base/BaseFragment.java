@@ -9,7 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.squareup.leakcanary.RefWatcher;
+
 import butterknife.ButterKnife;
+import tysheng.atlas.app.MyApplication;
 
 /**
  * Created by shengtianyang on 16/2/22.
@@ -31,6 +34,13 @@ public abstract class BaseFragment extends Fragment{
         ButterKnife.bind(this, rootView);
         initData();
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = MyApplication.getRefWatcher(getActivity());
+        refWatcher.watch(this);
     }
 
     @Override

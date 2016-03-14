@@ -9,10 +9,12 @@ import com.android.volley.VolleyError;
 public abstract class VolleyIF {
     public static Response.Listener<String> mListener;
     public static Response.ErrorListener mErrorListener;
+//    public Context context;
 
     public VolleyIF(Response.Listener<String> mListener, Response.ErrorListener mErrorListener) {
-        VolleyIF.mListener = mListener;
-        VolleyIF.mErrorListener = mErrorListener;
+        this.mListener = mListener;
+        this.mErrorListener = mErrorListener;
+//        this.context = context;
     }
 
     public Response.Listener<String> getmListener() {

@@ -23,14 +23,14 @@ import tysheng.atlas.adapter.V2HotAdapter;
 import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseFragment;
 import tysheng.atlas.bean.V2HotBean;
-import tysheng.atlas.presenter.HotPresenter;
-import tysheng.atlas.presenter.HotPresenterImpl;
-import tysheng.atlas.presenter.HotView;
+import tysheng.atlas.presenter.GetPresenter;
+import tysheng.atlas.presenter.GetPresenterImpl;
+import tysheng.atlas.presenter.VolleyView;
 
 /**
  * Created by shengtianyang on 16/1/31.
  */
-public class V2HotFragment extends BaseFragment implements HotView{
+public class V2HotFragment extends BaseFragment implements VolleyView {
 
     @Bind(R.id.rv_v2)
     RecyclerView rvV2;
@@ -39,7 +39,7 @@ public class V2HotFragment extends BaseFragment implements HotView{
     private List<V2HotBean> data;
     Fragment fragment;
     private V2HotAdapter mAdapter;
-    private HotPresenter presenter;
+    private GetPresenter presenter;
 
     public V2HotFragment() {
     }
@@ -115,7 +115,7 @@ public class V2HotFragment extends BaseFragment implements HotView{
         rvV2.setLayoutManager(new LinearLayoutManager(frmContext));
         rvV2.setItemAnimator(new DefaultItemAnimator());
         rvV2.setAdapter(mAdapter);
-        presenter = new HotPresenterImpl(this);
+        presenter = new GetPresenterImpl(this);
     }
 
     @Override

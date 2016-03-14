@@ -1,31 +1,39 @@
 package tysheng.atlas.app;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 public class MyApplication extends Application {
-    public static RequestQueue requestQueue;
+    private static RequestQueue requestQueue;
 //    SQLiteDatabase db;
 //    DaoMaster daoMaster;
 //    public static DaoSession daoSession;
-    public static IWXAPI api;
-
+    private static IWXAPI api;
+    private static MyApplication instance;
+    private RefWatcher refWatcher;
     @Override
     public void onCreate() {
         super.onCreate();
-
+        instance = this;
         Fresco.initialize(this);
         requestQueue = Volley.newRequestQueue(this);
 //        setupDatabase();
         regTowX();
+        refWatcher = LeakCanary.install(this);
 
     }
-
+    public static RefWatcher getRefWatcher(Context context) {
+        MyApplication application = (MyApplication) context.getApplicationContext();
+        return application.refWatcher;
+    }
 //    public void setupDatabase() {
 //        // 通过 DaoMaster 的内部类 DevOpenHelper，你可以得到一个便利的 SQLiteOpenHelper 对象。
 //        // 可能你已经注意到了，你并不需要去编写「CREATE TABLE」这样的 SQL 语句，因为 greenDAO 已经帮你做了。
@@ -43,7 +51,13 @@ public class MyApplication extends Application {
 //    }
 
     public static RequestQueue getRequestQueue() {
+        if (requestQueue == null){
+            requestQueue = Volley.newRequestQueue(instance);
+        }
         return requestQueue;
+    }
+    public static MyApplication getInstance() {
+        return instance;
     }
 
     public static IWXAPI getWxApi() {

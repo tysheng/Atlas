@@ -63,17 +63,6 @@ public class V2NodeRecyclerAdapter extends RecyclerView.Adapter<V2NodeRecyclerAd
         return data.size();
     }
 
-//    public void addItem(int position,HashMap<String,String> map) {
-////        data.toolbar_add(position, map);
-//        notifyItemInserted(position);
-//    }
-//
-//    public void deleteItem(int position) {
-//        data.remove(position);
-//        notifyItemRemoved(position);
-//    }
-
-
     static class MyViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.tv_node_title)

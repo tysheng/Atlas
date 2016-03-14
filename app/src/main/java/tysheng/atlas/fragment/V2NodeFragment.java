@@ -29,13 +29,14 @@ import tysheng.atlas.app.Constant;
 import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseFragment;
 import tysheng.atlas.bean.V2NodesBean;
-import tysheng.atlas.net.VolleyIF;
-import tysheng.atlas.net.VolleyUtils;
+import tysheng.atlas.presenter.GetPresenter;
+import tysheng.atlas.presenter.GetPresenterImpl;
+import tysheng.atlas.presenter.VolleyView;
 
 /**
  * Created by shengtianyang on 16/2/2.
  */
-public class V2NodeFragment extends BaseFragment {
+public class V2NodeFragment extends BaseFragment implements VolleyView {
     @Bind(R.id.srl_node)
     SwipyRefreshLayout swipe;
     @Bind(R.id.rv_v2node)
@@ -44,6 +45,7 @@ public class V2NodeFragment extends BaseFragment {
     List<V2NodesBean> data;
     Fragment v2NodeFragment;
     List<V2NodesBean> list;
+    private GetPresenter presenter;
     int total = 0;
     int used = 0;
 
@@ -67,12 +69,13 @@ public class V2NodeFragment extends BaseFragment {
     @Override
     public void onStop() {
         super.onStop();
-        MyApplication.getRequestQueue().cancelAll("V2NodeFragment");
+        MyApplication.getRequestQueue().cancelAll(getClass().getSimpleName());
     }
 
     @Override
     protected void initData() {
         setHasOptionsMenu(true);
+        presenter = new GetPresenterImpl(this);
         initswipe();
         data = new ArrayList<>();
         mAdapter = new V2NodeRecyclerAdapter(frmContext, data);
@@ -104,26 +107,7 @@ public class V2NodeFragment extends BaseFragment {
     }
 
     private void getData() {
-        VolleyUtils.Get(Constant.URL_V2_NODE_ALL, "V2NodeFragment", new VolleyIF(VolleyIF.mListener,VolleyIF.mErrorListener) {
-            @Override
-            public void onMyResponse(String response) {
-                list = JSON.parseArray(response, V2NodesBean.class);
-                total = list.size();
-                for (int i = 0; i < 30; i++) {
-                    data.add(list.get(i));
-                }
-                used += 30;
-                mAdapter.notifyDataSetChanged();
-                if (swipe.isRefreshing())
-                    swipe.setRefreshing(false);
-            }
-
-            @Override
-            public void onMyErrorResponse(VolleyError error) {
-                if (swipe.isRefreshing())
-                    swipe.setRefreshing(false);
-            }
-        });
+        presenter.getData(Constant.URL_V2_NODE_ALL,getClass().getSimpleName());
     }
 
     private void initswipe() {
@@ -150,6 +134,11 @@ public class V2NodeFragment extends BaseFragment {
                 }
             }
         });
+    }
+    @Override
+    public void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -186,5 +175,24 @@ public class V2NodeFragment extends BaseFragment {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSuccessResponse(String response) {
+        list = JSON.parseArray(response, V2NodesBean.class);
+        total = list.size();
+        for (int i = 0; i < 30; i++) {
+            data.add(list.get(i));
+        }
+        used += 30;
+        mAdapter.notifyDataSetChanged();
+        if (swipe.isRefreshing())
+            swipe.setRefreshing(false);
+    }
+
+    @Override
+    public void onFailResponse(VolleyError error) {
+        if (swipe.isRefreshing())
+            swipe.setRefreshing(false);
     }
 }
