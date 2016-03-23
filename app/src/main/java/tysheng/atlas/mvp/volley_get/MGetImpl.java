@@ -1,4 +1,4 @@
-package tysheng.atlas.presenter;
+package tysheng.atlas.mvp.volley_get;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -9,33 +9,24 @@ import tysheng.atlas.app.MyApplication;
 /**
  * Created by shengtianyang on 16/3/13.
  */
-public class GetPresenterImpl implements GetPresenter {
-    private VolleyView view;
-
-    public GetPresenterImpl(VolleyView view) {
-        this.view = view;
-    }
-
+public class MGetImpl implements MGet {
     @Override
-    public void getData(String url, String tag) {
+    public void getData(String url, String tag, final MVolleyListener listener) {
         MyApplication.getRequestQueue().cancelAll(tag);
         StringRequest r = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                view.onSuccessResponse(response);
+                listener.onSuccessResponse(response);
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                view.onFailResponse(error);
+                listener.onFailResponse(error);
             }
         });
         r.setTag(tag);
         MyApplication.getRequestQueue().add(r);
     }
 
-    @Override
-    public void onDestroy() {
-        view = null;
-    }
 }

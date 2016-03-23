@@ -12,27 +12,23 @@ import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.Bind;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 import tysheng.atlas.R;
 import tysheng.atlas.adapter.WeatherRVAdapter;
-import tysheng.atlas.app.Constant;
 import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseActivity;
+import tysheng.atlas.bean.RWeatherBean;
+import tysheng.atlas.retrofit.RetrofitSingleton;
 import tysheng.atlas.utils.SPHelper;
 
 
@@ -51,9 +47,11 @@ public class WeatherListActivity extends BaseActivity {
     int count;
     ArrayList<String> cities;
     private long exitTime = 0;
+    protected CompositeSubscription subscriber;
 
     @Override
     public void initData() {
+        subscriber = new CompositeSubscription();
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24dp);
@@ -106,62 +104,58 @@ public class WeatherListActivity extends BaseActivity {
         }
     }
 
-    private void getData(final String cityname, final int type) {
+    private void getData(final String cityName, final int type) {
+        subscriber.add(
+        RetrofitSingleton.getWeatherApi(MyApplication.getInstance())
+                .getParams(cityName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(new Func1<RWeatherBean, Boolean>() {
+                    @Override
+                    public Boolean call(RWeatherBean rWeatherBean) {
+                        return rWeatherBean.getHeWeather().get(0).getStatus().equals("ok");
+                    }
+                })
+                .map(new Func1<RWeatherBean, RWeatherBean.HeWeatherEntity>() {
 
-        StringRequest request = new StringRequest(Request.Method.POST, Constant.HF_WEATHER_API, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                HashMap<String, String> map = new HashMap<>();
-                JSONObject object = null;
-                try {
-                    object = new JSONObject(response);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                if (object != null) {
-                    JSONArray array = object.optJSONArray("HeWeather data service 3.0");
-                    JSONObject object1 = array.optJSONObject(0);
-                    if (object1.optString("status").equals("ok")) {
-                        JSONObject basic = object1.optJSONObject("basic");
-                        if (basic.optString("cnty").equals("中国")) {
-                            JSONObject object2 = object1.optJSONObject("aqi");
-                            if (object2 != null) {
-                                JSONObject object3 = object2.optJSONObject("city");
-                                String aqi = object3.optString("aqi");
-                                String qlty = object3.optString("qlty");
-                                map.put("aqi", aqi);
-                                map.put("qlty", qlty);
-                            } else {
+                    @Override
+                    public RWeatherBean.HeWeatherEntity call(RWeatherBean rWeatherBean) {
+                        return rWeatherBean.getHeWeather().get(0);
+                    }
+                })
+                .subscribe(new Subscriber<RWeatherBean.HeWeatherEntity>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(RWeatherBean.HeWeatherEntity heWeatherEntity) {
+                        HashMap<String, String> map = new HashMap<>();
+                        if (heWeatherEntity.getBasic().getCnty().equals("中国")) {
+                            if (heWeatherEntity.getAqi() == null){
                                 map.put("ll_aqi", "ll_aqi");
+                            } else {
+                                map.put("aqi", heWeatherEntity.getAqi().getCity().getAqi());
+                                map.put("qlty", heWeatherEntity.getAqi().getCity().getQlty());
                             }
-                            JSONObject now = object1.optJSONObject("now");
-                            JSONObject suggestion = object1.optJSONObject("suggestion");
-                            JSONObject comf = suggestion.optJSONObject("comf");
-                            JSONArray hourly_forecast = object1.optJSONArray("hourly_forecast");
-                            JSONObject hourforecast = null;
-                            try {
-                                hourforecast = hourly_forecast.getJSONObject(0);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                            String brf = comf.optString("brf");
-                            String txt = comf.optString("txt");
-                            String tmp = hourforecast.optString("tmp");
-                            String city_name = basic.optString("city");
-                            String cond = now.optJSONObject("cond").optString("txt");
-                            map.put("brf", brf);
-                            map.put("city_name", city_name);
-                            map.put("tmp", tmp + "°");
-                            map.put("txt", txt);
-                            map.put("cond", cond);
+                            map.put("brf", heWeatherEntity.getSuggestion().getComf().getBrf());
+                            map.put("city_name", heWeatherEntity.getBasic().getCity());
+                            map.put("tmp", heWeatherEntity.getHourly_forecast().get(0).getTmp() + "°");
+                            map.put("txt", heWeatherEntity.getSuggestion().getComf().getTxt());
+                            map.put("cond", heWeatherEntity.getNow().getCond().getTxt());
                             if (type == 1) {
-                                cities.add(cityname);
+                                cities.add(cityName);
                                 list.add(map);
                                 adapter.notifyItemChanged(list.size());
                             } else {
                                 for (int i = 0; i < cities.size(); i++) {
-                                    if (cities.get(i).equals(cityname)) {
+                                    if (cities.get(i).equals(cityName)) {
                                         list.remove(i);
                                         list.add(i, map);
                                         count++;
@@ -175,38 +169,17 @@ public class WeatherListActivity extends BaseActivity {
                         } else {
                             ShowToast("请输入正确的城市名");
                         }
+
                     }
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> header = new HashMap<>();
-                header.put("apikey", Constant.HF_WEATHER_APIKEY);
-                return header;
-            }
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> params = new HashMap<>();
-                params.put("city", cityname);
-                return params;
-            }
-        };
-        request.setTag(cityname);
-        MyApplication.getRequestQueue().add(request);
+                })
+        );
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         saveData();
+        subscriber.unsubscribe();
     }
 
     private void saveData() {

@@ -2,7 +2,6 @@ package tysheng.atlas.fragment;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -11,28 +10,19 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
 import com.facebook.drawee.view.SimpleDraweeView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
 
 import butterknife.Bind;
 import tysheng.atlas.R;
-import tysheng.atlas.app.Constant;
-import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseFragment;
-import tysheng.atlas.presenter.PostPresenter;
-import tysheng.atlas.presenter.PostPresenterImpl;
-import tysheng.atlas.presenter.VolleyView;
+import tysheng.atlas.bean.RWeatherBean;
+import tysheng.atlas.mvp.retrofit.PPost;
+import tysheng.atlas.mvp.retrofit.VPost;
 
 /**
  * Created by shengtianyang on 16/1/31.
  */
-public class WeatherFragment extends BaseFragment implements VolleyView {
+public class WeatherFragment extends BaseFragment implements VPost {
 
     @Bind(R.id.tv_aqi)
     TextView tvAqi;
@@ -58,7 +48,7 @@ public class WeatherFragment extends BaseFragment implements VolleyView {
     LinearLayout ll_aqi;
     private String cityname;
     private String city_url;
-    private PostPresenter presenter;
+    private PPost presenter;
 
     public WeatherFragment(String cityname, String city_url) {
         this.cityname = cityname;
@@ -79,14 +69,8 @@ public class WeatherFragment extends BaseFragment implements VolleyView {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d("sty","a");
-    }
-
-    @Override
     protected void initData() {
-        presenter = new PostPresenterImpl(this);
+        presenter = new PPost(this);
         if (cityname.equals("")) {
             etSearchCity.setVisibility(View.VISIBLE);
             etSearchCity.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -115,17 +99,6 @@ public class WeatherFragment extends BaseFragment implements VolleyView {
 
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        MyApplication.getRequestQueue().cancelAll("WeatherFragment" + cityname);
-    }
-
-    @Override
-    public void onDestroy() {
-        presenter.onDestroy();
-        super.onDestroy();
-    }
 
     private void getWeather(final String cityname) {
         if (!city_url.equals("")) {
@@ -133,74 +106,32 @@ public class WeatherFragment extends BaseFragment implements VolleyView {
         } else {
             drawee_weather_city.setVisibility(View.GONE);
         }
+        presenter.func(cityname);
+    }
 
-        HashMap<String, String> header = new HashMap<>();
-        header.put("apikey", Constant.HF_WEATHER_APIKEY);
-        HashMap<String, String> params = new HashMap<>();
-        params.put("city", cityname);
-        presenter.getData(Constant.HF_WEATHER_API, "WeatherFragment" + cityname, header, params);
+
+    @Override
+    public void onFailedError(Throwable e) {
+        ShowToast("请输入正确的城市名");
     }
 
     @Override
-    public void onSuccessResponse(String response) {
-        JSONObject object = null;
-        try {
-            object = new JSONObject(response);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        if (object != null) {
-            JSONArray array = object.optJSONArray("HeWeather data service 3.0");
-            JSONObject object1 = array.optJSONObject(0);
-            if (object1.optString("status").equals("ok")) {
-                JSONObject basic = object1.optJSONObject("basic");
-                if (basic.optString("cnty").equals("中国")) {
-                    JSONObject object2 = object1.optJSONObject("aqi");
-                    if (object2 != null) {
-                        JSONObject object3 = object2.optJSONObject("city");
-                        String aqi = object3.optString("aqi");
-                        String qlty = object3.optString("qlty");
-                        tvAqi.setText(aqi);
-                        tcQlty.setText(qlty);
-                        tv_textaqi.setText("AQI");
-                    } else {
-                        ll_aqi.setVisibility(View.GONE);
-                    }
-
-                    JSONObject now = object1.optJSONObject("now");
-                    JSONObject suggestion = object1.optJSONObject("suggestion");
-                    JSONObject comf = suggestion.optJSONObject("comf");
-                    JSONArray hourly_forecast = object1.optJSONArray("hourly_forecast");
-                    JSONObject hourforecast = null;
-                    try {
-                        hourforecast = hourly_forecast.getJSONObject(0);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    String brf = comf.optString("brf");
-                    String txt = comf.optString("txt");
-                    String tmp = hourforecast.optString("tmp");
-                    String city_name = basic.optString("city");
-                    String cond = now.optJSONObject("cond").optString("txt");
-
-                    tvBrf.setText(brf);
-                    tvCity.setText(city_name);
-                    tvTmp.setText(tmp + "°");
-                    tvTxt.setText(txt);
-                    tvCond.setText(cond);
-                } else {
-                    ShowToast("外国城市懒得解析~");
-                }
+    public void onSuccess(RWeatherBean.HeWeatherEntity heWeatherEntity) {
+        if (heWeatherEntity.getBasic().getCnty().equals("中国")) {
+            if (heWeatherEntity.getAqi() == null){
+                ll_aqi.setVisibility(View.GONE);
             } else {
-                ShowToast("请输入正确的城市名");
+                tvAqi.setText(heWeatherEntity.getAqi().getCity().getAqi());
+                tcQlty.setText(heWeatherEntity.getAqi().getCity().getQlty());
+                tv_textaqi.setText("AQI");
             }
+            tvBrf.setText(heWeatherEntity.getSuggestion().getComf().getBrf());
+            tvCity.setText(heWeatherEntity.getBasic().getCity());
+            tvTmp.setText(heWeatherEntity.getHourly_forecast().get(0).getTmp() + "°");
+            tvTxt.setText(heWeatherEntity.getSuggestion().getComf().getTxt());
+            tvCond.setText(heWeatherEntity.getNow().getCond().getTxt());
+        } else {
+            ShowToast("外国城市懒得解析~");
         }
-
-    }
-
-    @Override
-    public void onFailResponse(VolleyError error) {
-
     }
 }

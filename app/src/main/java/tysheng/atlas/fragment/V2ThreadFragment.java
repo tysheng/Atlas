@@ -24,20 +24,19 @@ import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseFragment;
 import tysheng.atlas.bean.HeaderBean;
 import tysheng.atlas.bean.V2ReplyBean;
-import tysheng.atlas.presenter.GetPresenter;
-import tysheng.atlas.presenter.GetPresenterImpl;
-import tysheng.atlas.presenter.VolleyView;
+import tysheng.atlas.mvp.volley_get.PGet;
+import tysheng.atlas.mvp.volley_get.VGet;
 import tysheng.atlas.utils.ItemDivider;
 
 
 /**
  * Created by shengtianyang on 16/2/1.
  */
-public class V2ThreadFragment extends BaseFragment implements VolleyView {
+public class V2ThreadFragment extends BaseFragment implements VGet {
 
     @Bind(R.id.rc_thread)
     RecyclerView rcThread;
-    private GetPresenter presenter;
+    private PGet presenter;
     @Override
     public void onStop() {
         super.onStop();
@@ -76,13 +75,9 @@ public class V2ThreadFragment extends BaseFragment implements VolleyView {
         rcThread.setLayoutManager(new LinearLayoutManager(frmContext));
         rcThread.addItemDecoration(new ItemDivider(frmContext));
 
-        presenter.getData(Constant.URL_V2_REPLY + "?topic_id=" + id,getClass().getSimpleName());
+        presenter.func(Constant.URL_V2_REPLY + "?topic_id=" + id,getClass().getSimpleName());
     }
-    @Override
-    public void onDestroy() {
-        presenter.onDestroy();
-        super.onDestroy();
-    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -119,7 +114,7 @@ public class V2ThreadFragment extends BaseFragment implements VolleyView {
     @Override
     protected void initData() {
         setHasOptionsMenu(true);
-        presenter = new GetPresenterImpl(this);
+        presenter = new PGet(this);
         bundle = getArguments();
         getReply();
     }
@@ -142,14 +137,20 @@ public class V2ThreadFragment extends BaseFragment implements VolleyView {
         MyApplication.getWxApi().sendReq(req);
     }
 
+
     @Override
-    public void onSuccessResponse(String response) {
-        data.addAll(JSON.parseArray(response, V2ReplyBean.class));
-        adapter.notifyDataSetChanged();
+    public void stopSwipe() {
+
     }
 
     @Override
-    public void onFailResponse(VolleyError error) {
+    public void onFailedError(VolleyError error) {
 
+    }
+
+    @Override
+    public void onSuccess(String s) {
+        data.addAll(JSON.parseArray(s, V2ReplyBean.class));
+        adapter.notifyDataSetChanged();
     }
 }

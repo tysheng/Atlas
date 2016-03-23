@@ -93,7 +93,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void ShowToast(String msg) {
         if (toast == null) {
-            toast = Toast.makeText(actContext, msg, Toast.LENGTH_SHORT);
+            toast = Toast.makeText(actContext.getApplicationContext(), msg, Toast.LENGTH_SHORT);
         } else {
             toast.setText(msg);
         }

@@ -29,14 +29,13 @@ import tysheng.atlas.app.Constant;
 import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseFragment;
 import tysheng.atlas.bean.V2NodesBean;
-import tysheng.atlas.presenter.GetPresenter;
-import tysheng.atlas.presenter.GetPresenterImpl;
-import tysheng.atlas.presenter.VolleyView;
+import tysheng.atlas.mvp.volley_get.PGet;
+import tysheng.atlas.mvp.volley_get.VGet;
 
 /**
  * Created by shengtianyang on 16/2/2.
  */
-public class V2NodeFragment extends BaseFragment implements VolleyView {
+public class V2NodeFragment extends BaseFragment implements VGet {
     @Bind(R.id.srl_node)
     SwipyRefreshLayout swipe;
     @Bind(R.id.rv_v2node)
@@ -45,7 +44,7 @@ public class V2NodeFragment extends BaseFragment implements VolleyView {
     List<V2NodesBean> data;
     Fragment v2NodeFragment;
     List<V2NodesBean> list;
-    private GetPresenter presenter;
+    private PGet presenter;
     int total = 0;
     int used = 0;
 
@@ -74,8 +73,8 @@ public class V2NodeFragment extends BaseFragment implements VolleyView {
 
     @Override
     protected void initData() {
+        presenter = new PGet(this);
         setHasOptionsMenu(true);
-        presenter = new GetPresenterImpl(this);
         initswipe();
         data = new ArrayList<>();
         mAdapter = new V2NodeRecyclerAdapter(frmContext, data);
@@ -107,7 +106,7 @@ public class V2NodeFragment extends BaseFragment implements VolleyView {
     }
 
     private void getData() {
-        presenter.getData(Constant.URL_V2_NODE_ALL,getClass().getSimpleName());
+        presenter.func(Constant.URL_V2_NODE_ALL,getClass().getSimpleName());
     }
 
     private void initswipe() {
@@ -135,11 +134,7 @@ public class V2NodeFragment extends BaseFragment implements VolleyView {
             }
         });
     }
-    @Override
-    public void onDestroy() {
-        presenter.onDestroy();
-        super.onDestroy();
-    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -177,22 +172,29 @@ public class V2NodeFragment extends BaseFragment implements VolleyView {
         return super.onOptionsItemSelected(item);
     }
 
+
+
+
+
     @Override
-    public void onSuccessResponse(String response) {
-        list = JSON.parseArray(response, V2NodesBean.class);
+    public void stopSwipe() {
+        if (swipe.isRefreshing())
+            swipe.setRefreshing(false);
+    }
+
+    @Override
+    public void onFailedError(VolleyError error) {
+
+    }
+
+    @Override
+    public void onSuccess(String s) {
+        list = JSON.parseArray(s, V2NodesBean.class);
         total = list.size();
         for (int i = 0; i < 30; i++) {
             data.add(list.get(i));
         }
         used += 30;
         mAdapter.notifyDataSetChanged();
-        if (swipe.isRefreshing())
-            swipe.setRefreshing(false);
-    }
-
-    @Override
-    public void onFailResponse(VolleyError error) {
-        if (swipe.isRefreshing())
-            swipe.setRefreshing(false);
     }
 }

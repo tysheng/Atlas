@@ -23,24 +23,22 @@ import tysheng.atlas.adapter.V2HotAdapter;
 import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseFragment;
 import tysheng.atlas.bean.V2HotBean;
-import tysheng.atlas.presenter.GetPresenter;
-import tysheng.atlas.presenter.GetPresenterImpl;
-import tysheng.atlas.presenter.VolleyView;
+import tysheng.atlas.mvp.volley_get.PGet;
+import tysheng.atlas.mvp.volley_get.VGet;
 
 /**
  * Created by shengtianyang on 16/1/31.
  */
-public class V2NewFragment extends BaseFragment implements VolleyView {
+public class V2NewFragment extends BaseFragment implements VGet {
 
     @Bind(R.id.rv_v2)
     RecyclerView rvV2;
     @Bind(R.id.swipe)
     SwipeRefreshLayout swipe;
-
     private List<V2HotBean> data;
     Fragment fragment;
     private V2HotAdapter mAdapter;
-    private GetPresenter presenter;
+    private PGet presenter;
     public V2NewFragment() {
     }
 
@@ -55,25 +53,26 @@ public class V2NewFragment extends BaseFragment implements VolleyView {
     private String url;
 
     private void getHotThread() {
-        presenter.getData(url,getClass().getSimpleName());
+        presenter.func(url,getClass().getSimpleName());
     }
 
     @Override
-    public void onSuccessResponse(String response) {
-        data.addAll(JSON.parseArray(response, V2HotBean.class));
-        mAdapter.notifyDataSetChanged();
-        stopSwipe();
-    }
-
-    @Override
-    public void onFailResponse(VolleyError error) {
-        stopSwipe();
-    }
-
-
-    private void stopSwipe() {
+    public void stopSwipe() {
         if (swipe.isRefreshing())
             swipe.setRefreshing(false);
+    }
+
+
+
+    @Override
+    public void onFailedError(VolleyError error) {
+
+    }
+
+    @Override
+    public void onSuccess(String s) {
+        data.addAll(JSON.parseArray(s, V2HotBean.class));
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -81,12 +80,9 @@ public class V2NewFragment extends BaseFragment implements VolleyView {
         super.onStop();
         MyApplication.getRequestQueue().cancelAll(getClass().getSimpleName());
     }
-    @Override
-    public void onDestroy() {
-        presenter.onDestroy();
-        super.onDestroy();
-    }
+
     private void initView() {
+        presenter = new PGet(this);
         swipe.setColorSchemeResources(android.R.color.holo_purple,
                 android.R.color.holo_green_light,
                 android.R.color.holo_red_light,
@@ -125,7 +121,7 @@ public class V2NewFragment extends BaseFragment implements VolleyView {
         rvV2.setLayoutManager(new LinearLayoutManager(frmContext));
         rvV2.setItemAnimator(new DefaultItemAnimator());
         rvV2.setAdapter(mAdapter);
-        presenter = new GetPresenterImpl(this);
+
     }
 
     @Override
