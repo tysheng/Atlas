@@ -39,7 +39,7 @@ import tysheng.atlas.utils.SPHelper;
 /**
  * Created by shengtianyang on 16/2/29.
  */
-public class WeatherListActivity extends BaseActivity  {
+public class WeatherListActivity extends BaseActivity {
     @Bind(R.id.rv_v2)
     RecyclerView recyclerView;
     @Bind(R.id.toolbar)
@@ -111,9 +111,14 @@ public class WeatherListActivity extends BaseActivity  {
         StringRequest request = new StringRequest(Request.Method.POST, Constant.HF_WEATHER_API, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                HashMap<String, String> map = new HashMap<>();
+                JSONObject object = null;
                 try {
-                    HashMap<String, String> map = new HashMap<>();
-                    JSONObject object = new JSONObject(response);
+                    object = new JSONObject(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (object != null) {
                     JSONArray array = object.optJSONArray("HeWeather data service 3.0");
                     JSONObject object1 = array.optJSONObject(0);
                     if (object1.optString("status").equals("ok")) {
@@ -133,7 +138,12 @@ public class WeatherListActivity extends BaseActivity  {
                             JSONObject suggestion = object1.optJSONObject("suggestion");
                             JSONObject comf = suggestion.optJSONObject("comf");
                             JSONArray hourly_forecast = object1.optJSONArray("hourly_forecast");
-                            JSONObject hourforecast = hourly_forecast.getJSONObject(0);
+                            JSONObject hourforecast = null;
+                            try {
+                                hourforecast = hourly_forecast.getJSONObject(0);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
 
                             String brf = comf.optString("brf");
                             String txt = comf.optString("txt");
@@ -145,17 +155,17 @@ public class WeatherListActivity extends BaseActivity  {
                             map.put("tmp", tmp + "°");
                             map.put("txt", txt);
                             map.put("cond", cond);
-                            if (type == 1){
+                            if (type == 1) {
                                 cities.add(cityname);
                                 list.add(map);
                                 adapter.notifyItemChanged(list.size());
                             } else {
                                 for (int i = 0; i < cities.size(); i++) {
-                                    if (cities.get(i).equals(cityname)){
+                                    if (cities.get(i).equals(cityname)) {
                                         list.remove(i);
-                                        list.add(i,map);
+                                        list.add(i, map);
                                         count++;
-                                        if (count >= sum){
+                                        if (count >= sum) {
                                             dialog.dismiss();
                                             adapter.notifyDataSetChanged();
                                         }
@@ -166,10 +176,8 @@ public class WeatherListActivity extends BaseActivity  {
                             ShowToast("请输入正确的城市名");
                         }
                     }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
+
             }
         }, new Response.ErrorListener() {
             @Override

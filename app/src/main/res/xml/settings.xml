@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <tysheng.atlas.diy.MyPreferenceCategory android:title="基本设置">
+        <Preference
+            android:title="主题"
+            android:summary="选择主题颜色"
+            android:key="theme"/>
+
+
+    </tysheng.atlas.diy.MyPreferenceCategory>
+    <tysheng.atlas.diy.MyPreferenceCategory android:title="账号设置">
+        <Preference
+            android:title="头像"
+            android:summary="修改头像"
+            android:key="avatar"/>
+        <Preference
+            android:title="姓名"
+            android:summary="修改姓名"
+            android:key="name"/>
+        <Preference
+            android:title="邮箱"
+            android:summary="修改邮箱"
+            android:key="email"/>
+    </tysheng.atlas.diy.MyPreferenceCategory>
+
+</PreferenceScreen>

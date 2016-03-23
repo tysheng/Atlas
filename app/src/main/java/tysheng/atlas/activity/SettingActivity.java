@@ -15,12 +15,13 @@ import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.afollestad.materialdialogs.util.DialogUtils;
 
 import butterknife.Bind;
-import butterknife.OnClick;
 import tysheng.atlas.R;
 import tysheng.atlas.base.BaseActivity;
+import tysheng.atlas.fragment.FragmentCallback;
+import tysheng.atlas.fragment.MyPreferenceFragment;
 import tysheng.atlas.utils.SPHelper;
 
-public class SettingActivity extends BaseActivity implements ColorChooserDialog.ColorCallback {
+public class SettingActivity extends BaseActivity implements ColorChooserDialog.ColorCallback,FragmentCallback {
 
     private static final int RESULT_LOAD_IMAGE = 100;
 
@@ -29,51 +30,52 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
     @Bind(R.id.tl_setting)
     Toolbar tbSetting;
 
-    @OnClick({R.id.info_avatar, R.id.info_name, R.id.info_email, R.id.ll_color_chooser})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.info_avatar:
-                Intent i = new Intent(Intent.ACTION_PICK, null);
-                i.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-                startActivityForResult(i, RESULT_LOAD_IMAGE);
-                break;
-            case R.id.info_name:
-                new MaterialDialog.Builder(this)
-                        .title("输入你的姓名")
-                        .inputRange(1, 15)
-                        .positiveText("OK")
-                        .input("", "", false, new MaterialDialog.InputCallback() {
-                            @Override
-                            public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                                SPHelper.setName(actContext, input.toString());
-                                SPHelper.setIsSetting(actContext, true);
-                            }
-                        }).show();
-                break;
-            case R.id.info_email:
-                new MaterialDialog.Builder(this)
-                        .title("输入你的邮箱")
-                        .inputRange(1, 15)
-                        .positiveText("OK")
-                        .input("", "", false, new MaterialDialog.InputCallback() {
-                            @Override
-                            public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                                SPHelper.setEmail(actContext, input.toString());
-                                SPHelper.setIsSetting(actContext, true);
-                            }
-                        }).show();
-                break;
-            case R.id.ll_color_chooser:
-                new ColorChooserDialog.Builder(this, R.string.color_palette)
-                        .titleSub(R.string.colors)
-                        .accentMode(false)
-                        .allowUserColorInput(false)
-                        .preselect(primaryPreselect)
-                        .customColors(R.array.custom_colors, null)
-                        .show();
-                break;
-        }
-    }
+//    @OnClick({R.id.info_avatar, R.id.info_name, R.id.info_email, R.id.ll_color_chooser})
+//    public void onClick(View view) {
+//        switch (view.getId()) {
+//            case R.id.info_avatar:
+//                Intent i = new Intent(Intent.ACTION_PICK, null);
+//                i.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+//                startActivityForResult(i, RESULT_LOAD_IMAGE);
+//                break;
+//            case R.id.info_name:
+//                new MaterialDialog.Builder(this)
+//                        .title("输入你的姓名")
+//                        .inputRange(1, 15)
+//                        .positiveText("OK")
+//                        .input("", "", false, new MaterialDialog.InputCallback() {
+//                            @Override
+//                            public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+//                                SPHelper.setName(actContext, input.toString());
+//                                SPHelper.setIsSetting(actContext, true);
+//                            }
+//                        }).show();
+//                break;
+//            case R.id.info_email:
+//                new MaterialDialog.Builder(this)
+//                        .title("输入你的邮箱")
+//                        .inputRange(1, 15)
+//                        .positiveText("OK")
+//                        .input("", "", false, new MaterialDialog.InputCallback() {
+//                            @Override
+//                            public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+//                                SPHelper.setEmail(actContext, input.toString());
+//                                SPHelper.setIsSetting(actContext, true);
+//                            }
+//                        }).show();
+//                break;
+//            case R.id.ll_color_chooser:
+//                new ColorChooserDialog.Builder(this, R.string.color_palette)
+//                        .titleSub(R.string.colors)
+//                        .accentMode(false)
+//                        .allowUserColorInput(false)
+//                        .preselect(primaryPreselect)
+//                        .customColors(R.array.custom_colors, null)
+//                        .show();
+//                break;
+//        }
+//    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -138,6 +140,10 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
         });
         intent = new Intent(this, MainActivity.class);
         primaryPreselect = DialogUtils.resolveColor(this, R.attr.themeColor);
+
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fl, new MyPreferenceFragment())
+                .commit();
     }
 
 
@@ -172,40 +178,52 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
         startActivity(intent);
         finish();
     }
-//    private void compressImage(String filePath,String s) {
-//        if(!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-//            return;
-//        }
-//        String destPath = "res:/"+s;
-////        content://media/external/images/media/3206
-//        File file = new File(filePath);
-//        if(file.exists()) {
-////            Bitmap src = BitmapFactory.decodeFile(filePath);
-////			byte[] bytes = CompressImageUtil.compressImage(src, 200);
-//            byte[] bytes = ImageCompress.getimage(filePath);
-//            InputStream in = new ByteArrayInputStream(bytes);
-//            try {
-//                OutputStream out = new FileOutputStream(destPath);
-//                int length = 0;
-//                byte[] b = new byte[1024];
-//                while((length=in.read(b))>0) {
-//                    out.write(b, 0, length);
-//                }
-//                out.flush();
-//                out.close();
-//                in.close();
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-//    private String pathSplit(String s){
-//        String[] array = s.split(":");
-//        return array[1];
-//    }
 
+    @Override
+    public void func1(String s) {
+        switch (s) {
+            case "avatar":
+                Intent i = new Intent(Intent.ACTION_PICK, null);
+                i.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                startActivityForResult(i, RESULT_LOAD_IMAGE);
+                break;
+            case "name":
+                new MaterialDialog.Builder(this)
+                        .title("输入你的姓名")
+                        .inputRange(1, 15)
+                        .positiveText("OK")
+                        .input("", "", false, new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                                SPHelper.setName(actContext, input.toString());
+                                SPHelper.setIsSetting(actContext, true);
+                            }
+                        }).show();
+                break;
+            case "email":
+                new MaterialDialog.Builder(this)
+                        .title("输入你的邮箱")
+                        .inputRange(1, 15)
+                        .positiveText("OK")
+                        .input("", "", false, new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                                SPHelper.setEmail(actContext, input.toString());
+                                SPHelper.setIsSetting(actContext, true);
+                            }
+                        }).show();
+                break;
+            case "theme":
+                new ColorChooserDialog.Builder(this, R.string.color_palette)
+                        .titleSub(R.string.colors)
+                        .accentMode(false)
+                        .allowUserColorInput(false)
+                        .preselect(primaryPreselect)
+                        .customColors(R.array.custom_colors, null)
+                        .show();
+                break;
+        }
+    }
 }
 
 

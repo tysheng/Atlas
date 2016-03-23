@@ -2,6 +2,7 @@ package tysheng.atlas.fragment;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -24,9 +25,9 @@ import tysheng.atlas.R;
 import tysheng.atlas.app.Constant;
 import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseFragment;
-import tysheng.atlas.presenter.VolleyView;
 import tysheng.atlas.presenter.PostPresenter;
 import tysheng.atlas.presenter.PostPresenterImpl;
+import tysheng.atlas.presenter.VolleyView;
 
 /**
  * Created by shengtianyang on 16/1/31.
@@ -63,6 +64,7 @@ public class WeatherFragment extends BaseFragment implements VolleyView {
         this.cityname = cityname;
         this.city_url = city_url;
     }
+
     public WeatherFragment() {
     }
 
@@ -73,7 +75,13 @@ public class WeatherFragment extends BaseFragment implements VolleyView {
 
     @Override
     protected int getLayoutId() {
-            return R.layout.fragment_weathertab;
+        return R.layout.fragment_weathertab;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d("sty","a");
     }
 
     @Override
@@ -135,8 +143,13 @@ public class WeatherFragment extends BaseFragment implements VolleyView {
 
     @Override
     public void onSuccessResponse(String response) {
+        JSONObject object = null;
         try {
-            JSONObject object = new JSONObject(response);
+            object = new JSONObject(response);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (object != null) {
             JSONArray array = object.optJSONArray("HeWeather data service 3.0");
             JSONObject object1 = array.optJSONObject(0);
             if (object1.optString("status").equals("ok")) {
@@ -158,7 +171,12 @@ public class WeatherFragment extends BaseFragment implements VolleyView {
                     JSONObject suggestion = object1.optJSONObject("suggestion");
                     JSONObject comf = suggestion.optJSONObject("comf");
                     JSONArray hourly_forecast = object1.optJSONArray("hourly_forecast");
-                    JSONObject hourforecast = hourly_forecast.getJSONObject(0);
+                    JSONObject hourforecast = null;
+                    try {
+                        hourforecast = hourly_forecast.getJSONObject(0);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
                     String brf = comf.optString("brf");
                     String txt = comf.optString("txt");
@@ -177,10 +195,8 @@ public class WeatherFragment extends BaseFragment implements VolleyView {
             } else {
                 ShowToast("请输入正确的城市名");
             }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
+
     }
 
     @Override
