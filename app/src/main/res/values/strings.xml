@@ -20,6 +20,9 @@
     <string name="fm_node">Node</string>
     <string name="fm_atlas">Atlas</string>
     <string name="fm_flash">Flash</string>
+    <string name="fm_hupu">Hupu</string>
+    <string name="fm_gank">Gank</string>
+    <string name="fm_v2ex">V2ex</string>
 
 
     <string-array name="atlas_drawbles">
@@ -42,5 +45,7 @@
     <string name="errcode_cancel">发送取消</string>
     <string name="errcode_deny">发送被拒绝</string>
     <string name="errcode_unknown">发送返回</string>
+    <string name="title_activity_picture">Picture</string>
+    <string name="picture_has_save_to">图片已保存至 %s 文件夹</string>
 
 </resources>

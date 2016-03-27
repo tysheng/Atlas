@@ -11,8 +11,6 @@ import com.squareup.leakcanary.RefWatcher;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
-import tysheng.atlas.retrofit.RetrofitSingleton;
-
 public class MyApplication extends Application {
     private static RequestQueue requestQueue;
 //    SQLiteDatabase db;
@@ -26,7 +24,6 @@ public class MyApplication extends Application {
         super.onCreate();
         instance = this;
         Fresco.initialize(this);
-        RetrofitSingleton.init(getApplicationContext());
         requestQueue = Volley.newRequestQueue(this);
 //        setupDatabase();
         regTowX();

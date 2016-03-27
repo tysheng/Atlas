@@ -22,9 +22,7 @@ public class RWeatherBean {
     @SerializedName("HeWeather data service 3.0")
     private List<HeWeatherEntity> HeWeather;
 
-    public void setHeWeather(List<HeWeatherEntity> HeWeather) {
-        this.HeWeather = HeWeather;
-    }
+
 
     public List<HeWeatherEntity> getHeWeather() {
         return HeWeather;

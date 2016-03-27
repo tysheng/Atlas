@@ -6,7 +6,8 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.bean.RWeatherBean;
-import tysheng.atlas.retrofit.RetrofitSingleton;
+import tysheng.atlas.api.RetrofitSingleton;
+import tysheng.atlas.api.WeatherApi;
 
 /**
  * Created by shengtianyang on 16/3/13.
@@ -15,7 +16,7 @@ public class MPostImpl implements MPost {
 
     @Override
     public void getData(String cityName, final MRetrofitListener listener) {
-        RetrofitSingleton.getWeatherApi(MyApplication.getInstance())
+        RetrofitSingleton.getWeatherApi(MyApplication.getInstance(), WeatherApi.BASE_URL)
                 .getParams(cityName)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -34,9 +35,7 @@ public class MPostImpl implements MPost {
                 })
                 .subscribe(new Subscriber<RWeatherBean.HeWeatherEntity>() {
                     @Override
-                    public void onCompleted() {
-
-                    }
+                    public void onCompleted() {}
 
                     @Override
                     public void onError(Throwable e) {

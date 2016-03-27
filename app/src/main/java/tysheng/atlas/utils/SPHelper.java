@@ -104,13 +104,20 @@ public final class SPHelper {
     }
     public static void setIsSetting(Context context,boolean s){
         SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
-        sp.edit().putBoolean("issetting",s).apply();
+        sp.edit().putBoolean("issetting", s).apply();
     }
     public static boolean getIsSetting(Context context){
         SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
-        return  sp.getBoolean("issetting",false);
+        return  sp.getBoolean("issetting", false);
     }
-
+    public static void setGankTip(Context context,String s){
+        SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
+        sp.edit().putString("gank_tip", s).commit();
+    }
+    public static String getGankTip(Context context){
+        SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
+        return  sp.getString("gank_tip", "on");
+    }
 
 
 

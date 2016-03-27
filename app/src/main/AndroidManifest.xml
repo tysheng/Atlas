@@ -3,11 +3,6 @@
     package="tysheng.atlas">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.FLASHLIGHT" />
-
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.flash" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -27,7 +22,7 @@
             android:value="85e31053269d6d5dba4cc3d37c9d33eb" />
 
         <activity
-            android:name="tysheng.atlas.activity.MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,18 +31,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="tysheng.atlas.activity.SettingActivity"
+            android:name=".ui.activity.SettingActivity"
             android:label="@string/title_activity_setting">
 
         </activity>
         <activity
-            android:name="tysheng.atlas.activity.WeatherTabActivity"
+            android:name=".ui.activity.WeatherTabActivity"
             android:label="@string/title_activity_weather">
 
         </activity>
         <activity
-            android:name="tysheng.atlas.activity.WeatherListActivity"
+            android:name=".ui.activity.WeatherListActivity"
             android:label="@string/title_activity_weather">
+
+        </activity>
+        <activity
+            android:name=".ui.activity.PictureActivity"
+            android:label="@string/title_activity_picture">
 
         </activity>
         <activity

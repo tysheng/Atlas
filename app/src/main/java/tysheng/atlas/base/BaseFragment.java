@@ -36,6 +36,7 @@ public abstract class BaseFragment extends Fragment{
         rootView = inflater.inflate(getLayoutId(), container, false);
         ButterKnife.bind(this, rootView);
         subscriber = new CompositeSubscription();
+
         initData();
         return rootView;
     }
@@ -51,6 +52,25 @@ public abstract class BaseFragment extends Fragment{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setTitle();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden)
+            setTitle();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
     }
 
     protected abstract void setTitle();

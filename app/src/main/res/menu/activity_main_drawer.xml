@@ -5,24 +5,24 @@
         <item
             android:id="@+id/nav_hot"
             android:icon="@drawable/menu_safari"
-            android:title="Hot" />
+            android:title="@string/fm_v2ex" />
         <item
             android:id="@+id/nav_new"
             android:icon="@drawable/menu_v2new2"
-            android:title="New" />
+            android:title="@string/fm_gank" />
         <item
             android:id="@+id/nav_node"
             android:icon="@drawable/menu_node"
-            android:title="Node" />
+            android:title="@string/fm_node" />
 
         <item
             android:id="@+id/nav_atals"
             android:icon="@drawable/menu_atlas"
-            android:title="Atlas" />
+            android:title="@string/fm_atlas" />
         <item
             android:id="@+id/nav_flash"
-            android:icon="@drawable/menu_lantern"
-            android:title="Flash" />
+            android:icon="@drawable/menu_hupu"
+            android:title="@string/fm_hupu" />
 
     </group>
     <item android:title="Weather">
