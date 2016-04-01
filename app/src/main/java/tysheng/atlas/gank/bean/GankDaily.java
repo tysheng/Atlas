@@ -1,13 +1,14 @@
-package tysheng.atlas.bean;
+package tysheng.atlas.gank.bean;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by shengtianyang on 16/3/26.
  */
-public class GankBean {
+public class GankDaily implements Serializable{
 
     /**
      * category : ["iOS","Android","瞎推荐","拓展资源","福利","休息视频"]
@@ -19,7 +20,7 @@ public class GankBean {
     public ResultsEntity results;
     public List<String> category;
 
-    public static class ResultsEntity {
+    public static class ResultsEntity implements Serializable{
         /**
          * _id : 56cc6d23421aa95caa707a69
          * _ns : ganhuo
@@ -33,9 +34,9 @@ public class GankBean {
          */
 
         @SerializedName("Android")
-        public List<AndroidEntity> Result;
+        public List<Entity> Result;
 
-        public static class AndroidEntity {
+        public static class Entity implements Serializable{
             public String _id;
             public String _ns;
             public String createdAt;

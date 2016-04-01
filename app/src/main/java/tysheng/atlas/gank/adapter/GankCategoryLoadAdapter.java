@@ -1,4 +1,4 @@
-package tysheng.atlas.adapter;
+package tysheng.atlas.gank.adapter;
 
 import android.content.Context;
 import android.net.Uri;
@@ -15,22 +15,19 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import tysheng.atlas.R;
-import tysheng.atlas.bean.GankCategory;
+import tysheng.atlas.gank.bean.GankCategory;
 
 /**
  * Created by shengtianyang on 16/1/28.
  */
-public class GankCategoryAdapter extends RecyclerView.Adapter<GankCategoryAdapter.MyViewHolder> {
+public class GankCategoryLoadAdapter extends BaseLoadMoreRecyclerAdapter<GankCategory.ResultsEntity, GankCategoryLoadAdapter.MyViewHolder> {
 
 
-    private LayoutInflater layoutInflater;
-    private List<GankCategory.ResultsEntity> data;
     private OnItemClickListener onItemClickListener;
 
 
-    public GankCategoryAdapter(Context context, List<GankCategory.ResultsEntity> data) {
-        this.data = data;
-        this.layoutInflater = layoutInflater.from(context);
+    public GankCategoryLoadAdapter(Context context, List<GankCategory.ResultsEntity> data) {
+        appendToList(data);
     }
 
     public interface OnItemClickListener {
@@ -41,36 +38,36 @@ public class GankCategoryAdapter extends RecyclerView.Adapter<GankCategoryAdapte
         this.onItemClickListener = listener;
     }
 
+
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.item_category, parent, false);
+    public MyViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_category, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        holder.desc.setText(data.get(position).desc);
-        holder.type.setText(data.get(position).type);
-        holder.who.setText(data.get(position).who);
-        holder.publishedAt.setText(data.get(position).publishedAt.substring(0,10));
-        if (data.get(position).type.equals("福利")){
-            holder.image.setImageURI(Uri.parse(data.get(position).url));
-            holder.image.setVisibility(View.VISIBLE);
+    public void onBindItemViewHolder(final MyViewHolder mHolder, int position) {
+        mHolder.desc.setText(getItem(position).desc);
+        mHolder.type.setText(getItem(position).type);
+        mHolder.who.setText(getItem(position).who);
+        mHolder.publishedAt.setText(getItem(position).publishedAt.substring(0, 10));
+        if (getItem(position).type.equals("福利")) {
+            mHolder.image.setImageURI(Uri.parse(getItem(position).url));
+            mHolder.image.setVisibility(View.VISIBLE);
+        } else {
+            mHolder.image.setVisibility(View.GONE);
         }
         if (onItemClickListener != null) {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+            mHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onClickListener(v, holder.getLayoutPosition());
+                    onItemClickListener.onClickListener(v, mHolder.getLayoutPosition());
                 }
             });
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return data.size();
-    }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
 

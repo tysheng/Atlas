@@ -1,4 +1,4 @@
-package tysheng.atlas.adapter;
+package tysheng.atlas.gank.adapter;
 
 /*
  * Copyright (C) 2015 Jorge Castillo Pérez

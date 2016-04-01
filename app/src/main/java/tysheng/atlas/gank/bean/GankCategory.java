@@ -1,4 +1,4 @@
-package tysheng.atlas.bean;
+package tysheng.atlas.gank.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -52,6 +52,8 @@
     <style name="AppTheme.TabLayout" parent="Widget.Design.TabLayout">
         <item name="android:background">?colorPrimary</item>
         <item name="tabMinWidth">0dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
         <item name="tabIndicatorColor">@android:color/white</item>
         <item name="tabSelectedTextColor">@android:color/white</item>
         <item name="tabTextAppearance">@style/AppTheme.TabLayout.TextAppearance</item>
@@ -59,5 +61,11 @@
 
     <style name="AppTheme.TabLayout.TextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textColor">#6fff</item>
+        <item name="android:textAllCaps">false</item>
+
+    </style>
+    <style name="CollapsingToolbarTitleStyle"
+        parent="@android:style/TextAppearance">
+        <item name="android:textColor">@android:color/transparent</item>
     </style>
 </resources>

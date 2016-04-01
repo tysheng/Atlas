@@ -42,6 +42,10 @@
     <item android:title="Others">
         <menu>
             <item
+                android:id="@+id/nav_gank"
+                android:icon="@drawable/menu_v2new2"
+                android:title="@string/fm_gank" />
+            <item
                 android:id="@+id/nav_setting"
                 android:icon="@drawable/menu_settings"
                 android:title="Settings" />

@@ -14,6 +14,7 @@
     <string name="please_wait">Please wait…</string>
     <string name="app_loading_more">loading…</string>
     <string name="loading_chn">正在加载…</string>
+
     <!--fragment name-->
     <string name="fm_new">New</string>
     <string name="fm_hot">Hot</string>
@@ -47,5 +48,18 @@
     <string name="errcode_unknown">发送返回</string>
     <string name="title_activity_picture">Picture</string>
     <string name="picture_has_save_to">图片已保存至 %s 文件夹</string>
+
+    <!--GANK-->
+    <string name="gank_android">Android</string>
+    <string name="gank_ios">iOS</string>
+    <string name="gank_video">休息视频</string>
+    <string name="gank_fuli">福利</string>
+    <string name="gank_resource">拓展资源</string>
+    <string name="gank_front">前端</string>
+    <string name="gank_recommend">瞎推荐</string>
+    <string name="gank_all">All</string>
+
+
+    <string name="gank_daily">Daily</string>
 
 </resources>

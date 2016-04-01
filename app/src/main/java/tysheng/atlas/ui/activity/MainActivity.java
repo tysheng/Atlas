@@ -12,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +23,10 @@ import butterknife.Bind;
 import tysheng.atlas.R;
 import tysheng.atlas.app.Constant;
 import tysheng.atlas.base.BaseActivity;
+import tysheng.atlas.gank.ui.GankActivity;
+import tysheng.atlas.gank.ui.fragment.GankFragment;
 import tysheng.atlas.hupu.ui.ForumFragment;
 import tysheng.atlas.ui.fragment.AtlasFragment;
-import tysheng.atlas.ui.fragment.GankFragment;
 import tysheng.atlas.ui.fragment.V2HotFragment;
 import tysheng.atlas.ui.fragment.V2NodeFragment;
 import tysheng.atlas.utils.SPHelper;
@@ -106,21 +106,21 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -180,6 +180,9 @@ public class MainActivity extends BaseActivity
                 break;
             case R.id.nav_weather2:
                 jumpActivity(WeatherListActivity.class, false);
+                break;
+            case R.id.nav_gank:
+                jumpActivity(GankActivity.class,false);
                 break;
 //            case R.id.imageView:
 //                break;

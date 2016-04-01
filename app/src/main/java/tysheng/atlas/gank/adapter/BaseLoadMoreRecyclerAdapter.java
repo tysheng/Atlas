@@ -1,4 +1,4 @@
-package tysheng.atlas.adapter;
+package tysheng.atlas.gank.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

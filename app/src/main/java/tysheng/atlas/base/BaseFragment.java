@@ -85,7 +85,7 @@ public abstract class BaseFragment extends Fragment{
     protected abstract void initData();
     protected void ShowToast(String msg){
         if (toast == null) {
-            toast = Toast.makeText(frmContext.getApplicationContext(), msg, Toast.LENGTH_SHORT);
+            toast = Toast.makeText(frmContext, msg, Toast.LENGTH_SHORT);
         } else {
             toast.setText(msg);
         }

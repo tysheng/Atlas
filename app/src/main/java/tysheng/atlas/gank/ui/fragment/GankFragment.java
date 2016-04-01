@@ -1,29 +1,27 @@
-package tysheng.atlas.ui.fragment;
+package tysheng.atlas.gank.ui.fragment;
 
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import tysheng.atlas.R;
-import tysheng.atlas.adapter.EndlessRecyclerOnScrollListener;
-import tysheng.atlas.adapter.GankCategoryLoadAdapter;
-import tysheng.atlas.api.GankApi;
+import tysheng.atlas.gank.api.GankApi;
 import tysheng.atlas.api.RetrofitSingleton;
 import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseFragment;
-import tysheng.atlas.bean.GankCategory;
+import tysheng.atlas.gank.adapter.EndlessRecyclerOnScrollListener;
+import tysheng.atlas.gank.adapter.GankCategoryLoadAdapter;
+import tysheng.atlas.gank.bean.GankCategory;
 import tysheng.atlas.ui.activity.PictureActivity;
 import tysheng.atlas.utils.ACache;
 
@@ -36,11 +34,11 @@ public class GankFragment extends BaseFragment {
     @Bind(R.id.swipe)
     SwipeRefreshLayout swipe;
     GankCategoryLoadAdapter mAdapter;
-    Fragment fragment;
     GankCategory mGankCategory;
     LinearLayoutManager mLinearLayoutManager;
     int page = 1;
     ACache mCache;
+    String typeName = "all";
 
     @Override
     protected void setTitle() {
@@ -50,8 +48,16 @@ public class GankFragment extends BaseFragment {
     public GankFragment() {
     }
 
+    public GankFragment(String typeName) {
+        this.typeName = typeName;
+    }
+
     public static GankFragment getInstance() {
         return new GankFragment();
+    }
+
+    public static GankFragment newInstance(String typeName) {
+        return new GankFragment(typeName);
     }
 
     @Override
@@ -61,9 +67,9 @@ public class GankFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        initSwipe();
+
         mCache = ACache.get(frmContext);
-        mGankCategory = (GankCategory) mCache.getAsObject("GankCategory");
+        mGankCategory = (GankCategory) mCache.getAsObject(typeName);
 
         mLinearLayoutManager = new LinearLayoutManager(frmContext);
         rv.setLayoutManager(mLinearLayoutManager);
@@ -71,7 +77,7 @@ public class GankFragment extends BaseFragment {
             @Override
             public void onLoadMore(int current_page) {
                 mAdapter.setHasMoreDataAndFooter(true, true);
-                getData("福利", current_page);
+                getData(typeName, current_page);
             }
         });
         if (mGankCategory == null) {
@@ -84,19 +90,34 @@ public class GankFragment extends BaseFragment {
             rv.setAdapter(mAdapter);
         }
 
-        mAdapter.setOnItemClickListener(new GankCategoryLoadAdapter.OnItemClickListener() {
-            @Override
-            public void onClickListener(View view, int position) {
-                Intent intent = PictureActivity.newIntent(frmContext, mAdapter.getItem(position).url,
-                        mAdapter.getItem(position).desc);
-                startActivity(intent);
+        initSwipe();
+        onItemClick(typeName);
 
-            }
-        });
+    }
+
+    private void onItemClick(String typeName) {
+        if (typeName.equals("福利")) {
+            mAdapter.setOnItemClickListener(new GankCategoryLoadAdapter.OnItemClickListener() {
+                @Override
+                public void onClickListener(View view, int position) {
+                    Intent intent = PictureActivity.newIntent(frmContext, mAdapter.getItem(position).url,
+                            mAdapter.getItem(position).desc);
+                    startActivity(intent);
+                }
+            });
+        } else {
+            mAdapter.setOnItemClickListener(new GankCategoryLoadAdapter.OnItemClickListener() {
+                @Override
+                public void onClickListener(View view, int position) {
+                    ShowToast(mAdapter.getItem(position).url);
+                }
+            });
+        }
+
     }
 
     private void getData(String category, final int page) {
-        RetrofitSingleton.getInstance(MyApplication.getInstance(), GankApi.BASE_URL)
+        subscriber.add(RetrofitSingleton.getInstance(MyApplication.getInstance(), GankApi.BASE_URL)
                 .create(GankApi.class)
                 .getParams(category, 10, page)
                 .subscribeOn(Schedulers.io())
@@ -123,9 +144,9 @@ public class GankFragment extends BaseFragment {
                         }
 
                         if (!gankCategory.error) {
-                            if (page == 1 && gankCategory.results.size()<5) {
+                            if (page == 1 && gankCategory.results.size() < 5) {
                                 mGankCategory.results.addAll(gankCategory.results);
-                                mCache.put("GankCategory", mGankCategory, 2 * ACache.TIME_DAY);
+                                mCache.put(typeName, mGankCategory, 2 * ACache.TIME_DAY);
                             }
 
                             mAdapter.appendToList(gankCategory.results);
@@ -136,28 +157,10 @@ public class GankFragment extends BaseFragment {
 
 
                     }
-                });
-
-
-    }
-
-    private void putCategory() {
-        Observable observable = Observable.create(new Observable.OnSubscribe() {
-            @Override
-            public void call(Object o) {
-                mCache.put("GankCategory", mGankCategory, 2 * ACache.TIME_DAY);
-            }
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-        observable.subscribe(new Action1() {
-            @Override
-            public void call(Object o) {
-
-            }
-        });
+                }));
 
     }
+
 
     private void stopSwipe() {
         if (swipe.isRefreshing())
@@ -178,16 +181,16 @@ public class GankFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 mAdapter.clear();
-                getData("福利", page = 1);
+                getData(typeName, page = 1);
             }
         });
-//        swipe.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//            @Override
-//            public void onGlobalLayout() {
-//                swipe.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-//                swipe.setRefreshing(true);
-//                getData("福利", page);
-//            }
-//        });
+        swipe.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                swipe.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                swipe.setRefreshing(true);
+                getData(typeName, page);
+            }
+        });
     }
 }
