@@ -59,8 +59,6 @@ public class WeatherTabActivity extends BaseActivity {
                         return new WeatherFragment(ningbo, weather_city_ningbo_url);
                     case 2:
                         return new WeatherFragment(xian, weather_city_xian_url);
-                    case 3:
-                        return new WeatherFragment("", "");
                     default:
                         return new WeatherFragment("", "");
                 }
@@ -89,9 +87,9 @@ public class WeatherTabActivity extends BaseActivity {
 
 
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(2);
+        viewPager.setOffscreenPageLimit(1);
         ViewCompat.setElevation(tabLayout, getResources().getDimension(R.dimen.appbar_elevation));
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setupWithViewPager(viewPager);
 
     }

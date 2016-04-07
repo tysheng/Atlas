@@ -168,7 +168,7 @@ public class WeatherListActivity extends BaseActivity {
                                 }
                             }
                         } else {
-                            ShowToast("请输入正确的城市名");
+                            showToast("请输入正确的城市名");
                         }
 
                     }
@@ -216,7 +216,7 @@ public class WeatherListActivity extends BaseActivity {
                                 if (cities.size() < 10)
                                     getData(input.toString(), 1);
                                 else
-                                    ShowToast("最多添加10个城市");
+                                    showToast("最多添加10个城市");
                             }
                         }).show();
                 return true;

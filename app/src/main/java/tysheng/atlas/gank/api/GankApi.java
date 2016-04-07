@@ -5,6 +5,7 @@ import retrofit2.http.Path;
 import rx.Observable;
 import tysheng.atlas.gank.bean.GankCategory;
 import tysheng.atlas.gank.bean.GankDaily;
+import tysheng.atlas.gank.bean.HistoryBean;
 
 /**
  * Created by shengtianyang on 16/3/26.
@@ -16,10 +17,13 @@ public interface GankApi {
     Observable<GankCategory>
     getParams(@Path("category") String category, @Path("counts") int counts, @Path("page") int page);
 
-    String DAILY_URL = "http://gank.io/api/day/";//2015/08/07
+//    String DAILY_URL = "http://gank.io/api/day/";//2015/08/07
 
-    @GET("{year}/{month}/{day}")
+    @GET("day/{year}/{month}/{day}")
     Observable<GankDaily>
     getParams(@Path("year") String year, @Path("month") String month, @Path("day") String day);
 
+    @GET("day/history")
+    Observable<HistoryBean>
+    getParams();
 }

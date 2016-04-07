@@ -1,18 +1,14 @@
 package tysheng.atlas.ui.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.provider.MediaStore;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.IntentCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -186,14 +182,7 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
             case "cache":
                 ImagePipeline imagePipeline = Fresco.getImagePipeline();
                 imagePipeline.clearCaches();
-                Snackbar snackbar = Snackbar.make(cl, "已清除缓存", Snackbar.LENGTH_SHORT);
-                ViewGroup viewGroup = (ViewGroup) snackbar.getView();
-                for (int j = 0; j < viewGroup.getChildCount(); j++) {
-                    View v = viewGroup.getChildAt(j);
-                    if (v instanceof TextView)
-                        ((TextView) v).setTextColor(Color.WHITE);
-                }
-                snackbar.show();
+                showSnackbar(cl, "已清除缓存");
                 break;
         }
     }

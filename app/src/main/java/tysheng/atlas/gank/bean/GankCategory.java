@@ -30,17 +30,4 @@ public class GankCategory implements Serializable {
 
     public List<ResultsEntity> results = new ArrayList<>();
 
-    public static class ResultsEntity implements Serializable {
-        public String _id;
-        public String _ns;
-        public String createdAt;
-        public String desc;
-        public String publishedAt;
-        public String source;
-        public String type;
-        public String url;
-        public boolean used;
-        public String who;
-
-    }
 }

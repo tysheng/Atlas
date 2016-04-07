@@ -3,12 +3,13 @@ package tysheng.atlas.gank.bean;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by shengtianyang on 16/3/26.
  */
-public class GankDaily implements Serializable{
+public class GankDaily implements Serializable {
 
     /**
      * category : ["iOS","Android","瞎推荐","拓展资源","福利","休息视频"]
@@ -17,36 +18,18 @@ public class GankDaily implements Serializable{
      */
 
     public boolean error;
-    public ResultsEntity results;
-    public List<String> category;
+    public DailyEntity results = new DailyEntity();
+    public List<String> category = new ArrayList<>();
 
-    public static class ResultsEntity implements Serializable{
-        /**
-         * _id : 56cc6d23421aa95caa707a69
-         * _ns : ganhuo
-         * createdAt : 2015-08-06T07:15:52.65Z
-         * desc : 类似Link Bubble的悬浮式操作设计
-         * publishedAt : 2015-08-07T03:57:48.45Z
-         * type : Android
-         * url : https://github.com/recruit-lifestyle/FloatingView
-         * used : true
-         * who : mthli
-         */
 
-        @SerializedName("Android")
-        public List<Entity> Result;
-
-        public static class Entity implements Serializable{
-            public String _id;
-            public String _ns;
-            public String createdAt;
-            public String desc;
-            public String publishedAt;
-            public String type;
-            public String url;
-            public boolean used;
-            public String who;
-
-        }
+    public static class DailyEntity implements Serializable {
+        @SerializedName("Android") public List<ResultsEntity> androidList=new ArrayList<>();
+        @SerializedName("休息视频") public List<ResultsEntity> 休息视频List;
+        @SerializedName("iOS") public List<ResultsEntity> iOSList;
+        @SerializedName("福利") public List<ResultsEntity> 妹纸List;
+        @SerializedName("拓展资源") public List<ResultsEntity> 拓展资源List;
+        @SerializedName("瞎推荐") public List<ResultsEntity> 瞎推荐List;
+        @SerializedName("App") public List<ResultsEntity> appList;
+        @SerializedName("前端") public List<ResultsEntity> 前端List;
     }
 }

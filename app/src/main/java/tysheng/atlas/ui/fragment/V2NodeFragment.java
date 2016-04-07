@@ -11,13 +11,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
-import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
-import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
+import com.canyinghao.canrefresh.CanRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,15 +33,17 @@ import tysheng.atlas.mvp.volley_get.VGet;
 /**
  * Created by shengtianyang on 16/2/2.
  */
-public class V2NodeFragment extends BaseFragment implements VGet {
-    @Bind(R.id.srl_node)
-    SwipyRefreshLayout swipe;
-    @Bind(R.id.rv_v2node)
-    RecyclerView rvV2node;
+public class V2NodeFragment extends BaseFragment implements VGet, CanRefreshLayout.OnRefreshListener, CanRefreshLayout.OnLoadMoreListener {
     V2NodeRecyclerAdapter mAdapter;
     List<V2NodesBean> data;
     Fragment v2NodeFragment;
     List<V2NodesBean> list;
+
+    @Bind(R.id.can_content_view)
+    RecyclerView recyclerView;
+    @Bind(R.id.refresh)
+    CanRefreshLayout swipe;
+
     private PGet presenter;
     int total = 0;
     int used = 0;
@@ -75,7 +75,7 @@ public class V2NodeFragment extends BaseFragment implements VGet {
     protected void initData() {
         presenter = new PGet(this);
         setHasOptionsMenu(true);
-        initswipe();
+        initSwipe();
         data = new ArrayList<>();
         mAdapter = new V2NodeRecyclerAdapter(frmContext, data);
         mAdapter.setOnItemClickListener(new V2NodeRecyclerAdapter.OnItemClickListener() {
@@ -92,47 +92,19 @@ public class V2NodeFragment extends BaseFragment implements VGet {
                         .commitAllowingStateLoss();
             }
         });
-        rvV2node.setLayoutManager(new GridLayoutManager(frmContext, 2));
-        rvV2node.setAdapter(mAdapter);
-        
-        swipe.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                swipe.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                swipe.setRefreshing(true);
-                getData();
-            }
-        });
+        recyclerView.setLayoutManager(new GridLayoutManager(frmContext, 2));
+        recyclerView.setAdapter(mAdapter);
+        swipe.autoRefresh();
     }
 
     private void getData() {
-        presenter.func(Constant.URL_V2_NODE_ALL,getClass().getSimpleName());
+        presenter.func(Constant.URL_V2_NODE_ALL, getClass().getSimpleName());
     }
 
-    private void initswipe() {
-        swipe.setColorSchemeResources(android.R.color.holo_purple,
-                android.R.color.holo_green_light,
-                android.R.color.holo_red_light,
-                android.R.color.holo_blue_light);
-        swipe.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh(SwipyRefreshLayoutDirection direction) {
-                if (direction == SwipyRefreshLayoutDirection.TOP) {
-                    used = 0;
-                    data.clear();
-                    getData();
-                } else if (direction == SwipyRefreshLayoutDirection.BOTTOM) {
-                    int wtf = (total - used) < 30 ? total - used : 30;
-                    for (int i = used; i < wtf+used; i++) {
-                        data.add(list.get(i));
-                    }
-                    used += 30;
-                    mAdapter.notifyDataSetChanged();
-                    if (swipe.isRefreshing())
-                        swipe.setRefreshing(false);
-                }
-            }
-        });
+    private void initSwipe() {
+        swipe.setOnLoadMoreListener(this);
+        swipe.setOnRefreshListener(this);
+        swipe.setStyle(1, 1);
     }
 
     @Override
@@ -156,7 +128,7 @@ public class V2NodeFragment extends BaseFragment implements VGet {
                                 FragmentManager manager = getActivity().getSupportFragmentManager();
                                 FragmentTransaction transaction = manager.beginTransaction();
                                 v2NodeFragment = manager.findFragmentByTag("node");
-                                WebviewFragment webviewFragment = new WebviewFragment(Constant.URL_V2_NODE_GO+input.toString());
+                                WebviewFragment webviewFragment = new WebviewFragment(Constant.URL_V2_NODE_GO + input.toString());
                                 transaction.hide(v2NodeFragment)
                                         .addToBackStack(null)
                                         .setCustomAnimations(0, 0, R.anim.abc_fade_in, R.anim.abc_fade_out)
@@ -173,13 +145,8 @@ public class V2NodeFragment extends BaseFragment implements VGet {
     }
 
 
-
-
-
     @Override
     public void stopSwipe() {
-        if (swipe.isRefreshing())
-            swipe.setRefreshing(false);
     }
 
     @Override
@@ -196,5 +163,25 @@ public class V2NodeFragment extends BaseFragment implements VGet {
         }
         used += 30;
         mAdapter.notifyDataSetChanged();
+    }
+
+
+    @Override
+    public void onLoadMore() {
+        int wtf = (total - used) < 30 ? total - used : 30;
+        for (int i = used; i < wtf + used; i++) {
+            data.add(list.get(i));
+        }
+        used += 30;
+        mAdapter.notifyDataSetChanged();
+        swipe.loadMoreComplete();
+    }
+
+    @Override
+    public void onRefresh() {
+        used = 0;
+        data.clear();
+        getData();
+        swipe.refreshComplete();
     }
 }

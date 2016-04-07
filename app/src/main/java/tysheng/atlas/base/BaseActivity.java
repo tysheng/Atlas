@@ -2,12 +2,17 @@ package tysheng.atlas.base;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
@@ -91,12 +96,22 @@ public abstract class BaseActivity extends AppCompatActivity {
                 .commitAllowingStateLoss();
     }
 
-    protected void ShowToast(String msg) {
+    protected void showToast(String msg) {
         if (toast == null) {
             toast = Toast.makeText(actContext, msg, Toast.LENGTH_SHORT);
         } else {
             toast.setText(msg);
         }
         toast.show();
+    }
+    protected void showSnackbar(View view, String msg){
+        Snackbar snackbar = Snackbar.make(view, msg, Snackbar.LENGTH_SHORT);
+        ViewGroup viewGroup = (ViewGroup) snackbar.getView();
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            View v = viewGroup.getChildAt(i);
+            if (v instanceof TextView)
+                ((TextView) v).setTextColor(Color.WHITE);
+        }
+        snackbar.show();
     }
 }

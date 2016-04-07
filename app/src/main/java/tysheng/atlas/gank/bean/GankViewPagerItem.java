@@ -11,7 +11,6 @@ public class GankViewPagerItem implements Serializable {
 
     public List<String> mList;
 
-
     public String gank_android;
     public String gank_ios;
     public String gank_video;
@@ -21,7 +20,6 @@ public class GankViewPagerItem implements Serializable {
     public String gank_recommend;
     public String gank_all;
     public String gank_app;
-
 
     {
         gank_all = "all";
@@ -34,7 +32,7 @@ public class GankViewPagerItem implements Serializable {
         gank_video = "休息视频";
         gank_app = "App";
         mList = new ArrayList<>();
-        mList.add(gank_all);
+//        mList.add(gank_all);
         mList.add(gank_android);
         mList.add(gank_ios);
         mList.add(gank_front);

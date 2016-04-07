@@ -37,27 +37,39 @@
             android:name=".ui.activity.WeatherTabActivity"
             android:label="@string/title_activity_weather">
         </activity>
-
+        <activity
+            android:name=".gank.ui.WebviewActivity"
+            android:label="@string/title_activity_webview">
+        </activity>
         <activity
             android:name=".ui.activity.WeatherListActivity"
             android:label="@string/title_activity_weather">
         </activity>
         <activity
-            android:name=".ui.activity.PictureActivity"
+            android:name=".gank.ui.PictureActivity"
             android:label="@string/title_activity_picture">
         </activity>
         <activity
             android:name=".gank.ui.GankDailyActivity"
             android:label="@string/gank_daily">
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
+
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity
+            android:name=".gank.ui.SortActivity"
+            android:label="@string/gank_sort">
         </activity>
         <activity
             android:name=".gank.ui.GankActivity"
             android:label="@string/fm_gank">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+        </activity>
+        <activity
+            android:name=".gank.ui.DailyDetailActivity"
+            android:label="@string/fm_gank">
         </activity>
         <activity
             android:name=".wxapi.WXEntryActivity"

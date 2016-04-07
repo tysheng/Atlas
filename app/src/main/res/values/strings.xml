@@ -26,6 +26,7 @@
     <string name="fm_v2ex">V2ex</string>
 
 
+
     <string-array name="atlas_drawbles">
         <item>http://ww4.sinaimg.cn/large/a823bdcdgw1f1ad0n7ohzj21hc118h8x.jpg</item>
         <item>http://ww3.sinaimg.cn/large/a823bdcdgw1f1ad0ls8wpj21hc11u7s1.jpg</item>
@@ -61,5 +62,7 @@
 
 
     <string name="gank_daily">Daily</string>
+    <string name="gank_sort">Sort</string>
+    <string name="title_activity_webview" />
 
 </resources>

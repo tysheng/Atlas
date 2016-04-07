@@ -1,11 +1,11 @@
 package tysheng.atlas.gank.ui.fragment;
 
 import android.content.Intent;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewTreeObserver;
+
+import com.canyinghao.canrefresh.CanRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,30 +15,36 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import tysheng.atlas.R;
-import tysheng.atlas.gank.api.GankApi;
 import tysheng.atlas.api.RetrofitSingleton;
 import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseFragment;
-import tysheng.atlas.gank.adapter.EndlessRecyclerOnScrollListener;
-import tysheng.atlas.gank.adapter.GankCategoryLoadAdapter;
+import tysheng.atlas.gank.adapter.GankCategoryAdapter;
+import tysheng.atlas.gank.api.GankApi;
 import tysheng.atlas.gank.bean.GankCategory;
-import tysheng.atlas.ui.activity.PictureActivity;
+import tysheng.atlas.gank.bean.ResultsEntity;
+import tysheng.atlas.gank.ui.PictureActivity;
+import tysheng.atlas.gank.ui.WebviewActivity;
+import tysheng.atlas.gank.view.SectionsDecoration;
 import tysheng.atlas.utils.ACache;
+import tysheng.atlas.utils.ItemDivider;
+
 
 /**
  * Created by shengtianyang on 16/3/26.
  */
-public class GankFragment extends BaseFragment {
-    @Bind(R.id.rv)
+public class GankFragment extends BaseFragment implements CanRefreshLayout.OnLoadMoreListener, CanRefreshLayout.OnRefreshListener {
+    @Bind(R.id.can_content_view)
     RecyclerView rv;
-    @Bind(R.id.swipe)
-    SwipeRefreshLayout swipe;
-    GankCategoryLoadAdapter mAdapter;
+    @Bind(R.id.refresh)
+    CanRefreshLayout swipe;
+
+    GankCategoryAdapter mAdapter;
+
     GankCategory mGankCategory;
-    LinearLayoutManager mLinearLayoutManager;
+    private List<ResultsEntity> data;
     int page = 1;
     ACache mCache;
-    String typeName = "all";
+    String typeName;
 
     @Override
     protected void setTitle() {
@@ -67,52 +73,49 @@ public class GankFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-
+        initSwipe();
         mCache = ACache.get(frmContext);
         mGankCategory = (GankCategory) mCache.getAsObject(typeName);
 
-        mLinearLayoutManager = new LinearLayoutManager(frmContext);
-        rv.setLayoutManager(mLinearLayoutManager);
-        rv.addOnScrollListener(new EndlessRecyclerOnScrollListener(mLinearLayoutManager) {
-            @Override
-            public void onLoadMore(int current_page) {
-                mAdapter.setHasMoreDataAndFooter(true, true);
-                getData(typeName, current_page);
-            }
-        });
+        rv.setHasFixedSize(true);
+        rv.setLayoutManager(new LinearLayoutManager(frmContext));
+        rv.addItemDecoration(new SectionsDecoration(true));
+        rv.addItemDecoration(new ItemDivider(frmContext));
+
         if (mGankCategory == null) {
             mGankCategory = new GankCategory();
-            List<GankCategory.ResultsEntity> data = new ArrayList<>();
-            mAdapter = new GankCategoryLoadAdapter(frmContext, data);
+            data = new ArrayList<>();
+            mAdapter = new GankCategoryAdapter(frmContext, data);
             rv.setAdapter(mAdapter);
         } else {
-            mAdapter = new GankCategoryLoadAdapter(frmContext, mGankCategory.results.subList(0, 9));
+            data.addAll(mGankCategory.results.subList(0, 9));
+            mAdapter = new GankCategoryAdapter(frmContext, data);
             rv.setAdapter(mAdapter);
         }
 
-        initSwipe();
-        onItemClick(typeName);
+
+        swipe.autoRefresh();
+        setItemClick();
 
     }
 
-    private void onItemClick(String typeName) {
-        if (typeName.equals("福利")) {
-            mAdapter.setOnItemClickListener(new GankCategoryLoadAdapter.OnItemClickListener() {
-                @Override
-                public void onClickListener(View view, int position) {
-                    Intent intent = PictureActivity.newIntent(frmContext, mAdapter.getItem(position).url,
-                            mAdapter.getItem(position).desc);
+    private void setItemClick() {
+        mAdapter.setOnItemClickListener(new GankCategoryAdapter.OnItemClickListener() {
+            @Override
+            public void onClickListener(View view, int position) {
+                if (data.get(position).type.equals("福利")) {
+                    Intent intent = PictureActivity.newIntent(frmContext, data.get(position).url,
+                            data.get(position).desc);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(frmContext, WebviewActivity.class);
+                    intent.putExtra(WebviewActivity.URL, data.get(position).url);
+                    intent.putExtra(WebviewActivity.TITLE, data.get(position).desc);
                     startActivity(intent);
                 }
-            });
-        } else {
-            mAdapter.setOnItemClickListener(new GankCategoryLoadAdapter.OnItemClickListener() {
-                @Override
-                public void onClickListener(View view, int position) {
-                    ShowToast(mAdapter.getItem(position).url);
-                }
-            });
-        }
+            }
+        });
+
 
     }
 
@@ -125,14 +128,18 @@ public class GankFragment extends BaseFragment {
                 .subscribe(new Subscriber<GankCategory>() {
                     @Override
                     public void onCompleted() {
-                        stopSwipe();
-                        stopLoad();
+                        if (page == 1)
+                            stopSwipe();
+                        else
+                            stopLoad();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        stopSwipe();
-                        stopLoad();
+                        if (page == 1)
+                            stopSwipe();
+                        else
+                            stopLoad();
                     }
 
                     @Override
@@ -149,7 +156,7 @@ public class GankFragment extends BaseFragment {
                                 mCache.put(typeName, mGankCategory, 2 * ACache.TIME_DAY);
                             }
 
-                            mAdapter.appendToList(gankCategory.results);
+                            data.addAll(gankCategory.results);
                             mAdapter.notifyDataSetChanged();
                         } else {
                             ShowToast("网络访问出错");
@@ -163,34 +170,28 @@ public class GankFragment extends BaseFragment {
 
 
     private void stopSwipe() {
-        if (swipe.isRefreshing())
-            swipe.setRefreshing(false);
+        swipe.refreshComplete();
     }
 
     private void stopLoad() {
-        if (mAdapter.hasFooter() || mAdapter.hasMoreData())
-            mAdapter.setHasMoreDataAndFooter(false, false);
+        swipe.loadMoreComplete();
     }
 
     private void initSwipe() {
-        swipe.setColorSchemeResources(android.R.color.holo_purple,
-                android.R.color.holo_green_light,
-                android.R.color.holo_red_light,
-                android.R.color.holo_blue_light);
-        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mAdapter.clear();
-                getData(typeName, page = 1);
-            }
-        });
-        swipe.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                swipe.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                swipe.setRefreshing(true);
-                getData(typeName, page);
-            }
-        });
+        swipe.setOnLoadMoreListener(this);
+        swipe.setOnRefreshListener(this);
+        swipe.setStyle(1, 1);
+
+    }
+
+    @Override
+    public void onLoadMore() {
+        getData(typeName, ++page);
+    }
+
+    @Override
+    public void onRefresh() {
+        data.clear();
+        getData(typeName, page = 1);
     }
 }

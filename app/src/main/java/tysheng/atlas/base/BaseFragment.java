@@ -1,12 +1,15 @@
 package tysheng.atlas.base;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.leakcanary.RefWatcher;
@@ -90,5 +93,15 @@ public abstract class BaseFragment extends Fragment{
             toast.setText(msg);
         }
         toast.show();
+    }
+    protected void showSnackbar(View view, String msg){
+        Snackbar snackbar = Snackbar.make(view, msg, Snackbar.LENGTH_SHORT);
+        ViewGroup viewGroup = (ViewGroup) snackbar.getView();
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            View v = viewGroup.getChildAt(i);
+            if (v instanceof TextView)
+                ((TextView) v).setTextColor(Color.WHITE);
+        }
+        snackbar.show();
     }
 }

@@ -5,7 +5,7 @@
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tablayout"
-        style="@style/AppTheme.TabLayout"
+        style="@style/MyTabLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/tab_height"
         android:background="?attr/themeColor">

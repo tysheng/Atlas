@@ -8,8 +8,4 @@
         android:height="1dp" />
 
     <solid android:color="#cec8c8" />
-<!--<gradient android:startColor="@color/dark_gray" android:endColor="#20ff0000"-->
-    <!--android:centerColor="#6000ff00"-->
-    <!--android:type="linear">-->
-<!--</gradient>-->
 </shape>

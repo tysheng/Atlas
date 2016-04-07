@@ -23,6 +23,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+
         Fresco.initialize(this);
         requestQueue = Volley.newRequestQueue(this);
 //        setupDatabase();

@@ -30,7 +30,7 @@ android {
         }
     }
 }
-def androidSupportVersion = "23.1.1"//"22.2.1"
+def androidSupportVersion = "23.2.1"//"22.2.1"
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:' + androidSupportVersion
@@ -45,7 +45,6 @@ dependencies {
         transitive = true
     }
     compile 'com.alibaba:fastjson:1.1.46.android'
-    compile 'com.github.orangegangsters:swipy:1.2.2@aar'
     compile files('libs/libammsdk.jar')
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1' // or 1.4-beta1
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1' // or 1.4-beta1
@@ -56,4 +55,8 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0'
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'eu.davidea:flexible-adapter:4.2.0'
+    compile ('com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:0.8.7@aar'){
+        transitive=true
+    }
+    compile 'com.canyinghao:canrefresh:1.0.0'
 }

@@ -1,18 +1,20 @@
 package tysheng.atlas.ui.fragment;
 
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
-import com.afollestad.materialdialogs.MaterialDialog;
+import android.widget.ProgressBar;
 
 import butterknife.Bind;
 import tysheng.atlas.R;
 import tysheng.atlas.base.BaseFragment;
+import tysheng.atlas.gank.utils.GankUtils;
 
 /**
  * Created by shengtianyang on 16/2/1.
@@ -20,20 +22,27 @@ import tysheng.atlas.base.BaseFragment;
 public class WebviewFragment extends BaseFragment {
     @Bind(R.id.webview)
     WebView webview;
-    private MaterialDialog dialog;
+    @Bind(R.id.progress_bar)
+    ProgressBar progressBar;
 
     public WebviewFragment() {
     }
 
     private String url;
+    private String title = "";
 
     public WebviewFragment(String url) {
         this.url = url;
     }
 
+    public WebviewFragment(String url, String title) {
+        this.url = url;
+        this.title = title;
+    }
+
     @Override
     protected void setTitle() {
-
+        getActivity().setTitle(title);
     }
 
     @Override
@@ -41,18 +50,9 @@ public class WebviewFragment extends BaseFragment {
         return R.layout.fragment_webview;
     }
 
-
     @Override
     protected void initData() {
         setHasOptionsMenu(true);
-        MaterialDialog.Builder builder = new MaterialDialog.Builder(frmContext)
-                .progress(true, 0)
-                .content(R.string.please_wait)
-                .progressIndeterminateStyle(false);
-
-        dialog = builder.build();
-//        dialog.setCancelable(false);
-        dialog.show();
         webview.getSettings().setJavaScriptEnabled(true);
         webview.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         webview.setWebViewClient(new WebViewClient() {
@@ -65,33 +65,33 @@ public class WebviewFragment extends BaseFragment {
         webview.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                if (newProgress >= 60) {
-                    dialog.dismiss();
+                if (progressBar != null) {
+                    if (newProgress == 100) {
+                        progressBar.setVisibility(View.GONE);
+                        progressBar.setProgress(0);
+                    } else {
+                        progressBar.setVisibility(View.VISIBLE);
+                        progressBar.setProgress(newProgress);
+                    }
                 }
-
             }
 
         });
+
+        webview.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK && webview.canGoBack()) {  //表示按返回键 时的操作
+                        webview.goBack();   //后退
+                        return true;    //已处理
+                    }
+                }
+                return false;
+            }
+        });
         webview.loadUrl(url);
     }
-
-
-//    @OnClick({R.id.ib_web_refresh, R.id.ib_web_back, R.id.ib_web_go})
-//    public void onClick(View view) {
-//        switch (view.getId()) {
-//            case R.id.ib_web_refresh:
-//                webview.reload();
-//                break;
-//            case R.id.ib_web_back:
-//                if (webview.canGoBack())
-//                    webview.goBack();
-//                break;
-//            case R.id.ib_web_go:
-//                if (webview.canGoForward())
-//                    webview.goForward();
-//                break;
-//        }
-//    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -102,6 +102,9 @@ public class WebviewFragment extends BaseFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_share:
+                GankUtils.share(frmContext, url, title);
+                return true;
             case R.id.action_back:
                 if (webview.canGoBack())
                     webview.goBack();
@@ -112,6 +115,9 @@ public class WebviewFragment extends BaseFragment {
                 return true;
             case R.id.action_refresh:
                 webview.reload();
+                return true;
+            case R.id.action_open:
+                GankUtils.openUrlByBrowser(frmContext, url);
                 return true;
             default:
                 break;

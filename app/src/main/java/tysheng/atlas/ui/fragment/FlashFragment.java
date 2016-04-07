@@ -75,7 +75,7 @@ public class FlashFragment extends BaseFragment {
 //                    @Override
 //                    public void onNext(RWeatherBean.HeWeatherEntity heWeatherEntity) {
 //                        String s =heWeatherEntity.getAqi().getCity().getAqi();
-//                        ShowToast(s);
+//                        showToast(s);
 //
 //                    }
 //                }));

@@ -3,40 +3,55 @@ package tysheng.atlas.gank.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 
-import tysheng.atlas.gank.bean.GankViewPagerItem;
-import tysheng.atlas.gank.ui.fragment.GankFragment;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by shengtianyang on 16/4/1.
  */
 public class GankViewPagerAdapter extends FragmentStatePagerAdapter {
 
-    private int mPages = 8;
-    private GankViewPagerItem mItem;
+    private List<Fragment> mFragments = null;
+    private  List<String> mFragmentTitles = null;
+    private FragmentManager mFragmentManager;
+
 
     public GankViewPagerAdapter(FragmentManager fm) {
         super(fm);
+        mFragments = new ArrayList<>();
+        mFragmentTitles = new ArrayList<>();
+        mFragmentManager = fm;
     }
-
-    public GankViewPagerAdapter(FragmentManager fm, int mPages, GankViewPagerItem mItem) {
-        super(fm);
-        this.mPages = mPages;
-        this.mItem = mItem;
+    public void addFragment(Fragment fragment, String title) {
+        mFragments.add(fragment);
+        mFragmentTitles.add(title);
     }
+    public void clear(){
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
+        for(Fragment f:this.mFragments){
+            ft.remove(f);
+        }
+        ft.commit();
+        mFragmentManager.executePendingTransactions();
 
+        mFragments.clear();
+        mFragmentTitles.clear();
+
+    }
     @Override
     public Fragment getItem(int position) {
-        return GankFragment.newInstance(mItem.mList.get(position));
+        return mFragments.get(position);
     }
 
     @Override
     public int getCount() {
-        return mPages;
+        return mFragments.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return mItem.mList.get(position);
+        return mFragmentTitles.get(position);
     }
 }

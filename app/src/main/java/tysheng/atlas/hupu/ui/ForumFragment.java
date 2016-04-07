@@ -105,7 +105,7 @@ public class ForumFragment extends BaseFragment {
 //                v.setOnClickListener(new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View v) {
-//                        ShowToast("正在加载");
+//                        showToast("正在加载");
 //                        getThread();
 //                    }
 //                });

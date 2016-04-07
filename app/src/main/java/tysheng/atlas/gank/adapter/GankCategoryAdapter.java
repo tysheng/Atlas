@@ -15,22 +15,65 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import tysheng.atlas.R;
-import tysheng.atlas.gank.bean.GankCategory;
+import tysheng.atlas.gank.bean.GankDaily;
+import tysheng.atlas.gank.bean.ResultsEntity;
+import tysheng.atlas.gank.view.SectionsDecoration;
 
 /**
  * Created by shengtianyang on 16/1/28.
  */
-public class GankCategoryAdapter extends RecyclerView.Adapter<GankCategoryAdapter.MyViewHolder> {
+public class GankCategoryAdapter
+        extends RecyclerView.Adapter<GankCategoryAdapter.MyViewHolder>
+        implements SectionsDecoration.Adapter<GankCategoryAdapter.SectionHeaderView> {
 
 
-    private LayoutInflater layoutInflater;
-    private List<GankCategory.ResultsEntity> data;
+    private List<ResultsEntity> data;
     private OnItemClickListener onItemClickListener;
+    private Context context;
 
 
-    public GankCategoryAdapter(Context context, List<GankCategory.ResultsEntity> data) {
+    public GankCategoryAdapter(Context context, List<ResultsEntity> data) {
         this.data = data;
-        this.layoutInflater = layoutInflater.from(context);
+        this.context = context;
+    }
+
+    public void add(GankDaily daily) {
+        if (daily.results.androidList != null) data.addAll(daily.results.androidList);
+        if (daily.results.iOSList != null) data.addAll(daily.results.iOSList);
+        if (daily.results.前端List != null) data.addAll(daily.results.前端List);
+        if (daily.results.appList != null) data.addAll(daily.results.appList);
+        if (daily.results.拓展资源List != null) data.addAll(daily.results.拓展资源List);
+        if (daily.results.瞎推荐List != null) data.addAll(daily.results.瞎推荐List);
+        if (daily.results.休息视频List != null) data.addAll(0, daily.results.休息视频List);
+        notifyDataSetChanged();
+    }
+    public void clear() {
+        data.clear();
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public long getHeaderId(int position) {
+        if (data.get(position) != null)
+            return data.get(position).getPublish();
+        return 0;
+    }
+
+    @Override
+    public SectionHeaderView onCreateHeaderViewHolder(ViewGroup parent) {
+        return new SectionHeaderView(LayoutInflater.from(context).inflate(R.layout.item_gank_section_header, parent, false));
+    }
+
+    @Override
+    public void onBindHeaderViewHolder(SectionHeaderView viewHolder, int position) {
+        if (data.get(position) != null) {
+            viewHolder.tv.setText(formatTime(data.get(position).publishedAt.substring(5, 10)));
+        }
+    }
+
+    public String formatTime(String str) {
+        String[] strings = str.split("-");
+        return strings[0].replace("0", "") + "月" + strings[1].replace("0", "") + "日";
     }
 
     public interface OnItemClickListener {
@@ -43,25 +86,28 @@ public class GankCategoryAdapter extends RecyclerView.Adapter<GankCategoryAdapte
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.item_category, parent, false);
-        return new MyViewHolder(view);
+        return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_category, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        holder.desc.setText(data.get(position).desc);
-        holder.type.setText(data.get(position).type);
-        holder.who.setText(data.get(position).who);
-        holder.publishedAt.setText(data.get(position).publishedAt.substring(0,10));
-        if (data.get(position).type.equals("福利")){
-            holder.image.setImageURI(Uri.parse(data.get(position).url));
-            holder.image.setVisibility(View.VISIBLE);
+    public void onBindViewHolder(final MyViewHolder mHolder, final int position) {
+        mHolder.type.setText(data.get(position).type);
+        mHolder.who.setText(data.get(position).who == null ? "None" : data.get(position).who);
+        mHolder.publishedAt.setText(formatTime(data.get(position).publishedAt.substring(5, 10)));
+        if (data.get(position).type.equals("福利")) {
+            mHolder.image.setImageURI(Uri.parse(data.get(position).url));
+            mHolder.image.setVisibility(View.VISIBLE);
+            mHolder.desc.setVisibility(View.GONE);
+        } else {
+            mHolder.image.setVisibility(View.GONE);
+            mHolder.desc.setVisibility(View.VISIBLE);
+            mHolder.desc.setText(data.get(position).desc);
         }
         if (onItemClickListener != null) {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+            mHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onClickListener(v, holder.getLayoutPosition());
+                    onItemClickListener.onClickListener(v, mHolder.getLayoutPosition());
                 }
             });
         }
@@ -69,7 +115,7 @@ public class GankCategoryAdapter extends RecyclerView.Adapter<GankCategoryAdapte
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return data == null ? 0 : data.size();
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -90,5 +136,15 @@ public class GankCategoryAdapter extends RecyclerView.Adapter<GankCategoryAdapte
             ButterKnife.bind(this, itemView);
         }
 
+    }
+
+    static class SectionHeaderView extends RecyclerView.ViewHolder {
+        @Bind(R.id.tv)
+        TextView tv;
+
+        public SectionHeaderView(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
     }
 }

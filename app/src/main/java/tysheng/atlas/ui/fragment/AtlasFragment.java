@@ -2,7 +2,6 @@ package tysheng.atlas.ui.fragment;
 
 
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewCompat;
 
 import butterknife.Bind;
 import tysheng.atlas.R;
@@ -46,7 +45,6 @@ public class AtlasFragment extends BaseFragment {
         viewPager.setPageTransformer(true, new RecyclerTransformAnimation());
         viewPager.setAdapter(new DraweePagerAdapter(drawbles));
 //        viewPager.setOffscreenPageLimit(1);
-        ViewCompat.setElevation(tablayout, getResources().getDimension(R.dimen.appbar_elevation));
         tablayout.setupWithViewPager(viewPager);
     }
 

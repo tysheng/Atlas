@@ -1,15 +1,27 @@
-<com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/srl_node"
+
+<com.canyinghao.canrefresh.CanRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/refresh"
+android:layout_height="match_parent"
+android:layout_width="match_parent">
+
+<com.canyinghao.canrefresh.google.GoogleCircleHookRefreshView
+    android:id="@id/can_refresh_header"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"/>
+
+<com.canyinghao.canrefresh.google.GoogleCircleHookRefreshView
+    android:id="@id/can_refresh_footer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"/>
+
+
+
+<android.support.v7.widget.RecyclerView
+    android:id="@id/can_content_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:srl_direction="both">
-<android.support.v7.widget.RecyclerView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rv_v2node"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:clipToPadding="false" />
 
-</android.support.v7.widget.RecyclerView>
 
-</com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>
+
+</com.canyinghao.canrefresh.CanRefreshLayout>

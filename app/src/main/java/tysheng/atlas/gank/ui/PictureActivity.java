@@ -1,4 +1,4 @@
-package tysheng.atlas.ui.activity;
+package tysheng.atlas.gank.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -187,7 +187,7 @@ public class PictureActivity extends BaseActivity {
                         File appDir = new File(Environment.getExternalStorageDirectory(), "Meizhi");
                         String msg = String.format(getString(R.string.picture_has_save_to),
                                 appDir.getAbsolutePath());
-                        ShowToast(msg);
+                        showToast(msg);
                     }
                 });
 

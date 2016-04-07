@@ -1,10 +1,8 @@
 package tysheng.atlas.ui.activity;
 
-import android.graphics.Color;
 import android.net.Uri;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -14,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -24,7 +21,8 @@ import tysheng.atlas.R;
 import tysheng.atlas.app.Constant;
 import tysheng.atlas.base.BaseActivity;
 import tysheng.atlas.gank.ui.GankActivity;
-import tysheng.atlas.gank.ui.fragment.GankFragment;
+import tysheng.atlas.gank.ui.GankDailyActivity;
+import tysheng.atlas.gank.utils.GankUtils;
 import tysheng.atlas.hupu.ui.ForumFragment;
 import tysheng.atlas.ui.fragment.AtlasFragment;
 import tysheng.atlas.ui.fragment.V2HotFragment;
@@ -46,10 +44,7 @@ public class MainActivity extends BaseActivity
     private long exitTime;
     private FragmentManager fragmentManager;
     AtlasFragment atlasFragment;
-//    FlashFragment flashFragment;
     V2HotFragment v2HotFragment;
-//    V2NewFragment v2NewFragment;
-    GankFragment gankFragment;
     V2NodeFragment v2NodeFragment;
     ForumFragment forumFragment;
     Fragment currentFragment;
@@ -60,22 +55,20 @@ public class MainActivity extends BaseActivity
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         initNav();
 
         fragmentManager = getSupportFragmentManager();
         atlasFragment = AtlasFragment.getInstance(getResources().getStringArray(R.array.atlas_drawbles));
-//        flashFragment = FlashFragment.getInstance();
         v2HotFragment = V2HotFragment.getInstance(Constant.URL_V2_HOT);
-//        v2NewFragment = V2NewFragment.getInstance(Constant.URL_V2_LASTED);
         v2NodeFragment = V2NodeFragment.getInstance();
         forumFragment = ForumFragment.getInstance();
-        gankFragment = GankFragment.getInstance();
         currentFragment = v2HotFragment;
         jumpFragment(null, v2HotFragment, R.id.fg_main, "hot");
-//        jumpFragment(null, new GankFragment(), R.id.fg_main, "hot");
+        if (!GankUtils.isNetworkConnected(actContext))
+            showSnackbar(cl, "貌似没有网络连接...");
     }
 
 
@@ -106,22 +99,6 @@ public class MainActivity extends BaseActivity
         }
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -135,23 +112,15 @@ public class MainActivity extends BaseActivity
                 currentFragment = v2HotFragment;
                 break;
             case R.id.nav_new:
-//                if (v2NewFragment == null)
-//                    v2NewFragment = V2NewFragment.getInstance(Constant.URL_V2_LASTED);
-//                if (!(currentFragment instanceof V2NewFragment))
-//                    jumpFragment(currentFragment, v2NewFragment, R.id.fg_main, "new");
-//                currentFragment = v2NewFragment;
-                if (gankFragment == null)
-                    gankFragment = GankFragment.getInstance();
-                if (!(currentFragment instanceof GankFragment))
-                    jumpFragment(currentFragment, gankFragment, R.id.fg_main, "gank");
-                currentFragment = gankFragment;
+                jumpActivity(GankActivity.class, false);
                 break;
             case R.id.nav_node:
-                if (v2NodeFragment == null)
-                    v2NodeFragment = V2NodeFragment.getInstance();
-                if (!(currentFragment instanceof V2NodeFragment))
-                    jumpFragment(currentFragment, v2NodeFragment, R.id.fg_main, "node");
-                currentFragment = v2NodeFragment;
+//                if (v2NodeFragment == null)
+//                    v2NodeFragment = V2NodeFragment.getInstance();
+//                if (!(currentFragment instanceof V2NodeFragment))
+//                    jumpFragment(currentFragment, v2NodeFragment, R.id.fg_main, "node");
+//                currentFragment = v2NodeFragment;
+                jumpActivity(GankDailyActivity.class,false);
                 break;
             case R.id.nav_atals:
                 if (atlasFragment == null)
@@ -161,11 +130,6 @@ public class MainActivity extends BaseActivity
                 currentFragment = atlasFragment;
                 break;
             case R.id.nav_flash:
-//                if (flashFragment == null)
-//                    flashFragment = FlashFragment.getInstance();
-//                if (!(currentFragment instanceof FlashFragment))
-//                    jumpFragment(currentFragment, flashFragment, R.id.fg_main, "flash");
-//                currentFragment = flashFragment;
                 if (forumFragment == null)
                     forumFragment = ForumFragment.getInstance();
                 if (!(currentFragment instanceof ForumFragment))
@@ -181,15 +145,6 @@ public class MainActivity extends BaseActivity
             case R.id.nav_weather2:
                 jumpActivity(WeatherListActivity.class, false);
                 break;
-            case R.id.nav_gank:
-                jumpActivity(GankActivity.class,false);
-                break;
-//            case R.id.imageView:
-//                break;
-//            case R.id.tv_name:
-//                break;
-//            case R.id.tv_email:
-//                break;
             default:
                 break;
         }
@@ -204,15 +159,7 @@ public class MainActivity extends BaseActivity
             if (keyCode == KeyEvent.KEYCODE_BACK
                     && event.getAction() == KeyEvent.ACTION_DOWN) {
                 if ((System.currentTimeMillis() - exitTime) > 2000) {
-//                    ShowToast("再按一次退出程序");
-                    Snackbar snackbar = Snackbar.make(cl, "再按一次退出程序", Snackbar.LENGTH_SHORT);
-                    ViewGroup viewGroup = (ViewGroup) snackbar.getView();
-                    for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                        View v = viewGroup.getChildAt(i);
-                        if (v instanceof TextView)
-                            ((TextView) v).setTextColor(Color.WHITE);
-                    }
-                    snackbar.show();
+                    showSnackbar(cl, "再按一次退出程序");
                     exitTime = System.currentTimeMillis();
                 } else {
                     finish();

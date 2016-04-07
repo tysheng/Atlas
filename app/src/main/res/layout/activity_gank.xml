@@ -10,53 +10,41 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/themeColor"
-            app:layout_collapseMode="pin"
-            app:layout_scrollFlags="scroll|enterAlways|snap"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="36dp"
+                android:background="?attr/themeColor"
+                style="@style/MyTabLayout"/>
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:id="@+id/imageView"
+                android:padding="6dp"
+                android:background="?attr/themeColor"
+                android:src="@drawable/ic_mode_edit_24dp"/>
+        </LinearLayout>
 
-        <!--<android.support.design.widget.CollapsingToolbarLayout-->
-        <!--android:id="@+id/collapsing_toolbar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--app:contentScrim="?attr/themeColor"-->
-        <!--app:expandedTitleTextAppearance="@style/CollapsingToolbarTitleStyle"-->
-        <!--app:layout_scrollFlags="scroll|exitUntilCollapsed">-->
-        <!-- -->
-        <!--</android.support.design.widget.CollapsingToolbarLayout>-->
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabLayout"
-            style="@style/AppTheme.TabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/tab_height"
-            android:background="?attr/themeColor">
-
-        </android.support.design.widget.TabLayout>
-
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
-    <!--<FrameLayout-->
-    <!--android:id="@+id/fg_main"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 </android.support.design.widget.CoordinatorLayout>
