@@ -24,9 +24,7 @@ import tysheng.atlas.gank.ui.GankActivity;
 import tysheng.atlas.gank.ui.GankDailyActivity;
 import tysheng.atlas.gank.utils.GankUtils;
 import tysheng.atlas.hupu.ui.ForumFragment;
-import tysheng.atlas.ui.fragment.AtlasFragment;
 import tysheng.atlas.ui.fragment.V2HotFragment;
-import tysheng.atlas.ui.fragment.V2NodeFragment;
 import tysheng.atlas.utils.SPHelper;
 
 public class MainActivity extends BaseActivity
@@ -43,12 +41,9 @@ public class MainActivity extends BaseActivity
 
     private long exitTime;
     private FragmentManager fragmentManager;
-    AtlasFragment atlasFragment;
     V2HotFragment v2HotFragment;
-    V2NodeFragment v2NodeFragment;
     ForumFragment forumFragment;
     Fragment currentFragment;
-
 
     @Override
     public void initData() {
@@ -61,9 +56,7 @@ public class MainActivity extends BaseActivity
         initNav();
 
         fragmentManager = getSupportFragmentManager();
-        atlasFragment = AtlasFragment.getInstance(getResources().getStringArray(R.array.atlas_drawbles));
         v2HotFragment = V2HotFragment.getInstance(Constant.URL_V2_HOT);
-        v2NodeFragment = V2NodeFragment.getInstance();
         forumFragment = ForumFragment.getInstance();
         currentFragment = v2HotFragment;
         jumpFragment(null, v2HotFragment, R.id.fg_main, "hot");
@@ -75,14 +68,19 @@ public class MainActivity extends BaseActivity
     private void initNav() {
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
+
         SimpleDraweeView imageView = (SimpleDraweeView) headerView.findViewById(R.id.imageView);
         TextView name = (TextView) headerView.findViewById(R.id.tv_name);
         TextView email = (TextView) headerView.findViewById(R.id.tv_email);
+        navigationView.getMenu().findItem(R.id.nav_node).setIcon(GankUtils.getWeekIcon());
 
         imageView.setImageURI(Uri.parse(SPHelper.getAvatar(actContext)), null);
         name.setText(SPHelper.getName(actContext));
         email.setText(SPHelper.getEmail(actContext));
+
     }
+
+
 
 
     @Override
@@ -115,20 +113,11 @@ public class MainActivity extends BaseActivity
                 jumpActivity(GankActivity.class, false);
                 break;
             case R.id.nav_node:
-//                if (v2NodeFragment == null)
-//                    v2NodeFragment = V2NodeFragment.getInstance();
-//                if (!(currentFragment instanceof V2NodeFragment))
-//                    jumpFragment(currentFragment, v2NodeFragment, R.id.fg_main, "node");
-//                currentFragment = v2NodeFragment;
-                jumpActivity(GankDailyActivity.class,false);
+                jumpActivity(GankDailyActivity.class, false);
                 break;
-            case R.id.nav_atals:
-                if (atlasFragment == null)
-                    atlasFragment = AtlasFragment.getInstance(getResources().getStringArray(R.array.atlas_drawbles));
-                if (!(currentFragment instanceof AtlasFragment))
-                    jumpFragment(currentFragment, atlasFragment, R.id.fg_main, "atlas");
-                currentFragment = atlasFragment;
-                break;
+//            case R.id.nav_atals:
+//
+//                break;
             case R.id.nav_flash:
                 if (forumFragment == null)
                     forumFragment = ForumFragment.getInstance();

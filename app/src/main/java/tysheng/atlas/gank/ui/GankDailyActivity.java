@@ -1,9 +1,8 @@
 package tysheng.atlas.gank.ui;
 
-import android.support.design.widget.CoordinatorLayout;
+import android.graphics.Color;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.FrameLayout;
 
 import butterknife.Bind;
 import tysheng.atlas.R;
@@ -16,15 +15,12 @@ import tysheng.atlas.gank.ui.fragment.GankIndexFragment;
 public class GankDailyActivity extends BaseActivity {
     @Bind(R.id.tl_setting)
     Toolbar toolbar;
-    @Bind(R.id.fl)
-    FrameLayout fl;
-    @Bind(R.id.cl)
-    CoordinatorLayout cl;
 
     @Override
     public void initData() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitle("");
+        toolbar.setBackgroundColor(Color.parseColor("#00FFFFFF"));
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -36,7 +32,7 @@ public class GankDailyActivity extends BaseActivity {
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_sort;
+        return R.layout.activity_daily;
     }
 
 }

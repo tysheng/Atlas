@@ -2,9 +2,6 @@ package tysheng.atlas.gank.ui;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +10,7 @@ import android.view.View;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -32,14 +30,8 @@ public class DailyDetailActivity extends BaseActivity {
     SimpleDraweeView ivHead;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.toolbar_layout)
-    CollapsingToolbarLayout toolbarLayout;
-    @Bind(R.id.app_bar)
-    AppBarLayout appBar;
     @Bind(R.id.rv_gank)
     RecyclerView recyclerView;
-    @Bind(R.id.fab)
-    FloatingActionButton fab;
     public static final String DATE = "date";
     public static final String URL = "url";
     GankDailyDetailAdapter mAdapter;
@@ -93,7 +85,7 @@ public class DailyDetailActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        showSnackbar(toolbar, "数据有点不太对劲:(");
                     }
 
                     @Override
@@ -109,4 +101,15 @@ public class DailyDetailActivity extends BaseActivity {
         return R.layout.activity_gank_daily_detail;
     }
 
+
+    @OnClick(R.id.fab)
+    public void onClick() {
+        if (mAdapter.getDataItem(0)!=null&&mAdapter.getDataItem(0).type.equals("休息视频")){
+            Intent intent = new Intent(DailyDetailActivity.this, WebVideoActivity.class);
+            intent.putExtra(WebVideoActivity.URL, mAdapter.getDataItem(0).url);
+            startActivity(intent);
+        }else {
+            showSnackbar(toolbar,"今天的视频好像出了点问题:(");
+        }
+    }
 }

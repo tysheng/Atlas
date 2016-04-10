@@ -1,9 +1,7 @@
 package tysheng.atlas.gank.ui;
 
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.FrameLayout;
 
 import butterknife.Bind;
 import tysheng.atlas.R;
@@ -16,10 +14,6 @@ import tysheng.atlas.gank.ui.fragment.SortFragment;
 public class SortActivity extends BaseActivity {
     @Bind(R.id.tl_setting)
     Toolbar toolbar;
-    @Bind(R.id.fl)
-    FrameLayout fl;
-    @Bind(R.id.cl)
-    CoordinatorLayout cl;
 
 
     @Override

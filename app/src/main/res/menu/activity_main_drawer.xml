@@ -7,26 +7,26 @@
             android:icon="@drawable/menu_safari"
             android:title="@string/fm_v2ex" />
         <item
-            android:id="@+id/nav_new"
-            android:icon="@drawable/menu_v2new2"
-            android:title="@string/fm_gank" />
-        <item
-            android:id="@+id/nav_node"
-            android:icon="@drawable/menu_node"
-            android:title="@string/gank_daily" />
-
-        <item
-            android:id="@+id/nav_atals"
-            android:icon="@drawable/menu_atlas"
-            android:title="@string/fm_atlas" />
-        <item
             android:id="@+id/nav_flash"
             android:icon="@drawable/menu_hupu"
             android:title="@string/fm_hupu" />
 
     </group>
+    <item android:title="@string/fm_gank">
+        <menu>
+            <item
+                android:id="@+id/nav_new"
+                android:icon="@drawable/menu_v2new2"
+                android:title="@string/fm_gank" />
+            <item
+                android:id="@+id/nav_node"
+                android:icon="@drawable/monday"
+                android:title="@string/gank_daily" />
+        </menu>
+    </item>
     <item android:title="Weather">
         <menu>
+
             <item
                 android:id="@+id/nav_weather"
                 android:icon="@drawable/menu_tab"

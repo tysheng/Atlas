@@ -80,7 +80,6 @@ public class GankFragment extends BaseFragment implements CanRefreshLayout.OnLoa
         rv.setHasFixedSize(true);
         rv.setLayoutManager(new LinearLayoutManager(frmContext));
         rv.addItemDecoration(new SectionsDecoration(true));
-        rv.addItemDecoration(new ItemDivider(frmContext));
 
         if (mGankCategory == null) {
             mGankCategory = new GankCategory();

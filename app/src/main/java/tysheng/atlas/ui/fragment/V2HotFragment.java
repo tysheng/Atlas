@@ -128,7 +128,7 @@ public class V2HotFragment extends BaseFragment implements VGet {
 
     @Override
     protected void setTitle() {
-        getActivity().setTitle(R.string.fm_hot);
+        getActivity().setTitle(R.string.fm_v2ex);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package tysheng.atlas.gank.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,36 +70,31 @@ public class GankCategoryLoadAdapter
 
     @Override
     public void onBindItemViewHolder(final MyViewHolder mHolder, int position) {
-        mHolder.type.setText(getItem(position).type);
-        mHolder.who.setText(getItem(position).who);
-        mHolder.publishedAt.setText(getItem(position).publishedAt.substring(0, 10));
-        if (getItem(position).type.equals("福利")) {
-            mHolder.image.setImageURI(Uri.parse(getItem(position).url));
-            mHolder.image.setVisibility(View.VISIBLE);
-            mHolder.desc.setVisibility(View.GONE);
-        } else {
-            mHolder.image.setVisibility(View.GONE);
-            mHolder.desc.setVisibility(View.VISIBLE);
-            mHolder.desc.setText(getItem(position).desc);
-        }
-        if (onItemClickListener != null) {
-            mHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemClickListener.onClickListener(v, mHolder.getLayoutPosition());
-                }
-            });
-        }
+//        mHolder.type.setText(getItem(position).type);
+//        mHolder.who.setText(getItem(position).who);
+//        mHolder.publishedAt.setText(getItem(position).publishedAt.substring(0, 10));
+//        if (getItem(position).type.equals("福利")) {
+//            mHolder.image.setImageURI(Uri.parse(getItem(position).url));
+//            mHolder.image.setVisibility(View.VISIBLE);
+//            mHolder.desc.setVisibility(View.GONE);
+//        } else {
+//            mHolder.image.setVisibility(View.GONE);
+//            mHolder.desc.setVisibility(View.VISIBLE);
+//            mHolder.desc.setText(getItem(position).desc);
+//        }
+//        if (onItemClickListener != null) {
+//            mHolder.itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    onItemClickListener.onClickListener(v, mHolder.getLayoutPosition());
+//                }
+//            });
+//        }
     }
 
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.desc)
-        TextView desc;
-        @Bind(R.id.publishedAt)
-        TextView publishedAt;
-        @Bind(R.id.type)
         TextView type;
         @Bind(R.id.who)
         TextView who;

@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 import tysheng.atlas.R;
 import tysheng.atlas.gank.bean.GankDaily;
 import tysheng.atlas.gank.bean.ResultsEntity;
+import tysheng.atlas.gank.utils.GankUtils;
 import tysheng.atlas.gank.view.SectionsDecoration;
 
 /**
@@ -47,6 +48,7 @@ public class GankCategoryAdapter
         if (daily.results.休息视频List != null) data.addAll(0, daily.results.休息视频List);
         notifyDataSetChanged();
     }
+
     public void clear() {
         data.clear();
         notifyDataSetChanged();
@@ -54,6 +56,8 @@ public class GankCategoryAdapter
 
     @Override
     public long getHeaderId(int position) {
+        if (data.get(position).type.equals("福利"))
+            return 0;
         if (data.get(position) != null)
             return data.get(position).getPublish();
         return 0;
@@ -66,7 +70,7 @@ public class GankCategoryAdapter
 
     @Override
     public void onBindHeaderViewHolder(SectionHeaderView viewHolder, int position) {
-        if (data.get(position) != null) {
+        if (data.get(position) != null && !data.get(position).type.equals("福利")) {
             viewHolder.tv.setText(formatTime(data.get(position).publishedAt.substring(5, 10)));
         }
     }
@@ -91,17 +95,15 @@ public class GankCategoryAdapter
 
     @Override
     public void onBindViewHolder(final MyViewHolder mHolder, final int position) {
-        mHolder.type.setText(data.get(position).type);
-        mHolder.who.setText(data.get(position).who == null ? "None" : data.get(position).who);
-        mHolder.publishedAt.setText(formatTime(data.get(position).publishedAt.substring(5, 10)));
+        mHolder.who.setText(GankUtils.getGankStyleStr(data.get(position).who == null ? "None" : data.get(position).who,
+                data.get(position).desc));
+
         if (data.get(position).type.equals("福利")) {
             mHolder.image.setImageURI(Uri.parse(data.get(position).url));
             mHolder.image.setVisibility(View.VISIBLE);
-            mHolder.desc.setVisibility(View.GONE);
         } else {
             mHolder.image.setVisibility(View.GONE);
-            mHolder.desc.setVisibility(View.VISIBLE);
-            mHolder.desc.setText(data.get(position).desc);
+
         }
         if (onItemClickListener != null) {
             mHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -120,12 +122,6 @@ public class GankCategoryAdapter
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.desc)
-        TextView desc;
-        @Bind(R.id.publishedAt)
-        TextView publishedAt;
-        @Bind(R.id.type)
-        TextView type;
         @Bind(R.id.who)
         TextView who;
         @Bind(R.id.image)

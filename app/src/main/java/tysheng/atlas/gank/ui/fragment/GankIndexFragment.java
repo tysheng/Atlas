@@ -3,9 +3,11 @@ package tysheng.atlas.gank.ui.fragment;
 import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -16,6 +18,7 @@ import tysheng.atlas.R;
 import tysheng.atlas.api.RetrofitSingleton;
 import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseFragment;
+import tysheng.atlas.gank.adapter.EndlessRecyclerOnScrollListener;
 import tysheng.atlas.gank.adapter.GankDailyAdapter;
 import tysheng.atlas.gank.api.GankApi;
 import tysheng.atlas.gank.bean.GankCategory;
@@ -39,6 +42,10 @@ public class GankIndexFragment extends BaseFragment {
     GankDailyAdapter mAdapter;
     final int REFRESH = 0;
     final int MORE = 1;
+    LinearLayoutManager layoutManager;
+    View bar;
+    @Bind(R.id.swipe)
+    SwipeRefreshLayout swipe;
 
     @Override
     protected void setTitle() {
@@ -57,49 +64,109 @@ public class GankIndexFragment extends BaseFragment {
         if (gankCategory == null)
             gankCategory = new GankCategory();
         mAdapter = new GankDailyAdapter(frmContext, gankCategory);
-        recyclerView.setAdapter(mAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(frmContext));
+        initRecyclerView();
         setItemClick();
-        getData(REFRESH,page);
+        initSwipe();
+
+    }
+
+    private void initSwipe() {
+        swipe.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                swipe.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                swipe.setRefreshing(true);
+                getData(REFRESH, page);
+            }
+        });
+        swipe.setColorSchemeResources(android.R.color.holo_purple,
+                android.R.color.holo_green_light,
+                android.R.color.holo_red_light,
+                android.R.color.holo_blue_light);
+        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getData(REFRESH, page);
+            }
+        });
+    }
+
+    private void initRecyclerView() {
+        layoutManager = new LinearLayoutManager(frmContext);
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int current_page) {
+                getData(MORE, current_page);
+            }
+        });
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                boolean isScrollingToBottom = dy > 0;
+                if (fab != null) {
+                    if (isScrollingToBottom) {
+                        if (fab.isShown())
+                            fab.hide();
+                    } else {
+                        if (!fab.isShown())
+                            fab.show();
+                    }
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    if (!fab.isShown())
+                        fab.show();
+                }
+            }
+        });
+
     }
 
     private void getData(final int type, int page) {
         subscriber.add(RetrofitSingleton.getInstance(MyApplication.getInstance(), GankApi.BASE_URL)
-                        .create(GankApi.class)
-                        .getParams("福利", 10, page)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<GankCategory>() {
-                            @Override
-                            public void onCompleted() {
+                .create(GankApi.class)
+                .getParams("福利", 10, page)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<GankCategory>() {
+                    @Override
+                    public void onCompleted() {
 
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(GankCategory bean) {
+                        if (!bean.error) {
+                            if (type == REFRESH) {
+                                mAdapter.clear();
+                                mAdapter.add(bean);
+                            } else {
+                                mAdapter.add(bean);
                             }
 
-                            @Override
-                            public void onError(Throwable e) {
-
-                            }
-
-                            @Override
-                            public void onNext(GankCategory bean) {
-                                if (!bean.error) {
-                                    if (type == REFRESH) {
-                                        mAdapter.clear();
-                                        mAdapter.add(bean);
-                                    } else {
-                                        mAdapter.add(bean);
-                                    }
-
-                                } else
-                                    showSnackbar(cl, "获取出错...");
-                            }
-                        })
+                        } else
+                            showSnackbar(cl, "获取出错...");
+                        swipe.setRefreshing(false);
+                    }
+                })
         );
     }
 
     @OnClick(R.id.fab)
     public void onClick() {
-        getData(MORE, ++page);
+        if (layoutManager.findLastCompletelyVisibleItemPosition() >= 30)
+            recyclerView.scrollToPosition(0);
+        else recyclerView.smoothScrollToPosition(0);
     }
 
     private void setItemClick() {
@@ -112,12 +179,12 @@ public class GankIndexFragment extends BaseFragment {
                     startActivity(intent);
                 } else if (view.getId() == R.id.tv_date) {
                     Intent intent = new Intent(frmContext, DailyDetailActivity.class);
-                    intent.putExtra(DailyDetailActivity.DATE,mAdapter.getYMD(position));
-                    intent.putExtra(DailyDetailActivity.URL,mAdapter.getUrl(position));
+                    intent.putExtra(DailyDetailActivity.DATE, mAdapter.getYMD(position));
+                    intent.putExtra(DailyDetailActivity.URL, mAdapter.getUrl(position));
                     startActivity(intent);
-//
                 }
             }
         });
     }
+
 }

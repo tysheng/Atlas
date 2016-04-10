@@ -1,12 +1,7 @@
 package tysheng.atlas.gank.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +14,7 @@ import butterknife.ButterKnife;
 import tysheng.atlas.R;
 import tysheng.atlas.gank.bean.GankDaily;
 import tysheng.atlas.gank.bean.ResultsEntity;
+import tysheng.atlas.gank.utils.GankUtils;
 import tysheng.atlas.gank.view.SectionsDecoration;
 
 /**
@@ -49,9 +45,11 @@ public class GankDailyDetailAdapter
         if (daily.results.休息视频List != null) data.addAll(0, daily.results.休息视频List);
         notifyDataSetChanged();
     }
-public ResultsEntity getDataItem(int pos){
-    return data.get(pos);
-}
+
+    public ResultsEntity getDataItem(int pos) {
+        return data.get(pos);
+    }
+
     public void clear() {
         data.clear();
         notifyDataSetChanged();
@@ -96,7 +94,7 @@ public ResultsEntity getDataItem(int pos){
 
     @Override
     public void onBindViewHolder(final MyViewHolder mHolder, final int position) {
-        mHolder.who.setText(getGankStyleStr(data.get(position).who == null ? "None" : data.get(position).who,
+        mHolder.who.setText(GankUtils.getGankStyleStr(data.get(position).who == null ? "None" : data.get(position).who,
                 data.get(position).desc));
 
         if (onItemClickListener != null) {
@@ -109,13 +107,7 @@ public ResultsEntity getDataItem(int pos){
         }
     }
 
-    public SpannableString getGankStyleStr(String who, String desc) {
-        String gankStr = desc + " @" + who;
-        SpannableString spannableString = new SpannableString(gankStr);
-        spannableString.setSpan(new RelativeSizeSpan(0.8f), desc.length() + 1, gankStr.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        spannableString.setSpan(new ForegroundColorSpan(Color.GRAY), desc.length() + 1, gankStr.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        return spannableString;
-    }
+
 
     @Override
     public int getItemCount() {
