@@ -112,7 +112,7 @@ public class WeatherFragment extends BaseFragment implements VPost {
 
     @Override
     public void onFailedError(Throwable e) {
-        ShowToast("请输入正确的城市名");
+        showSnackbar(getView(), "请输入正确的城市名:(");
     }
 
     @Override
@@ -131,7 +131,7 @@ public class WeatherFragment extends BaseFragment implements VPost {
             tvTxt.setText(heWeatherEntity.getSuggestion().getComf().getTxt());
             tvCond.setText(heWeatherEntity.getNow().getCond().getTxt());
         } else {
-            ShowToast("外国城市懒得解析~");
+            showSnackbar(getView(), "国外城市暂不提供:(");
         }
     }
 }

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,15 +22,22 @@ import tysheng.atlas.R;
 public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.MyViewHolder> {
 
 
-
     private LayoutInflater layoutInflater;
     private List<HashMap<String, String>> data;
     private OnItemClickListener onItemClickListener;
 
 
-    public WeatherRVAdapter(Context context, List<HashMap<String, String>> data) {
-        this.data = data;
+    public WeatherRVAdapter(Context context,int num) {
+        initData(num);
         this.layoutInflater = LayoutInflater.from(context);
+    }
+
+    private void initData(int num) {
+        data = new ArrayList<>();
+        for (int i = 0; i < num; i++) {
+            HashMap<String, String> map = new HashMap<>();
+            data.add(map);
+        }
     }
 
     public interface OnItemClickListener {
@@ -40,6 +48,23 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.MyVi
         this.onItemClickListener = listener;
     }
 
+    public void addItem(int pos, HashMap<String, String> map) {
+        data.add(pos, map);
+        notifyDataSetChanged();
+    }
+    public void addItem(HashMap<String, String> map) {
+        data.add(map);
+        notifyDataSetChanged();
+    }
+    public void removeItem(int pos){
+        data.remove(pos);
+        notifyDataSetChanged();
+    }
+    public void clearItem(){
+        data.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = layoutInflater.inflate(R.layout.item_weatherlist, parent, false);
@@ -48,12 +73,13 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.MyVi
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position) {
-        if (!data.get(position).isEmpty()){
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
+        if (!data.get(position).isEmpty()) {
             if (data.get(position).get("ll_aqi") == null) {
                 holder.tvAqi.setText(data.get(position).get("aqi"));
                 holder.tcQlty.setText(data.get(position).get("qlty"));
                 holder.tvTextaqi.setText("AQI");
+                holder.llAqi.setVisibility(View.VISIBLE);
             } else {
                 holder.llAqi.setVisibility(View.GONE);
             }
@@ -67,7 +93,7 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.MyVi
                 holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        onItemClickListener.onClickListener(v, position);
+                        onItemClickListener.onClickListener(v, holder.getLayoutPosition());
                         return true;
                     }
                 });
@@ -102,7 +128,6 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.MyVi
         TextView tvTmp;
         @Bind(R.id.tv_cond)
         TextView tvCond;
-
 
 
         public MyViewHolder(View itemView) {

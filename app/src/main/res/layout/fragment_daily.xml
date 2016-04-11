@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
-        android:src="@drawable/ic_vertical_align_top_black_24dp"
+        android:src="@drawable/ic_arrow_upward_black_24dp"
         app:elevation="2dp"
         app:layout_anchor="@id/recyclerView"
         app:layout_anchorGravity="bottom|right|end" />

@@ -7,7 +7,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 
 import tysheng.atlas.R;
-import tysheng.atlas.ui.activity.SettingActivity;
+import tysheng.atlas.ui.SettingActivity;
 import tysheng.atlas.utils.SPHelper;
 
 /**

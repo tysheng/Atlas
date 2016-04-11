@@ -60,7 +60,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
                 previousTotal = totalItemCount;
             }
         }
-        // // TODO: 15/10/7 可能把 Toolbar 的高度也算上了
+        // // 可能把 Toolbar 的高度也算上了
         //totalItemCount > visibleItemCount 超过一个页面才有加载更多
         if (!loading && totalItemCount > visibleItemCount && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
             // End has been reached

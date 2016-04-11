@@ -1,4 +1,4 @@
-package tysheng.atlas.ui.activity;
+package tysheng.atlas.ui;
 
 import android.content.Intent;
 import android.provider.MediaStore;

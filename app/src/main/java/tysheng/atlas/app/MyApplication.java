@@ -11,6 +11,9 @@ import com.squareup.leakcanary.RefWatcher;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+
 public class MyApplication extends Application {
     private static RequestQueue requestQueue;
 //    SQLiteDatabase db;
@@ -19,6 +22,7 @@ public class MyApplication extends Application {
     private static IWXAPI api;
     private static MyApplication instance;
     private RefWatcher refWatcher;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -30,6 +34,7 @@ public class MyApplication extends Application {
         regTowX();
         refWatcher = LeakCanary.install(this);
 
+        Realm.setDefaultConfiguration(new RealmConfiguration.Builder(this).build());
     }
     public static RefWatcher getRefWatcher(Context context) {
         MyApplication application = (MyApplication) context.getApplicationContext();

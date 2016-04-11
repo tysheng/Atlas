@@ -1,4 +1,4 @@
-package tysheng.atlas.ui.activity;
+package tysheng.atlas.ui;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
