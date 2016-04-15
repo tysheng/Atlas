@@ -1,11 +1,11 @@
 package tysheng.atlas.gank.ui.fragment;
 
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
-import com.canyinghao.canrefresh.CanRefreshLayout;
+import android.view.ViewTreeObserver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +18,7 @@ import tysheng.atlas.R;
 import tysheng.atlas.api.RetrofitSingleton;
 import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseFragment;
+import tysheng.atlas.gank.adapter.EndlessRecyclerOnScrollListener;
 import tysheng.atlas.gank.adapter.GankCategoryAdapter;
 import tysheng.atlas.gank.api.GankApi;
 import tysheng.atlas.gank.bean.GankCategory;
@@ -26,17 +27,16 @@ import tysheng.atlas.gank.ui.PictureActivity;
 import tysheng.atlas.gank.ui.WebviewActivity;
 import tysheng.atlas.gank.view.SectionsDecoration;
 import tysheng.atlas.utils.ACache;
-import tysheng.atlas.utils.ItemDivider;
 
 
 /**
  * Created by shengtianyang on 16/3/26.
  */
-public class GankFragment extends BaseFragment implements CanRefreshLayout.OnLoadMoreListener, CanRefreshLayout.OnRefreshListener {
-    @Bind(R.id.can_content_view)
+public class GankFragment extends BaseFragment {
+    @Bind(R.id.rv)
     RecyclerView rv;
-    @Bind(R.id.refresh)
-    CanRefreshLayout swipe;
+    @Bind(R.id.swipe)
+    SwipeRefreshLayout swipe;
 
     GankCategoryAdapter mAdapter;
 
@@ -45,6 +45,7 @@ public class GankFragment extends BaseFragment implements CanRefreshLayout.OnLoa
     int page = 1;
     ACache mCache;
     String typeName;
+    LinearLayoutManager mLayoutManager;
 
     @Override
     protected void setTitle() {
@@ -56,10 +57,6 @@ public class GankFragment extends BaseFragment implements CanRefreshLayout.OnLoa
 
     public GankFragment(String typeName) {
         this.typeName = typeName;
-    }
-
-    public static GankFragment getInstance() {
-        return new GankFragment();
     }
 
     public static GankFragment newInstance(String typeName) {
@@ -76,11 +73,17 @@ public class GankFragment extends BaseFragment implements CanRefreshLayout.OnLoa
         initSwipe();
         mCache = ACache.get(frmContext);
         mGankCategory = (GankCategory) mCache.getAsObject(typeName);
-
+        mLayoutManager = new LinearLayoutManager(frmContext);
         rv.setHasFixedSize(true);
-        rv.setLayoutManager(new LinearLayoutManager(frmContext));
-        rv.addItemDecoration(new SectionsDecoration(true));
-
+        rv.setLayoutManager(mLayoutManager);
+        if (!typeName.equals("福利"))
+            rv.addItemDecoration(new SectionsDecoration(true));
+        rv.addOnScrollListener(new EndlessRecyclerOnScrollListener(mLayoutManager) {
+            @Override
+            public void onLoadMore(int current_page) {
+                getData(typeName, current_page);
+            }
+        });
         if (mGankCategory == null) {
             mGankCategory = new GankCategory();
             data = new ArrayList<>();
@@ -92,9 +95,8 @@ public class GankFragment extends BaseFragment implements CanRefreshLayout.OnLoa
             rv.setAdapter(mAdapter);
         }
 
-
-        swipe.autoRefresh();
         setItemClick();
+
 
     }
 
@@ -127,25 +129,19 @@ public class GankFragment extends BaseFragment implements CanRefreshLayout.OnLoa
                 .subscribe(new Subscriber<GankCategory>() {
                     @Override
                     public void onCompleted() {
-                        if (page == 1)
-                            stopSwipe();
-                        else
-                            stopLoad();
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        if (page == 1)
-                            stopSwipe();
-                        else
-                            stopLoad();
+
                     }
 
                     @Override
                     public void onNext(GankCategory gankCategory) {
                         if (gankCategory.results.isEmpty()) {
                             ShowToast("没有更多数据了~");
-                            stopLoad();
+                            stopSwipe();
                             return;
                         }
 
@@ -162,35 +158,40 @@ public class GankFragment extends BaseFragment implements CanRefreshLayout.OnLoa
                         }
 
 
+
                     }
                 }));
+        stopSwipe();
 
     }
-
 
     private void stopSwipe() {
-        swipe.refreshComplete();
+        if (swipe.isRefreshing())
+            swipe.setRefreshing(false);
     }
 
-    private void stopLoad() {
-        swipe.loadMoreComplete();
-    }
 
     private void initSwipe() {
-        swipe.setOnLoadMoreListener(this);
-        swipe.setOnRefreshListener(this);
-        swipe.setStyle(1, 1);
-
+        swipe.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                swipe.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                swipe.setRefreshing(true);
+                getData(typeName, page = 1);
+            }
+        });
+        swipe.setColorSchemeResources(android.R.color.holo_purple,
+                android.R.color.holo_green_light,
+                android.R.color.holo_red_light,
+                android.R.color.holo_blue_light);
+        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                data.clear();
+                getData(typeName, page = 1);
+            }
+        });
     }
 
-    @Override
-    public void onLoadMore() {
-        getData(typeName, ++page);
-    }
 
-    @Override
-    public void onRefresh() {
-        data.clear();
-        getData(typeName, page = 1);
-    }
 }

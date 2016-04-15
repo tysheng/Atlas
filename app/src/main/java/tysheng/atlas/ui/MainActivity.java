@@ -1,6 +1,5 @@
 package tysheng.atlas.ui;
 
-import android.net.Uri;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -14,9 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
-
 import butterknife.Bind;
+import de.hdodenhof.circleimageview.CircleImageView;
 import tysheng.atlas.R;
 import tysheng.atlas.app.Constant;
 import tysheng.atlas.base.BaseActivity;
@@ -25,6 +23,7 @@ import tysheng.atlas.gank.ui.GankDailyActivity;
 import tysheng.atlas.gank.utils.GankUtils;
 import tysheng.atlas.hupu.ui.ForumFragment;
 import tysheng.atlas.ui.fragment.V2HotFragment;
+import tysheng.atlas.utils.ACache;
 import tysheng.atlas.utils.SPHelper;
 
 public class MainActivity extends BaseActivity
@@ -69,18 +68,20 @@ public class MainActivity extends BaseActivity
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
 
-        SimpleDraweeView imageView = (SimpleDraweeView) headerView.findViewById(R.id.imageView);
+        CircleImageView imageView = (CircleImageView) headerView.findViewById(R.id.imageView);
         TextView name = (TextView) headerView.findViewById(R.id.tv_name);
         TextView email = (TextView) headerView.findViewById(R.id.tv_email);
         navigationView.getMenu().findItem(R.id.nav_node).setIcon(GankUtils.getWeekIcon());
 
-        imageView.setImageURI(Uri.parse(SPHelper.getAvatar(actContext)), null);
+//        imageView.setImageURI(Uri.parse(SPHelper.getAvatar(actContext)), null);
+        if (ACache.get(actContext).getAsBitmap(Constant.AVATAR_BITMAP) == null) {
+            imageView.setImageDrawable(getResources().getDrawable(R.drawable.menu_myavatar));
+        } else
+            imageView.setImageBitmap(ACache.get(actContext).getAsBitmap(Constant.AVATAR_BITMAP));
         name.setText(SPHelper.getName(actContext));
         email.setText(SPHelper.getEmail(actContext));
 
     }
-
-
 
 
     @Override
@@ -115,9 +116,6 @@ public class MainActivity extends BaseActivity
             case R.id.nav_node:
                 jumpActivity(GankDailyActivity.class, false);
                 break;
-//            case R.id.nav_atals:
-//
-//                break;
             case R.id.nav_flash:
                 if (forumFragment == null)
                     forumFragment = ForumFragment.getInstance();

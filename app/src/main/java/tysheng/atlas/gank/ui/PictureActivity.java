@@ -10,8 +10,11 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -42,7 +45,9 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import tysheng.atlas.R;
 import tysheng.atlas.base.BaseActivity;
+import tysheng.atlas.gank.utils.GankUtils;
 import tysheng.atlas.utils.SPHelper;
+import tysheng.atlas.utils.phtodraweeview.OnViewTapListener;
 import tysheng.atlas.utils.phtodraweeview.PhotoDraweeView;
 
 /**
@@ -53,19 +58,17 @@ public class PictureActivity extends BaseActivity {
     PhotoDraweeView picture;
     public static final String EXTRA_IMAGE_URL = "image_url";
     public static final String EXTRA_IMAGE_TITLE = "image_title";
-    //    @Bind(R.id.app_bar_layout)
-//    AppBarLayout appBarLayout;
-//    @Bind(R.id.toolbar)
-//    Toolbar toolbar;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
     private String mImageUrl;
     private String mImageTitle;
-
+    protected boolean mIsHidden = false;
     @Override
     public void initData() {
         if (SPHelper.getGankTip(actContext).equals("on"))
             initSnackBar();
         parseIntent();
-//        initToolbar();
+        initToolbar();
         initPicture();
     }
 
@@ -117,20 +120,49 @@ public class PictureActivity extends BaseActivity {
                 return true;
             }
         });
+        picture.setOnViewTapListener(new OnViewTapListener() {
+            @Override
+            public void onViewTap(View view, float x, float y) {
+                hideOrShowToolbar();
+            }
+        });
     }
 
-//    private void initToolbar() {
-//        appBarLayout.setAlpha(0.1f);
-//        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24dp);
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//            }
-//        });
-//        setTitle(mImageTitle);
-//    }
+    private void initToolbar() {
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        toolbar.setTitle("");
+        toolbar.inflateMenu(R.menu.menu_picture);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch(item.getItemId()){
+                    case R.id.action_save:
+                        saveImageToGallery();
+                        break;
+                    case R.id.action_share:
+                        GankUtils.share(actContext, mImageUrl, mImageTitle);
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
+        toolbar.setBackgroundColor(Color.TRANSPARENT);
+    }
+    private void hideOrShowToolbar() {
+        toolbar.animate()
+                .translationY(mIsHidden ? 0 : -toolbar.getHeight())
+                .setInterpolator(new DecelerateInterpolator(2))
+                .start();
 
+        mIsHidden = !mIsHidden;
+    }
     private Bitmap getBitmap() {
         final Bitmap[] mBitmap = new Bitmap[1];
         ImageRequest imageRequest = ImageRequestBuilder

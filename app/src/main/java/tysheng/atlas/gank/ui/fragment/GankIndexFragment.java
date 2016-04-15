@@ -43,7 +43,6 @@ public class GankIndexFragment extends BaseFragment {
     final int REFRESH = 0;
     final int MORE = 1;
     LinearLayoutManager layoutManager;
-    View bar;
     @Bind(R.id.swipe)
     SwipeRefreshLayout swipe;
 
@@ -59,6 +58,8 @@ public class GankIndexFragment extends BaseFragment {
 
     @Override
     protected void initData() {
+        initSwipe();
+
         mCache = ACache.get(frmContext);
         gankCategory = (GankCategory) mCache.getAsObject("index_category");
         if (gankCategory == null)
@@ -66,8 +67,9 @@ public class GankIndexFragment extends BaseFragment {
         mAdapter = new GankDailyAdapter(frmContext, gankCategory);
         initRecyclerView();
         setItemClick();
-        initSwipe();
 
+        if (gankCategory.results.size() != 0)
+            mAdapter.notifyDataSetChanged();
     }
 
     private void initSwipe() {
@@ -150,16 +152,18 @@ public class GankIndexFragment extends BaseFragment {
                             if (type == REFRESH) {
                                 mAdapter.clear();
                                 mAdapter.add(bean);
+                                mCache.put("index_category", bean, ACache.TIME_DAY * 2);
                             } else {
                                 mAdapter.add(bean);
                             }
 
                         } else
                             showSnackbar(cl, "获取出错...");
-                        swipe.setRefreshing(false);
+
                     }
                 })
         );
+        swipe.setRefreshing(false);
     }
 
     @OnClick(R.id.fab)

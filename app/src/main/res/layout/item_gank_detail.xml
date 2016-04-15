@@ -11,7 +11,7 @@
         android:layout_gravity="center"
         android:layout_marginLeft="16dp"
         android:padding="5dp"
-        android:textColor="@color/google_blue"
+        android:textColor="@color/light_blue"
         android:text="&#032; &#187;"
         android:textSize="18sp" />
 

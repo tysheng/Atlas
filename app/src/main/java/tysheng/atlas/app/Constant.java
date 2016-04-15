@@ -28,6 +28,8 @@ public class Constant {
     public static final String WX_APP_ID = "wx029d7cfe5492d0c3";
     public static final String WX_APP_SECRET = "5ee73f83b047053ea4f773add5a3025d";
 
+    public static final String AVATAR_BITMAP="avatar_bitmap";
+
 }
 /*
         最热主题

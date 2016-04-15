@@ -44,42 +44,6 @@ public class FlashFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-//        subscriber.add(RetrofitSingleton.getWeatherApi(frmContext)
-//                .getParams("shaoxing")
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .filter(new Func1<RWeatherBean, Boolean>() {
-//                    @Override
-//                    public Boolean call(RWeatherBean rWeatherBean) {
-//                        return rWeatherBean.getHeWeather().get(0).getStatus().equals("ok");
-//                    }
-//                })
-//                .map(new Func1<RWeatherBean, RWeatherBean.HeWeatherEntity>() {
-//
-//                    @Override
-//                    public RWeatherBean.HeWeatherEntity call(RWeatherBean rWeatherBean) {
-//                        return rWeatherBean.getHeWeather().get(0);
-//                    }
-//                })
-//                .subscribe(new Subscriber<RWeatherBean.HeWeatherEntity>() {
-//                    @Override
-//                    public void onCompleted() {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onNext(RWeatherBean.HeWeatherEntity heWeatherEntity) {
-//                        String s =heWeatherEntity.getAqi().getCity().getAqi();
-//                        showToast(s);
-//
-//                    }
-//                }));
-
 
     }
 

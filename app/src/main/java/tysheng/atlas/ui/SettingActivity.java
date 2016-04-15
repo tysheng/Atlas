@@ -1,6 +1,7 @@
 package tysheng.atlas.ui;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
@@ -14,14 +15,19 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.afollestad.materialdialogs.util.DialogUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipeline;
 
 import butterknife.Bind;
 import tysheng.atlas.R;
+import tysheng.atlas.app.Constant;
 import tysheng.atlas.base.BaseActivity;
 import tysheng.atlas.ui.fragment.FragmentCallback;
 import tysheng.atlas.ui.fragment.MyPreferenceFragment;
+import tysheng.atlas.utils.ACache;
 import tysheng.atlas.utils.SPHelper;
 
 public class SettingActivity extends BaseActivity implements ColorChooserDialog.ColorCallback, FragmentCallback {
@@ -35,9 +41,10 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
     @Bind(R.id.tl_setting)
     Toolbar tbSetting;
 
+    ACache mCache;
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(final int requestCode, int resultCode, final Intent data) {
         if (resultCode == RESULT_OK && requestCode == RESULT_LOAD_IMAGE) {
             final String uri = data.getData().toString();
             new MaterialDialog.Builder(this)
@@ -47,8 +54,19 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            SPHelper.setAvatar(actContext, uri);
+//                            SPHelper.setAvatar(actContext, uri);
                             SPHelper.setIsSetting(actContext, true);
+
+                            Glide.with(actContext)
+                                    .loadFromMediaStore(data.getData())
+                                    .asBitmap()
+                                    .into(new SimpleTarget<Bitmap>(75,75) {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                            mCache.put(Constant.AVATAR_BITMAP, resource, ACache.TIME_DAY * 30);
+                                        }
+                                    });
+
                         }
                     }).show();
         }
@@ -97,7 +115,7 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
         });
         intent = new Intent(this, MainActivity.class);
         primaryPreselect = DialogUtils.resolveColor(this, R.attr.themeColor);
-
+        mCache = ACache.get(actContext);
         getFragmentManager().beginTransaction()
                 .replace(R.id.fl, new MyPreferenceFragment())
                 .commit();
