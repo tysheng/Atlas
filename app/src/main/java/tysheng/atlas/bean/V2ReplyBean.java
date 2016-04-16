@@ -1,10 +1,12 @@
 package tysheng.atlas.bean;
 
 
+import java.io.Serializable;
+
 /**
  * Created by shengtianyang on 16/2/26.
  */
-public class V2ReplyBean {
+public class V2ReplyBean implements Serializable{
 
 
     /**
@@ -39,14 +41,6 @@ public class V2ReplyBean {
         this.content = content;
     }
 
-    public void setMember(MemberEntity member) {
-        this.member = member;
-    }
-
-    public void setLast_modified(int last_modified) {
-        this.last_modified = last_modified;
-    }
-
     public int getId() {
         return id;
     }
@@ -63,17 +57,10 @@ public class V2ReplyBean {
         return last_modified;
     }
 
-    public static class MemberEntity {
+    public static class MemberEntity implements Serializable {
         private String username;
         private String avatar_normal;
 
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public void setAvatar_normal(String avatar_normal) {
-            this.avatar_normal = avatar_normal;
-        }
 
         public String getUsername() {
             return username;

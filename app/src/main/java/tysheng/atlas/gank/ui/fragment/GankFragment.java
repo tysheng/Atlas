@@ -100,6 +100,7 @@ public class GankFragment extends BaseFragment {
 
     }
 
+
     private void setItemClick() {
         mAdapter.setOnItemClickListener(new GankCategoryAdapter.OnItemClickListener() {
             @Override
@@ -156,7 +157,6 @@ public class GankFragment extends BaseFragment {
                         } else {
                             ShowToast("网络访问出错");
                         }
-
 
 
                     }

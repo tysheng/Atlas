@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity
         initNav();
 
         fragmentManager = getSupportFragmentManager();
-        v2HotFragment = V2HotFragment.getInstance(Constant.URL_V2_HOT);
+        v2HotFragment = V2HotFragment.getInstance(V2HotFragment.HOT);
         forumFragment = ForumFragment.getInstance();
         currentFragment = v2HotFragment;
         jumpFragment(null, v2HotFragment, R.id.fg_main, "hot");
@@ -105,7 +105,7 @@ public class MainActivity extends BaseActivity
         switch (id) {
             case R.id.nav_hot:
                 if (v2HotFragment == null)
-                    v2HotFragment = V2HotFragment.getInstance(Constant.URL_V2_HOT);
+                    v2HotFragment = V2HotFragment.getInstance(V2HotFragment.HOT);
                 if (!(currentFragment instanceof V2HotFragment))
                     jumpFragment(currentFragment, v2HotFragment, R.id.fg_main, "hot");
                 currentFragment = v2HotFragment;

@@ -65,4 +65,5 @@
     <string name="gank_sort">Sort</string>
     <string name="title_activity_webview" />
 
+    <string name="on_error">貌似出错了:(</string>
 </resources>

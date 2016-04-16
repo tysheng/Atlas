@@ -3,8 +3,6 @@ package tysheng.atlas.app;
 import android.app.Application;
 import android.content.Context;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -15,7 +13,6 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
 public class MyApplication extends Application {
-    private static RequestQueue requestQueue;
 //    SQLiteDatabase db;
 //    DaoMaster daoMaster;
 //    public static DaoSession daoSession;
@@ -29,7 +26,6 @@ public class MyApplication extends Application {
         instance = this;
 
         Fresco.initialize(this);
-        requestQueue = Volley.newRequestQueue(this);
 //        setupDatabase();
         regTowX();
         refWatcher = LeakCanary.install(this);
@@ -56,12 +52,6 @@ public class MyApplication extends Application {
 //        return daoSession;
 //    }
 
-    public static RequestQueue getRequestQueue() {
-        if (requestQueue == null){
-            requestQueue = Volley.newRequestQueue(instance);
-        }
-        return requestQueue;
-    }
     public static MyApplication getInstance() {
         return instance;
     }

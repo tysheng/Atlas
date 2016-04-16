@@ -14,27 +14,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
-import com.alibaba.fastjson.JSON;
-import com.android.volley.VolleyError;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import tysheng.atlas.R;
 import tysheng.atlas.adapter.V2HotAdapter;
-import tysheng.atlas.app.Constant;
-import tysheng.atlas.app.MyApplication;
+import tysheng.atlas.api.RetrofitSingleton;
+import tysheng.atlas.api.V2exApi;
 import tysheng.atlas.base.BaseFragment;
 import tysheng.atlas.bean.V2HotBean;
-import tysheng.atlas.mvp.volley_get.PGet;
-import tysheng.atlas.mvp.volley_get.VGet;
 
 /**
  * Created by shengtianyang on 16/1/31.
  */
-public class V2HotFragment extends BaseFragment implements VGet {
-
+public class V2HotFragment extends BaseFragment {
+    public static final String HOT = "hot";
+    public static final String LATEST = "latest";
     @Bind(R.id.rv_v2)
     RecyclerView rvV2;
     @Bind(R.id.swipe)
@@ -42,7 +41,6 @@ public class V2HotFragment extends BaseFragment implements VGet {
     private List<V2HotBean> data;
     Fragment fragment;
     private V2HotAdapter mAdapter;
-    private PGet presenter;
 
     public V2HotFragment() {
     }
@@ -58,28 +56,33 @@ public class V2HotFragment extends BaseFragment implements VGet {
     private String url;
 
     private void getHotThread(String mUrl) {
-        presenter.func(mUrl,getClass().getSimpleName());
+        subscriber.add(
+                RetrofitSingleton.getV2exApi(frmContext, V2exApi.BASE_URL)
+                        .getV2Hot(mUrl)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<List<V2HotBean>>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onNext(List<V2HotBean> v2HotBeen) {
+                                data.addAll(v2HotBeen);
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        }));
+        swipe.setRefreshing(false);
     }
 
-    @Override
-    public void stopSwipe() {
-        if (swipe.isRefreshing())
-            swipe.setRefreshing(false);
-    }
-
-    @Override
-    public void onFailedError(VolleyError error) {
-
-    }
-
-    @Override
-    public void onSuccess(String s) {
-        data.addAll(JSON.parseArray(s, V2HotBean.class));
-        mAdapter.notifyDataSetChanged();
-    }
 
     private void initView() {
-        presenter = new PGet(this);
         swipe.setColorSchemeResources(android.R.color.holo_purple,
                 android.R.color.holo_green_light,
                 android.R.color.holo_red_light,
@@ -97,13 +100,7 @@ public class V2HotFragment extends BaseFragment implements VGet {
             @Override
             public void onClickListener(View view, int position) {
                 Bundle bundle = new Bundle();
-                bundle.putString("avatar_normal", data.get(position).getMember().getAvatar_normal());
-                bundle.putString("username", data.get(position).getMember().getUsername());
-                bundle.putString("node_title", data.get(position).getNode().getTitle());
-                bundle.putString("content", data.get(position).getContent());
-                bundle.putString("title", data.get(position).getTitle());
-                bundle.putInt("last_modified", data.get(position).getLast_modified());
-                bundle.putString("url",data.get(position).getUrl());
+                bundle.putSerializable(V2ThreadFragment.TAG,data.get(position));
                 V2ThreadFragment v2ThreadFragment = new V2ThreadFragment(data.get(position).getId());
                 v2ThreadFragment.setArguments(bundle);
                 FragmentManager manager = getActivity().getSupportFragmentManager();
@@ -123,7 +120,6 @@ public class V2HotFragment extends BaseFragment implements VGet {
     @Override
     public void onStop() {
         super.onStop();
-        MyApplication.getRequestQueue().cancelAll(getClass().getSimpleName());
     }
 
     @Override
@@ -149,6 +145,7 @@ public class V2HotFragment extends BaseFragment implements VGet {
             }
         });
     }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -159,10 +156,10 @@ public class V2HotFragment extends BaseFragment implements VGet {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_switch:
-                if (url.equals(Constant.URL_V2_HOT))
-                    url = Constant.URL_V2_LASTED;
+                if (url.equals(HOT))
+                    url = LATEST;
                 else
-                    url = Constant.URL_V2_HOT;
+                    url = HOT;
                 data.clear();
                 getHotThread(url);
                 return true;

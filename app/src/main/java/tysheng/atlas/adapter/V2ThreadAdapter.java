@@ -28,7 +28,6 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int TYPE_ITEM = 1;
 
     private LayoutInflater layoutInflater;
-//    private List<HashMap<String, String>> data;
     private List<V2ReplyBean> data;
     private HeaderBean headerBean;
 //    private OnItemClickListener onItemClickListener;
@@ -60,23 +59,28 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         throw new RuntimeException("No matches with " + viewType);
     }
 
+    public void addItem(List<V2ReplyBean> list) {
+        data.addAll(list);
+        notifyDataSetChanged();
+    }
+
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder,int position) {
-        if(holder instanceof VHHeader){
-            VHHeader vhHeader = (VHHeader)holder;
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof VHHeader) {
+            VHHeader vhHeader = (VHHeader) holder;
             vhHeader.draweeTopic.setImageURI(Uri.parse("http:" + headerBean.getDraweeTopic()));
             vhHeader.tvTopicAuthor.setText(headerBean.getTvTopicAuthor());
             vhHeader.tvTopicContent.setText(headerBean.getTvTopicContent());
             vhHeader.tvTopicNode.setText(headerBean.getTvTopicNode());
             vhHeader.tvTopicTitle.setText(headerBean.getTvTopicTitle());
             vhHeader.tvTopicTime.setText(TimeStamp.getFinalTimeDiffrence(headerBean.getTvTopicTime()));
-        }else if (holder instanceof VHItem){
-            VHItem vhItem = (VHItem)holder;
-            vhItem.tvReplyContent.setText(data.get(position-1).getContent());
-            vhItem.tvReplyAuthor.setText(data.get(position-1).getMember().getUsername());
-            vhItem.draweeReply.setImageURI(Uri.parse("http:" + data.get(position-1).getMember().getAvatar_normal()));
-            vhItem.tvReplyTime.setText(TimeStamp.getFinalTimeDiffrence(data.get(position-1).getLast_modified()));
-            vhItem.tvReplyFloor.setText(position+"");
+        } else if (holder instanceof VHItem) {
+            VHItem vhItem = (VHItem) holder;
+            vhItem.tvReplyContent.setText(data.get(position - 1).getContent());
+            vhItem.tvReplyAuthor.setText(data.get(position - 1).getMember().getUsername());
+            vhItem.draweeReply.setImageURI(Uri.parse("http:" + data.get(position - 1).getMember().getAvatar_normal()));
+            vhItem.tvReplyTime.setText(TimeStamp.getFinalTimeDiffrence(data.get(position - 1).getLast_modified()));
+            vhItem.tvReplyFloor.setText(position + "");
         }
 
 
@@ -89,6 +93,7 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //            });
 //        }
     }
+
     @Override
     public int getItemViewType(int position) {
         switch (position) {
@@ -101,7 +106,7 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        return data.size()+1;
+        return data.size() + 1;
     }
 
 

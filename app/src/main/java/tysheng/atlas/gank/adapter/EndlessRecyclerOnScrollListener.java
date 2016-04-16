@@ -24,18 +24,22 @@ import android.support.v7.widget.RecyclerView;
 
 /**
  * @author Jorge Castillo Pérez
- *
- * modify at 2015/08/23
+ *         <p/>
+ *         modify at 2015/08/23
  */
 public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
-    public static String TAG = EndlessRecyclerOnScrollListener.class.getSimpleName();
 
-    private int previousTotal = 0; // The total number of items in the dataset after the last load
+    // 上一次load后item的数量
+    private int previousTotal = 0;
+
     private boolean loading = false;
+
     //list到达 最后一个item的时候 触发加载
     private int visibleThreshold = 1;
+
     // The minimum amount of items to have below your current scroll position before loading more.
     int firstVisibleItem, visibleItemCount, totalItemCount;
+
     //默认第一页
     private int current_page = 1;
 
@@ -60,7 +64,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
                 previousTotal = totalItemCount;
             }
         }
-        // // 可能把 Toolbar 的高度也算上了
+
         //totalItemCount > visibleItemCount 超过一个页面才有加载更多
         if (!loading && totalItemCount > visibleItemCount && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
             // End has been reached
