@@ -74,10 +74,9 @@ public class V2ThreadFragment extends BaseFragment {
         rcThread.addItemDecoration(new ItemDivider(frmContext));
         getData();
     }
-
     private void getData() {
         subscriber.add(
-                RetrofitSingleton.getV2exApi(frmContext, V2exApi.BASE_URL)
+                RetrofitSingleton.getV2exApi(MyApplication.getInstance(), V2exApi.BASE_URL)
                         .getV2Reply(id)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())

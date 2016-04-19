@@ -16,6 +16,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import tysheng.atlas.R;
 import tysheng.atlas.api.RetrofitSingleton;
+import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseActivity;
 import tysheng.atlas.gank.adapter.GankDailyDetailAdapter;
 import tysheng.atlas.gank.api.GankApi;
@@ -73,9 +74,9 @@ public class DailyDetailActivity extends BaseActivity {
     }
 
     private void getData(String[] date) {
-        RetrofitSingleton.getInstance(actContext, GankApi.BASE_URL)
-                .create(GankApi.class)
-                .getParams(date[0], date[1], date[2]).subscribeOn(Schedulers.io())
+        RetrofitSingleton.getGankApi(MyApplication.getInstance(), GankApi.BASE_URL)
+                .getDaily(date[0], date[1], date[2])
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<GankDaily>() {
                     @Override
@@ -94,6 +95,7 @@ public class DailyDetailActivity extends BaseActivity {
 
                     }
                 });
+
     }
 
     @Override

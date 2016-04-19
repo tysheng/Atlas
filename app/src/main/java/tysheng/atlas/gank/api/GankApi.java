@@ -15,15 +15,15 @@ public interface GankApi {
 
     @GET("data/{category}/{counts}/{page}")
     Observable<GankCategory>
-    getParams(@Path("category") String category, @Path("counts") int counts, @Path("page") int page);
+    getCategory(@Path("category") String category, @Path("counts") int counts, @Path("page") int page);
 
 //    String DAILY_URL = "http://gank.io/api/day/";//2015/08/07
 
     @GET("day/{year}/{month}/{day}")
     Observable<GankDaily>
-    getParams(@Path("year") String year, @Path("month") String month, @Path("day") String day);
+    getDaily(@Path("year") String year, @Path("month") String month, @Path("day") String day);
 
     @GET("day/history")
     Observable<HistoryBean>
-    getParams();
+    getHistory();
 }

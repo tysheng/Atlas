@@ -5,31 +5,36 @@ package tysheng.atlas.app;
  */
 public interface Constant {
     //V2EX
-     String URL_V2_LASTED = "https://www.v2ex.com/api/topics/latest.json";
-     String URL_V2_HOT = "https://www.v2ex.com/api/topics/hot.json";
-     String URL_V2_TOPIC = "https://www.v2ex.com/api/topics/show.json";
-     String URL_V2_REPLY = "https://www.v2ex.com/api/replies/show.json";
-     String URL_V2_NODE_ALL = "https://www.v2ex.com/api/nodes/all.json";
-     String URL_V2_NODE = "https://www.v2ex.com/api/nodes/show.json?name=";
-     String URL_V2_NODE_GO = "https://www.v2ex.com/go/";
-     String URL_V2_MEMBER = "https://www.v2ex.com/api/members/show.json";
+    String URL_V2_LASTED = "https://www.v2ex.com/api/topics/latest.json";
+    String URL_V2_HOT = "https://www.v2ex.com/api/topics/hot.json";
+    String URL_V2_TOPIC = "https://www.v2ex.com/api/topics/show.json";
+    String URL_V2_REPLY = "https://www.v2ex.com/api/replies/show.json";
+    String URL_V2_NODE_ALL = "https://www.v2ex.com/api/nodes/all.json";
+    String URL_V2_NODE = "https://www.v2ex.com/api/nodes/show.json?name=";
+    String URL_V2_NODE_GO = "https://www.v2ex.com/go/";
+    String URL_V2_MEMBER = "https://www.v2ex.com/api/members/show.json";
 
     //和风天气
-     String HF_WEATHER_APIKEY = "72242cee88b7717053de6a045245e582";
-     String HF_WEATHER_API = "http://apis.baidu.com/heweather/weather/free";
+    String HF_WEATHER_APIKEY = "72242cee88b7717053de6a045245e582";
+    String HF_WEATHER_API = "http://apis.baidu.com/heweather/weather/free";
 
     //百度车联网
-     String URL_BAIDU_WEATHER = "http://api.map.baidu.com/telematics/v3/weather";
-     String BAIDU_AK = "EIBnkLNbPzLIrKZoWIMXhb37";
+    String URL_BAIDU_WEATHER = "http://api.map.baidu.com/telematics/v3/weather";
+    String BAIDU_AK = "EIBnkLNbPzLIrKZoWIMXhb37";
 
-     String SP_NAME = "sp_name";
+    String SP_NAME = "sp_name";
 
     //微信
-     String WX_APP_ID = "wx029d7cfe5492d0c3";
-     String WX_APP_SECRET = "5ee73f83b047053ea4f773add5a3025d";
+    String WX_APP_ID = "wx029d7cfe5492d0c3";
+    String WX_APP_SECRET = "5ee73f83b047053ea4f773add5a3025d";
 
-     String AVATAR_BITMAP="avatar_bitmap";
-
+    //SharedPreferences
+    String AVATAR_BITMAP = "avatar_bitmap";
+    String GANK_TIP = "GANK_TIP";
+    String USER_NAME = "USER_NAME";
+    String USER_EMAIL = "USER_EMAIL";
+    String IS_SETTING = "IS_SETTING";
+    String THEME = "THEME";
 }
 /*
         最热主题

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import rx.Single;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -118,31 +119,28 @@ public class GankFragment extends BaseFragment {
             }
         });
 
-
     }
 
     private void getData(String category, final int page) {
-        subscriber.add(RetrofitSingleton.getInstance(MyApplication.getInstance(), GankApi.BASE_URL)
-                .create(GankApi.class)
-                .getParams(category, 10, page)
+        subscriber.add(RetrofitSingleton.getGankApi(MyApplication.getInstance(), GankApi.BASE_URL)
+                .getCategory(category, 10, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<GankCategory>() {
                     @Override
                     public void onCompleted() {
-
+                        stopSwipe();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        stopSwipe();
                     }
 
                     @Override
                     public void onNext(GankCategory gankCategory) {
                         if (gankCategory.results.isEmpty()) {
                             ShowToast("没有更多数据了~");
-                            stopSwipe();
                             return;
                         }
 
@@ -161,7 +159,7 @@ public class GankFragment extends BaseFragment {
 
                     }
                 }));
-        stopSwipe();
+
 
     }
 

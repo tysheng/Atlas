@@ -130,20 +130,19 @@ public class GankIndexFragment extends BaseFragment {
     }
 
     private void getData(final int type, int page) {
-        subscriber.add(RetrofitSingleton.getInstance(MyApplication.getInstance(), GankApi.BASE_URL)
-                .create(GankApi.class)
-                .getParams("福利", 10, page)
+        subscriber.add(RetrofitSingleton.getGankApi(MyApplication.getInstance(), GankApi.BASE_URL)
+                .getCategory("福利", 10, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<GankCategory>() {
                     @Override
                     public void onCompleted() {
-
+                        swipe.setRefreshing(false);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        swipe.setRefreshing(false);
                     }
 
                     @Override
@@ -163,7 +162,7 @@ public class GankIndexFragment extends BaseFragment {
                     }
                 })
         );
-        swipe.setRefreshing(false);
+
     }
 
     @OnClick(R.id.fab)

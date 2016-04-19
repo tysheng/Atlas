@@ -8,10 +8,6 @@ import android.view.View;
 
 import butterknife.Bind;
 import butterknife.OnClick;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import tysheng.atlas.R;
 import tysheng.atlas.base.BaseActivity;
 import tysheng.atlas.gank.adapter.GankViewPagerAdapter;
@@ -83,39 +79,17 @@ public class GankActivity extends BaseActivity {
     }
 
     private void onRefresh() {
-        Observable.create(new Observable.OnSubscribe<GankViewPagerItem>() {
-            @Override
-            public void call(Subscriber<? super GankViewPagerItem> subscriber) {
-                getCache();
-                subscriber.onNext(mItem);
-            }
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<GankViewPagerItem>() {
-                    @Override
-                    public void onCompleted() {
+        getCache();
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(GankViewPagerItem gankViewPagerItem) {
-                        mAdapter.clear();
-                        tabLayout.removeAllTabs();
-                        viewPager.removeAllViews();
-                        for (String str : mItem.mList) {
-                            mAdapter.addFragment(GankFragment.newInstance(str), str);
-                        }
-                        viewPager.setAdapter(mAdapter);
-                        mAdapter.notifyDataSetChanged();
-                        tabLayout.setupWithViewPager(viewPager);
-                        viewPager.setCurrentItem(0);
-                    }
-                });
+        mAdapter.clear();
+        tabLayout.removeAllTabs();
+        viewPager.removeAllViews();
+        for (String str : mItem.mList) {
+            mAdapter.addFragment(GankFragment.newInstance(str), str);
+        }
+        viewPager.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
+        tabLayout.setupWithViewPager(viewPager);
+        viewPager.setCurrentItem(0);
     }
 }

@@ -10,7 +10,36 @@ import tysheng.atlas.app.Constant;
 /**
  * Created by shengtianyang on 16/2/22.
  */
-public final class SPHelper {
+public class SPHelper {
+    private SharedPreferences mSharedPreferences;
+
+    public SPHelper(Context context) {
+        mSharedPreferences = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
+    }
+    public void setSpString(String key, String value) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(key, value);
+        editor.apply();
+    }
+    public String getSpString(String key,String defaultValue){
+        return mSharedPreferences.getString(key,defaultValue);
+    }
+    public void setSpBoolean(String key, Boolean value) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putBoolean(key, value);
+        editor.apply();
+    }
+    public Boolean getSpBoolean(String key, boolean def) {
+        return mSharedPreferences.getBoolean(key, def);
+    }
+    public void setSpInt(String key, @StyleRes int themeResId) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putInt(key, themeResId);
+        editor.apply();
+    }
+    public int getSpInt(String key, int def) {
+        return mSharedPreferences.getInt(key, def);
+    }
 
     /**
      * 设置主题
@@ -18,12 +47,12 @@ public final class SPHelper {
      * @param context
      * @return
      */
-    public static void setTheme(Context context,  @StyleRes int themeResId) {
-        SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
-        sp.edit().putInt("theme", themeResId).commit();
-
-
-    }
+//    public static void setTheme(Context context,  @StyleRes int themeResId) {
+//        SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
+//        sp.edit().putInt("theme", themeResId).apply();
+//
+//
+//    }
 
     /**
      * 得到主题
@@ -33,90 +62,6 @@ public final class SPHelper {
      */
     public static int getTheme(Context context) {
         SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
-        return sp.getInt("theme", R.style.BlueTheme);
+        return sp.getInt(Constant.THEME, R.style.BlueTheme);
     }
-//    /**
-//     * 切换天气模式
-//     * 0 : weathertab
-//     * 1 : weather
-//     */
-//    public static void SwitchWeatherMode(Context context){
-//        SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
-//        if (sp.getInt("weather",0) == 0){
-//            sp.edit().putInt("weather", 1).apply();
-//        } else if (sp.getInt("weather",0) == 1){
-//            sp.edit().putInt("weather", 0).apply();
-//        }
-//
-//    }
-    //weather list mode
-//    public static void setCitySum(Context context,int sum){
-//        SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
-//        sp.edit().putInt("sum",sum).commit();
-//    }
-//    public static int getCitySum(Context context){
-//        SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
-//        return sp.getInt("sum",1);
-//    }
-//
-//    public static void setCities(Context context, ArrayList<String> list){
-//        SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
-//        for (int i = 0; i < list.size() ; i++) {
-//            sp.edit().putString(""+i,list.get(i)).commit();
-//        }
-//    }
-//    public static ArrayList<String> getCities(Context context,int sum){
-//        SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
-//        ArrayList<String> list = new ArrayList<>();
-//        for (int i = 0; i < sum ; i++) {
-//            list.add(sp.getString(""+i,"shaoxing"));
-//        }
-//        return list;
-//    }
-
-
-    //personal info
-//    public static void setAvatar(Context context,String s){
-//        SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
-//        sp.edit().putString("avatar",s).apply();
-//    }
-//    public static String getAvatar(Context context){
-//        SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
-//        return  sp.getString("avatar","res:///"+R.drawable.menu_myavatar);
-//    }
-    public static void setName(Context context,String s){
-        SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
-        sp.edit().putString("name",s).apply();
-    }
-    public static String getName(Context context){
-        SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
-        return  sp.getString("name","Tianyang Sheng");
-    }
-    public static void setEmail(Context context,String s){
-        SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
-        sp.edit().putString("email",s).apply();
-    }
-    public static String getEmail(Context context){
-        SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
-        return  sp.getString("email","tyshengsx@gmail.com");
-    }
-    public static void setIsSetting(Context context,boolean s){
-        SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
-        sp.edit().putBoolean("issetting", s).apply();
-    }
-    public static boolean getIsSetting(Context context){
-        SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
-        return  sp.getBoolean("issetting", false);
-    }
-    public static void setGankTip(Context context,String s){
-        SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
-        sp.edit().putString("gank_tip", s).commit();
-    }
-    public static String getGankTip(Context context){
-        SharedPreferences sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE);
-        return  sp.getString("gank_tip", "on");
-    }
-
-
-
 }

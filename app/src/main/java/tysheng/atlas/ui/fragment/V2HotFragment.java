@@ -64,12 +64,12 @@ public class V2HotFragment extends BaseFragment {
                         .subscribe(new Subscriber<List<V2HotBean>>() {
                             @Override
                             public void onCompleted() {
-
+                                swipe.setRefreshing(false);
                             }
 
                             @Override
                             public void onError(Throwable e) {
-
+                                swipe.setRefreshing(false);
                             }
 
                             @Override
@@ -78,7 +78,6 @@ public class V2HotFragment extends BaseFragment {
                                 mAdapter.notifyDataSetChanged();
                             }
                         }));
-        swipe.setRefreshing(false);
     }
 
 
@@ -100,7 +99,7 @@ public class V2HotFragment extends BaseFragment {
             @Override
             public void onClickListener(View view, int position) {
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(V2ThreadFragment.TAG,data.get(position));
+                bundle.putSerializable(V2ThreadFragment.TAG, data.get(position));
                 V2ThreadFragment v2ThreadFragment = new V2ThreadFragment(data.get(position).getId());
                 v2ThreadFragment.setArguments(bundle);
                 FragmentManager manager = getActivity().getSupportFragmentManager();
@@ -108,7 +107,7 @@ public class V2HotFragment extends BaseFragment {
                 fragment = manager.findFragmentByTag("hot");
                 transaction.hide(fragment)
                         .addToBackStack(null)
-                        .add(R.id.fg_main, v2ThreadFragment, "thread" + position)
+                        .add(R.id.fg_main, v2ThreadFragment, V2ThreadFragment.class.getName())
                         .commitAllowingStateLoss();
             }
         });

@@ -11,6 +11,7 @@ import java.util.concurrent.Executors;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import tysheng.atlas.gank.api.GankApi;
 import tysheng.atlas.hupu.api.ForumApi;
 
 /**
@@ -21,6 +22,7 @@ public class RetrofitSingleton {
     private static Retrofit retrofit = null;
     private static ForumApi forumApi = null;
     private static V2exApi sV2exApi = null;
+    private static GankApi sGankApi = null;
     public static Context context;
 
     public static void init(Context context, String url) {
@@ -57,14 +59,20 @@ public class RetrofitSingleton {
         sV2exApi = retrofit.create(V2exApi.class);
         return getV2exApi(context, url);
     }
-
-    public static Retrofit getInstance(Context context, String url) {
-        if (retrofit == null) {
-            init(context, url);
-            return retrofit;
-        }
-        return retrofit;
+    public static GankApi getGankApi(Context context, String url) {
+        if (sGankApi != null) return sGankApi;
+        init(context, url);
+        sGankApi = retrofit.create(GankApi.class);
+        return getGankApi(context, url);
     }
+
+//    public static Retrofit getInstance(Context context, String url) {
+//        if (retrofit == null) {
+//            init(context, url);
+//            return retrofit;
+//        }
+//        return retrofit;
+//    }
 
 }
 

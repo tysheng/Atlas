@@ -58,7 +58,7 @@ public class MainActivity extends BaseActivity
         v2HotFragment = V2HotFragment.getInstance(V2HotFragment.HOT);
         forumFragment = ForumFragment.getInstance();
         currentFragment = v2HotFragment;
-        jumpFragment(null, v2HotFragment, R.id.fg_main, "hot");
+        jumpFragment(fragmentManager,null, v2HotFragment, R.id.fg_main, "hot");
         if (!GankUtils.isNetworkConnected(actContext))
             showSnackbar(cl, "貌似没有网络连接...");
     }
@@ -73,13 +73,14 @@ public class MainActivity extends BaseActivity
         TextView email = (TextView) headerView.findViewById(R.id.tv_email);
         navigationView.getMenu().findItem(R.id.nav_node).setIcon(GankUtils.getWeekIcon());
 
-//        imageView.setImageURI(Uri.parse(SPHelper.getAvatar(actContext)), null);
         if (ACache.get(actContext).getAsBitmap(Constant.AVATAR_BITMAP) == null) {
             imageView.setImageDrawable(getResources().getDrawable(R.drawable.menu_myavatar));
         } else
             imageView.setImageBitmap(ACache.get(actContext).getAsBitmap(Constant.AVATAR_BITMAP));
-        name.setText(SPHelper.getName(actContext));
-        email.setText(SPHelper.getEmail(actContext));
+        SPHelper spHelper = new SPHelper(actContext);
+
+        name.setText(spHelper.getSpString(Constant.USER_NAME,"Tianyang Sheng"));
+        email.setText(spHelper.getSpString(Constant.USER_EMAIL,"tyshengsx@gmail.com"));
 
     }
 
@@ -101,7 +102,7 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         switch (id) {
             case R.id.nav_hot:
                 if (v2HotFragment == null)

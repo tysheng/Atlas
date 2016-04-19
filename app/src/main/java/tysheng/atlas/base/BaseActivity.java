@@ -15,8 +15,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import butterknife.ButterKnife;
-import tysheng.atlas.R;
 import tysheng.atlas.utils.SPHelper;
 
 /**
@@ -31,10 +32,35 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTheme(SPHelper.getTheme(this));
         setContentView(getLayoutId());
+        if (savedInstanceState != null) {
+//            restoreFragments();
+            getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
         actContext = this;
         ButterKnife.bind(this);
         initData();
 
+
+    }
+
+    private void restoreFragments() {
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        if (fragments != null && fragments.size() > 0) {
+            boolean showFlag = false;
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            for (int i = fragments.size() - 1; i >= 0; i--) {
+                Fragment fragment = fragments.get(i);
+                if (fragment != null) {
+                    if (!showFlag) {
+                        ft.show(fragments.get(i));
+                        showFlag = true;
+                    } else {
+                        ft.hide(fragments.get(i));
+                    }
+                }
+            }
+            ft.commit();
+        }
     }
 
 
@@ -77,10 +103,18 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param tag
      */
     protected void jumpFragment(Fragment from, Fragment to, int id, String tag) {
+        FragmentManager manager = getSupportFragmentManager();
+        initJumpFragment(manager, from, to, id, tag);
+    }
+
+    protected void jumpFragment(FragmentManager manager, Fragment from, Fragment to, int id, String tag) {
+        initJumpFragment(manager, from, to, id, tag);
+    }
+
+    private void initJumpFragment(FragmentManager manager, Fragment from, Fragment to, int id, String tag) {
         if (to == null) {
             return;
         }
-        FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         if (from == null) {
             transaction.add(id, to, tag);
@@ -92,7 +126,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                 transaction.add(id, to, tag);
             }
         }
-        transaction.setCustomAnimations(0, 0, R.anim.abc_fade_in, R.anim.abc_fade_out)
+        transaction
+//                .setCustomAnimations(0, 0, R.anim.abc_fade_in, R.anim.abc_fade_out)
                 .commitAllowingStateLoss();
     }
 
@@ -104,7 +139,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         toast.show();
     }
-    protected void showSnackbar(View view, String msg){
+
+    protected void showSnackbar(View view, String msg) {
         Snackbar snackbar = Snackbar.make(view, msg, Snackbar.LENGTH_SHORT);
         ViewGroup viewGroup = (ViewGroup) snackbar.getView();
         for (int i = 0; i < viewGroup.getChildCount(); i++) {

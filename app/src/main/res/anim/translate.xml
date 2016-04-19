@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<translate xmlns:android="http://schemas.android.com/apk/res/android"
+           android:duration="300"
+           android:fromXDelta="0"
+           android:fromYDelta="0"
+           android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+           android:repeatCount="-1"
+           android:repeatMode="reverse"
+           android:toXDelta="30%"
+           android:toYDelta="0"/>
+
+    <!--<translate>可以实现位置移动的动画效果，可以是垂直方向的移动，也可以是水平方向的移动。
+    坐标的值可以有三种格式：从-100到100，以"%"结束，表示相对于View本身的百分比位置；
+    如果以"%p"结束，表示相对于View的父View的百分比位置；如果没有任何后缀，表示相对于View本身具体的像素值。主要的属性如下：-->
+
+    <!--android:duration 动画从开始到结束持续的时长，单位为毫秒-->
+    <!--android:fromXDelta 起始位置的X坐标的偏移量-->
+    <!--android:toXDelta 结束位置的X坐标的偏移量-->
+    <!--android:fromYDelta 起始位置的Y坐标的偏移量-->
+    <!--android:toYDelta 结束位置的Y坐标的偏移量-->
+    <!--看示例吧，以下代码实现的是从左到右的移动效果，起始位置为相对于控件本身-100%的位置，
+    即在控件左边，与控件本身宽度一致的位置；结束位置为相对于父控件100%的位置，即会移出父控件右边缘的位置。-->

@@ -40,7 +40,7 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
     Intent intent;
     @Bind(R.id.tl_setting)
     Toolbar tbSetting;
-
+    SPHelper mSPHelper;
     ACache mCache;
 
     @Override
@@ -54,13 +54,11 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-//                            SPHelper.setAvatar(actContext, uri);
-                            SPHelper.setIsSetting(actContext, true);
-
+                            mSPHelper.setSpBoolean(Constant.IS_SETTING,true);
                             Glide.with(actContext)
                                     .loadFromMediaStore(data.getData())
                                     .asBitmap()
-                                    .into(new SimpleTarget<Bitmap>(75,75) {
+                                    .into(new SimpleTarget<Bitmap>(75, 75) {
                                         @Override
                                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                                             mCache.put(Constant.AVATAR_BITMAP, resource, ACache.TIME_DAY * 30);
@@ -78,25 +76,25 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
         String s = String.format("#%06X", (0xFFFFFF & color));
         switch (s) {
             case "#3C515C":
-                SPHelper.setTheme(SettingActivity.this, R.style.YellowTheme);
+                mSPHelper.getSpInt(Constant.THEME, R.style.YellowTheme);
                 break;
             case "#F44336":
-                SPHelper.setTheme(SettingActivity.this, R.style.RedTheme);
+                mSPHelper.getSpInt(Constant.THEME, R.style.RedTheme);
                 break;
             case "#202020":
-                SPHelper.setTheme(SettingActivity.this, R.style.BlackTheme);
+                mSPHelper.getSpInt(Constant.THEME, R.style.BlackTheme);
                 break;
             case "#4CAF50":
-                SPHelper.setTheme(SettingActivity.this, R.style.GreenTheme);
+                mSPHelper.getSpInt(Constant.THEME, R.style.GreenTheme);
                 break;
             case "#9C27B0":
-                SPHelper.setTheme(SettingActivity.this, R.style.PurpleTheme);
+                mSPHelper.getSpInt(Constant.THEME, R.style.PurpleTheme);
                 break;
             case "#F06292":
-                SPHelper.setTheme(SettingActivity.this, R.style.PinkTheme);
+                mSPHelper.getSpInt(Constant.THEME, R.style.PinkTheme);
                 break;
             default:
-                SPHelper.setTheme(SettingActivity.this, R.style.BlueTheme);
+                mSPHelper.getSpInt(Constant.THEME, R.style.BlueTheme);
                 break;
         }
 
@@ -119,6 +117,7 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
         getFragmentManager().beginTransaction()
                 .replace(R.id.fl, new MyPreferenceFragment())
                 .commit();
+        mSPHelper = new SPHelper(actContext);
     }
 
 
@@ -136,19 +135,18 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         exit();
     }
 
     private void exit() {
-        if (!SPHelper.getIsSetting(actContext))
+        if (!mSPHelper.getSpBoolean(Constant.IS_SETTING,false))
             finish();
         else
             jumpIntent();
     }
 
     private void jumpIntent() {
-        SPHelper.setIsSetting(actContext, false);
+        mSPHelper.setSpBoolean(Constant.IS_SETTING,false);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
@@ -166,25 +164,24 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
                 new MaterialDialog.Builder(this)
                         .title("输入你的姓名")
                         .inputRange(1, 15)
-                        .positiveText("OK")
                         .input("", "", false, new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                                SPHelper.setName(actContext, input.toString());
-                                SPHelper.setIsSetting(actContext, true);
+                                mSPHelper.setSpString(Constant.USER_NAME,input.toString());
+                                mSPHelper.setSpBoolean(Constant.IS_SETTING,true);
                             }
                         }).show();
+
                 break;
             case "email":
                 new MaterialDialog.Builder(this)
                         .title("输入你的邮箱")
                         .inputRange(1, 15)
-                        .positiveText("OK")
                         .input("", "", false, new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                                SPHelper.setEmail(actContext, input.toString());
-                                SPHelper.setIsSetting(actContext, true);
+                                mSPHelper.setSpString(Constant.USER_EMAIL,input.toString());
+                                mSPHelper.setSpBoolean(Constant.IS_SETTING,true);
                             }
                         }).show();
                 break;

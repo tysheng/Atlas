@@ -44,8 +44,10 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import tysheng.atlas.R;
+import tysheng.atlas.app.Constant;
 import tysheng.atlas.base.BaseActivity;
 import tysheng.atlas.gank.utils.GankUtils;
+import tysheng.atlas.ui.fragment.MyPreferenceFragment;
 import tysheng.atlas.utils.SPHelper;
 import tysheng.atlas.utils.phtodraweeview.OnViewTapListener;
 import tysheng.atlas.utils.phtodraweeview.PhotoDraweeView;
@@ -63,9 +65,11 @@ public class PictureActivity extends BaseActivity {
     private String mImageUrl;
     private String mImageTitle;
     protected boolean mIsHidden = false;
+
     @Override
     public void initData() {
-        if (SPHelper.getGankTip(actContext).equals("on"))
+        SPHelper spHelper = new SPHelper(actContext);
+        if (spHelper.getSpString(Constant.GANK_TIP,MyPreferenceFragment.ON).equals(MyPreferenceFragment.ON))
             initSnackBar();
         parseIntent();
         initToolbar();

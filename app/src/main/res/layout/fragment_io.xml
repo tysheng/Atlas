@@ -7,16 +7,31 @@
    <Button
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       android:text="button"
-       android:id="@+id/button"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv"/>
+       android:text="bind"
 
-    <ImageView
+       android:id="@+id/bind"/>
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="unbind"
+
+        android:id="@+id/unbind"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="start"
+
+        android:id="@+id/start"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="stop"
+        android:id="@+id/stop"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="send"
         android:id="@+id/circle"/>
 
 </LinearLayout>

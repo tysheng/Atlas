@@ -7,6 +7,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 
 import tysheng.atlas.R;
+import tysheng.atlas.app.Constant;
 import tysheng.atlas.ui.SettingActivity;
 import tysheng.atlas.utils.SPHelper;
 
@@ -15,22 +16,26 @@ import tysheng.atlas.utils.SPHelper;
  */
 public class MyPreferenceFragment extends PreferenceFragment {
     private FragmentCallback callback;
+    private SPHelper mSPHelper;
+    public static final String ON = "on";
+    public static final String OFF = "off";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings);
         callback = (SettingActivity) getActivity();
+        mSPHelper = new SPHelper(getActivity());
     }
 
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         String key = preference.getKey();
-        if (key.equals("gank_tip")) {
+        if (key.equals(Constant.GANK_TIP)) {
             if (((CheckBoxPreference)preference).isChecked())
-                SPHelper.setGankTip(getActivity(), "on");
+                mSPHelper.setSpString(ON,ON);
             else
-                SPHelper.setGankTip(getActivity(), "off");
+                mSPHelper.setSpString(OFF,ON);
         } else
             callback.func1(key);
         return super.onPreferenceTreeClick(preferenceScreen, preference);

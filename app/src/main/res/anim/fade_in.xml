@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<alpha xmlns:android="http://schemas.android.com/apk/res/android"
+       android:duration="1000"
+       android:fromAlpha="0.0"
+       android:toAlpha="1.0"
+    />
+
+    <!--<alpha>可以实现透明度渐变的动画效果，也就是淡入淡出的效果，可通过设置下面三个属性来设置淡入或淡出效果：-->
+
+    <!--android:duration 动画从开始到结束持续的时长，单位为毫秒-->
+    <!--android:fromAlpha 动画开始时的透明度，0.0为全透明，1.0为不透明，默认为1.0-->
+    <!--android:toAlpha 动画结束时的透明度，0.0为全透明，1.0为不透明，默认为1.0-->
+    <!--当设置开始时透明度为0.0，结束时为1.0，就能实现淡入效果；相反，当设置开始时透明度为1.0，结束时为0.0，
+    那就能实现淡出效果。示例代码如下：-->

@@ -37,6 +37,8 @@
         <item name="themeColor">@color/pink</item>
     </style>
 
+
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -66,5 +68,8 @@
     <style name="CollapsingToolbarTitleStyle"
         parent="@android:style/TextAppearance">
         <item name="android:textColor">@android:color/transparent</item>
+    </style>
+    <style name="StyTextInputLayout" parent="AppTheme">
+        <item name="colorAccent">@color/colorPrimary</item>
     </style>
 </resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -21,23 +22,65 @@
             android:layout_height="wrap_content"
             android:text="stop"/>
 
-        <TextView
+        <Button
             android:id="@+id/tv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="pause"/>
+
+        <Button
+            android:id="@+id/go_on"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="GO ON"/>
 
         <ImageView
             android:id="@+id/imageView"
+            android:layout_width="70dp"
+            android:src="@drawable/menu_myavatar"
+            android:layout_height="70dp"
+            android:layout_gravity="center_horizontal"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            app:errorEnabled="true">
 
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="1234567890qwertyuiopasdfghjklzxcvbnm"
+                android:hint="请指定账号"
+                android:saveEnabled="true"/>
 
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:theme="@style/StyTextInputLayout"
+            app:errorEnabled="true">
+
+            <EditText
+                android:id="@+id/editText2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="请指定密码"
+                android:saveEnabled="true"
+                android:inputType="numberPassword"/>
+
+        </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
     <ViewStub
-        android:layout_gravity="center"
         android:id="@+id/viewStub"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout="@layout/viewstub_progressbar"/>
 </FrameLayout>
