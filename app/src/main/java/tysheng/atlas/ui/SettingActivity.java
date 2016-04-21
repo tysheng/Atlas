@@ -46,11 +46,10 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
     @Override
     protected void onActivityResult(final int requestCode, int resultCode, final Intent data) {
         if (resultCode == RESULT_OK && requestCode == RESULT_LOAD_IMAGE) {
-            final String uri = data.getData().toString();
             new MaterialDialog.Builder(this)
                     .title("是否更改头像")
-                    .positiveText("OK")
-                    .negativeText("No")
+                    .positiveText("Done")
+                    .negativeText("Cancel")
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -164,6 +163,8 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
                 new MaterialDialog.Builder(this)
                         .title("输入你的姓名")
                         .inputRange(1, 15)
+                        .positiveText("Done")
+                        .negativeText("Cancel")
                         .input("", "", false, new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
@@ -176,6 +177,8 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
             case "email":
                 new MaterialDialog.Builder(this)
                         .title("输入你的邮箱")
+                        .positiveText("Done")
+                        .negativeText("Cancel")
                         .inputRange(1, 15)
                         .input("", "", false, new MaterialDialog.InputCallback() {
                             @Override

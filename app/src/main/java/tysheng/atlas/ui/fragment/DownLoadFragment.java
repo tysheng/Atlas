@@ -28,6 +28,7 @@ import tysheng.atlas.base.BaseFragment;
 import tysheng.atlas.bean.FileInfo;
 import tysheng.atlas.service.DownloadService;
 import tysheng.atlas.service.MyService;
+import tysheng.atlas.utils.kbv.KenBurnsView;
 
 /**
  * Created by shengtianyang on 16/4/16.
@@ -35,7 +36,8 @@ import tysheng.atlas.service.MyService;
 public class DownLoadFragment extends BaseFragment {
     @Bind(R.id.imageView)
     ImageView imageView;
-
+    @Bind(R.id.kView)
+    KenBurnsView mKenBurnsView;
     View view1;
     FileInfo mFileInfo;
     DownloadService mService;
@@ -91,7 +93,7 @@ public class DownLoadFragment extends BaseFragment {
         mTextWatcher = new MyTextWatcher(mEditText2, mTextLayout2);
         mEditText.addTextChangedListener(new MyTextWatcher(mEditText, mTextLayout));
         mEditText2.addTextChangedListener(mTextWatcher);
-
+        mKenBurnsView.setImageResource(R.drawable.screen);
     }
 
     class MyTextWatcher implements TextWatcher {

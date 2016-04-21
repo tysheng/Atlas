@@ -25,12 +25,12 @@
                 android:id="@+id/tabLayout"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="24dp"
+                android:layout_height="30dp"
                 android:background="?attr/themeColor"
                 style="@style/MyTabLayout"/>
             <ImageView
                 android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_height="30dp"
                 android:id="@+id/imageView"
                 android:background="?attr/themeColor"
                 android:src="@drawable/ic_mode_edit_24dp"/>

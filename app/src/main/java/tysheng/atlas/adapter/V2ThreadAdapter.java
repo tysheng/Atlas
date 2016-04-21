@@ -1,5 +1,6 @@
 package tysheng.atlas.adapter;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -46,7 +47,18 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //    public void setOnItemClickListener(OnItemClickListener listener) {
 //        this.onItemClickListener = listener;
 //    }
-
+    /**
+     * 上划动画效果
+     */
+    private void showItemAnimation(VHItem holder, int position) {
+        if (position > lastPosition) {
+            lastPosition = position;
+            ObjectAnimator.ofFloat(holder.mView, "translationY", 1f * holder.mView.getHeight(), 0f)
+                    .setDuration(500)
+                    .start();
+        }
+    }
+    int lastPosition = 0;
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_HEADER) {
@@ -81,6 +93,7 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             vhItem.draweeReply.setImageURI(Uri.parse("http:" + data.get(position - 1).getMember().getAvatar_normal()));
             vhItem.tvReplyTime.setText(TimeStamp.getFinalTimeDiffrence(data.get(position - 1).getLast_modified()));
             vhItem.tvReplyFloor.setText(position + "");
+            showItemAnimation(vhItem,position);
         }
 
 
@@ -121,9 +134,10 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView tvReplyContent;
         @Bind(R.id.tv_reply_floor)
         TextView tvReplyFloor;
-
+        View mView;
         public VHItem(View itemView) {
             super(itemView);
+            mView = itemView;
             ButterKnife.bind(this, itemView);
         }
 

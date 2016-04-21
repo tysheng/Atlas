@@ -1,37 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-   <Button
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:text="bind"
-
-       android:id="@+id/bind"/>
-    <Button
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="unbind"
+        android:orientation="vertical">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:text="bind"
 
-        android:id="@+id/unbind"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="start"
+            android:id="@+id/bind"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:text="unbind"
 
-        android:id="@+id/start"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="stop"
-        android:id="@+id/stop"/>
+            android:id="@+id/unbind"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:text="start"
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="send"
-        android:id="@+id/circle"/>
+            android:id="@+id/start"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:text="stop"
+            android:id="@+id/stop"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="send"
+            android:id="@+id/circle"/>
+    </LinearLayout>
+</ScrollView>
+
 
 </LinearLayout>

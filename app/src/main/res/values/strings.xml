@@ -66,4 +66,6 @@
     <string name="title_activity_webview" />
 
     <string name="on_error">貌似出错了:(</string>
+    <string name="user_name">Tianyang Sheng</string>
+    <string name="user_email">tyshengsx@gmail.com</string>
 </resources>

@@ -104,14 +104,14 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected void jumpFragment(Fragment from, Fragment to, int id, String tag) {
         FragmentManager manager = getSupportFragmentManager();
-        initJumpFragment(manager, from, to, id, tag);
+        doJumpFragment(manager, from, to, id, tag);
     }
 
     protected void jumpFragment(FragmentManager manager, Fragment from, Fragment to, int id, String tag) {
-        initJumpFragment(manager, from, to, id, tag);
+        doJumpFragment(manager, from, to, id, tag);
     }
 
-    private void initJumpFragment(FragmentManager manager, Fragment from, Fragment to, int id, String tag) {
+    private void doJumpFragment(FragmentManager manager, Fragment from, Fragment to, int id, String tag) {
         if (to == null) {
             return;
         }

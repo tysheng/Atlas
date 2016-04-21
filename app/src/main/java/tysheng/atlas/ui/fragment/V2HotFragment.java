@@ -3,11 +3,10 @@ package tysheng.atlas.ui.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -52,9 +51,11 @@ public class V2HotFragment extends BaseFragment {
     public static V2HotFragment getInstance(String url) {
         return new V2HotFragment(url);
     }
-
     private String url;
 
+    public void show(){
+        Log.d("sty","show");
+    }
     private void getHotThread(String mUrl) {
         subscriber.add(
                 RetrofitSingleton.getV2exApi(frmContext, V2exApi.BASE_URL)
@@ -100,19 +101,15 @@ public class V2HotFragment extends BaseFragment {
             public void onClickListener(View view, int position) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(V2ThreadFragment.TAG, data.get(position));
-                V2ThreadFragment v2ThreadFragment = new V2ThreadFragment(data.get(position).getId());
+                V2ThreadFragment v2ThreadFragment = V2ThreadFragment.newInstance(data.get(position).getId());
                 v2ThreadFragment.setArguments(bundle);
-                FragmentManager manager = getActivity().getSupportFragmentManager();
-                FragmentTransaction transaction = manager.beginTransaction();
-                fragment = manager.findFragmentByTag("hot");
-                transaction.hide(fragment)
-                        .addToBackStack(null)
-                        .add(R.id.fg_main, v2ThreadFragment, V2ThreadFragment.class.getName())
-                        .commitAllowingStateLoss();
+                FragmentManager manager = getFragmentManager();
+                fragment = manager.findFragmentByTag(V2HotFragment.class.getName());
+                addFragment(manager,fragment,v2ThreadFragment,R.id.fg_main,
+                        V2ThreadFragment.class.getName());
             }
         });
         rvV2.setLayoutManager(new LinearLayoutManager(frmContext));
-        rvV2.setItemAnimator(new DefaultItemAnimator());
         rvV2.setAdapter(mAdapter);
     }
 

@@ -1,6 +1,8 @@
 package tysheng.atlas.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -27,6 +29,7 @@ import tysheng.atlas.base.BaseFragment;
 import tysheng.atlas.bean.HeaderBean;
 import tysheng.atlas.bean.V2HotBean;
 import tysheng.atlas.bean.V2ReplyBean;
+import tysheng.atlas.ui.MainActivity;
 import tysheng.atlas.utils.ItemDivider;
 
 
@@ -37,17 +40,32 @@ public class V2ThreadFragment extends BaseFragment {
     public static final String TAG = V2ThreadFragment.class.getSimpleName();
     @Bind(R.id.rc_thread)
     RecyclerView rcThread;
+    private FragmentCallback callback;
 
     public V2ThreadFragment() {
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        callback = (MainActivity) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        callback = null;
     }
 
     private int id;
     private V2ThreadAdapter adapter;
     private Bundle bundle;
-    private List<V2ReplyBean> data;
 
     public V2ThreadFragment(int id) {
         this.id = id;
+    }
+    public static V2ThreadFragment newInstance(int id){
+        return new V2ThreadFragment(id);
     }
 
     public HeaderBean getHeader() {
@@ -67,13 +85,13 @@ public class V2ThreadFragment extends BaseFragment {
     }
 
     private void getReply() {
-        data = new ArrayList<>();
-        adapter = new V2ThreadAdapter(frmContext, data, getHeader());
+        adapter = new V2ThreadAdapter(frmContext, new ArrayList<V2ReplyBean>(), getHeader());
         rcThread.setAdapter(adapter);
         rcThread.setLayoutManager(new LinearLayoutManager(frmContext));
         rcThread.addItemDecoration(new ItemDivider(frmContext));
         getData();
     }
+
     private void getData() {
         subscriber.add(
                 RetrofitSingleton.getV2exApi(MyApplication.getInstance(), V2exApi.BASE_URL)
@@ -110,9 +128,16 @@ public class V2ThreadFragment extends BaseFragment {
         switch (item.getItemId()) {
             case R.id.action_session:
                 sendToWx(bundle.getString("url"), bundle.getString("title"), bundle.getString("content"), 0);
+                callback.func1("");
+                getFragmentManager().popBackStack();
                 return true;
             case R.id.action_timeline:
                 sendToWx(bundle.getString("url"), bundle.getString("title"), bundle.getString("content"), 1);
+                FragmentManager manager = getFragmentManager();
+                addFragment(manager,
+                        manager.findFragmentByTag(V2ThreadFragment.class.getName()),
+                        new ServiceAndBroadcastFragment(),R.id.fg_main,
+                        ServiceAndBroadcastFragment.class.getName());
                 return true;
             case R.id.action_favorite:
                 sendToWx(bundle.getString("url"), bundle.getString("title"), bundle.getString("content"), 2);

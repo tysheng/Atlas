@@ -90,12 +90,12 @@ public class ForumFragment extends BaseFragment {
             public void onClickListener(View view, int position) {
                 FragmentManager manager = getActivity().getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
-                forumFragment = manager.findFragmentByTag("forum");
+                forumFragment = manager.findFragmentByTag(ForumFragment.class.getName());
                 WebviewFragment webviewFragment = new WebviewFragment("http://bbs.hupu.com/"+threadData.data.get(position).tid+".html");
                 transaction.hide(forumFragment)
                         .addToBackStack(null)
                         .setCustomAnimations(0, 0, R.anim.abc_fade_in, R.anim.abc_fade_out)
-                        .add(R.id.fg_main, webviewFragment, "nodeweb" + position)
+                        .add(R.id.fg_main, webviewFragment, WebviewFragment.class.getName())
                         .commitAllowingStateLoss();
             }
         });
