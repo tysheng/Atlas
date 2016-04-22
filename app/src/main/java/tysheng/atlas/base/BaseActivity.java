@@ -34,7 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(getLayoutId());
         if (savedInstanceState != null) {
 //            restoreFragments();
-            getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
         actContext = this;
         ButterKnife.bind(this);

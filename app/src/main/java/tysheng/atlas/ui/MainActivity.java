@@ -64,6 +64,7 @@ public class MainActivity extends BaseActivity
         jumpFragment(null, v2HotFragment, R.id.fg_main, V2HotFragment.class.getName());
         if (!GankUtils.isNetworkConnected(actContext))
             showSnackbar(cl, "貌似没有网络连接...");
+
     }
 
     @Override
@@ -85,8 +86,8 @@ public class MainActivity extends BaseActivity
             imageView.setImageDrawable(getResources().getDrawable(R.drawable.menu_myavatar));
         } else
             imageView.setImageBitmap(ACache.get(actContext).getAsBitmap(Constant.AVATAR_BITMAP));
-        SPHelper spHelper = new SPHelper(actContext);
 
+        SPHelper spHelper = new SPHelper(actContext);
         name.setText(spHelper.getSpString(Constant.USER_NAME,getString(R.string.user_name)));
         email.setText(spHelper.getSpString(Constant.USER_EMAIL,getString(R.string.user_email)));
 

@@ -41,7 +41,6 @@ public class ServiceAndBroadcastFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        //判断是否正在运行
 //        Glide.with(frmContext)
 //                .load("http://i3.hoopchina.com.cn/blogfile/201604/04/BbsImg145974633089957_339x476.gif")
 //                .asGif()

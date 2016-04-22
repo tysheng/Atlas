@@ -18,4 +18,6 @@
     <color name="transparent">#00000000</color>
     <color name="smart_tab">#3C515C</color>
     <color name="light_blue">#B3E5FC</color>
+    <color name="grey_500">#9e9e9e</color>
+    <color name="grey_800">#424242</color>
 </resources>

@@ -13,12 +13,13 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
 public class MyApplication extends Application {
-//    SQLiteDatabase db;
+    //    SQLiteDatabase db;
 //    DaoMaster daoMaster;
 //    public static DaoSession daoSession;
     private static IWXAPI api;
     private static MyApplication instance;
     private RefWatcher refWatcher;
+
 
     @Override
     public void onCreate() {
@@ -32,6 +33,7 @@ public class MyApplication extends Application {
 
         Realm.setDefaultConfiguration(new RealmConfiguration.Builder(this).build());
     }
+
     public static RefWatcher getRefWatcher(Context context) {
         MyApplication application = (MyApplication) context.getApplicationContext();
         return application.refWatcher;

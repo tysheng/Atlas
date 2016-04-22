@@ -2,14 +2,14 @@ package tysheng.atlas.gank.adapter;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.bumptech.glide.Glide;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -70,7 +70,9 @@ public class GankDailyAdapter extends RecyclerView.Adapter<GankDailyAdapter.MyVi
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        holder.image.setImageURI(Uri.parse(mItem.results.get(position).url));
+        Glide.with(context)
+                .load(mItem.results.get(position).url)
+                .into(holder.image);
         holder.tvDate.setText(mItem.results.get(position).formatData());
         if (onItemClickListener != null) {
             holder.image.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +112,7 @@ public class GankDailyAdapter extends RecyclerView.Adapter<GankDailyAdapter.MyVi
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.image)
-        SimpleDraweeView image;
+        ImageView image;
         @Bind(R.id.tv_date)
         TextView tvDate;
         View mView;

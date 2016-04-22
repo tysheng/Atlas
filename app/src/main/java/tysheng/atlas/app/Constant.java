@@ -30,11 +30,12 @@ public interface Constant {
 
     //SharedPreferences
     String AVATAR_BITMAP = "avatar_bitmap";
-    String GANK_TIP = "GANK_TIP";
+    String GANK_TIP = "gank_tip";
     String USER_NAME = "USER_NAME";
     String USER_EMAIL = "USER_EMAIL";
     String IS_SETTING = "IS_SETTING";
     String THEME = "THEME";
+    String IS_NIGHT = "IS_NIGHT";
 }
 /*
         最热主题

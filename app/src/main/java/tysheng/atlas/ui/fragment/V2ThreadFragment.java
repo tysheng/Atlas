@@ -30,7 +30,6 @@ import tysheng.atlas.bean.HeaderBean;
 import tysheng.atlas.bean.V2HotBean;
 import tysheng.atlas.bean.V2ReplyBean;
 import tysheng.atlas.ui.MainActivity;
-import tysheng.atlas.utils.ItemDivider;
 
 
 /**
@@ -88,7 +87,6 @@ public class V2ThreadFragment extends BaseFragment {
         adapter = new V2ThreadAdapter(frmContext, new ArrayList<V2ReplyBean>(), getHeader());
         rcThread.setAdapter(adapter);
         rcThread.setLayoutManager(new LinearLayoutManager(frmContext));
-        rcThread.addItemDecoration(new ItemDivider(frmContext));
         getData();
     }
 

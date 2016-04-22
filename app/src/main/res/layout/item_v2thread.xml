@@ -2,7 +2,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="#eeeeee"
     android:padding="13dp">
 
     <com.facebook.drawee.view.SimpleDraweeView
@@ -21,15 +20,13 @@
             android:id="@+id/tv_reply_author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingRight="10dp"
-            android:textColor="@color/black" />
+            android:paddingRight="10dp"/>
 
         <TextView
             android:id="@+id/tv_reply_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/tv_reply_author"
-            android:textColor="#aaa" />
+            android:layout_toRightOf="@id/tv_reply_author"/>
 
         <TextView
             android:id="@+id/tv_reply_floor"
@@ -45,7 +42,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_reply_author"
             android:paddingTop="10dp"
-            android:textColor="@color/black"
             android:textSize="7pt" />
 
 

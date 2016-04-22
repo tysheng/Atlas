@@ -75,25 +75,25 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
         String s = String.format("#%06X", (0xFFFFFF & color));
         switch (s) {
             case "#3C515C":
-                mSPHelper.getSpInt(Constant.THEME, R.style.YellowTheme);
+                mSPHelper.setSpInt(Constant.THEME, R.style.YellowTheme);
                 break;
             case "#F44336":
-                mSPHelper.getSpInt(Constant.THEME, R.style.RedTheme);
+                mSPHelper.setSpInt(Constant.THEME, R.style.RedTheme);
                 break;
             case "#202020":
-                mSPHelper.getSpInt(Constant.THEME, R.style.BlackTheme);
+                mSPHelper.setSpInt(Constant.THEME, R.style.BlackTheme);
                 break;
             case "#4CAF50":
-                mSPHelper.getSpInt(Constant.THEME, R.style.GreenTheme);
+                mSPHelper.setSpInt(Constant.THEME, R.style.GreenTheme);
                 break;
             case "#9C27B0":
-                mSPHelper.getSpInt(Constant.THEME, R.style.PurpleTheme);
+                mSPHelper.setSpInt(Constant.THEME, R.style.PurpleTheme);
                 break;
             case "#F06292":
-                mSPHelper.getSpInt(Constant.THEME, R.style.PinkTheme);
+                mSPHelper.setSpInt(Constant.THEME, R.style.PinkTheme);
                 break;
             default:
-                mSPHelper.getSpInt(Constant.THEME, R.style.BlueTheme);
+                mSPHelper.setSpInt(Constant.THEME, R.style.BlueTheme);
                 break;
         }
 
