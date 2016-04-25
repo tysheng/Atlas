@@ -57,7 +57,7 @@ public class GankCategoryAdapter
     @Override
     public long getHeaderId(int position) {
         if (data.get(position) != null)
-            return data.get(position).getPublish();
+            return data.get(position).getCreated();
         return 0;
     }
 
@@ -68,18 +68,9 @@ public class GankCategoryAdapter
 
     @Override
     public void onBindHeaderViewHolder(SectionHeaderView viewHolder, int position) {
-        if (data.get(position) != null ){
-//            if (data.get(position).type.equals("福利")){
-//                viewHolder.tv.setVisibility(View.GONE);
-//                return;
-//            }
-            viewHolder.tv.setText(formatTime(data.get(position).publishedAt.substring(5, 10)));
+        if (data.get(position) != null) {
+            viewHolder.tv.setText(data.get(position).formatData());
         }
-    }
-
-    public String formatTime(String str) {
-        String[] strings = str.split("-");
-        return strings[0].replace("0", "") + "月" + strings[1].replace("0", "") + "日";
     }
 
     public interface OnItemClickListener {

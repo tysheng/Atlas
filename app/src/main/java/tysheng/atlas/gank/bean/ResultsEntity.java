@@ -19,12 +19,13 @@ public class ResultsEntity implements Serializable{
     public boolean used;
     public String who;
     public String formatData(){
-        String monthAndDay = publishedAt.substring(5,10);
+        String monthAndDay = createdAt.substring(5,10);
         String[] strings = monthAndDay.split("-");
-        return strings[0].replace("0", "") + "月" + strings[1].replace("0", "") + "日";
+        String str1 = strings[1].startsWith("0") ? strings[1].replace("0", "") : strings[1];
+        return strings[0].replace("0", "") + "月" + str1 + "日";
     }
 
-    public long getPublish() {
-        return GankUtils.getDataTime(publishedAt);
+    public long getCreated() {
+        return GankUtils.getDataTime(createdAt);
     }
 }

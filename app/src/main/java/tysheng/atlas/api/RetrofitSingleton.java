@@ -7,7 +7,9 @@ import com.google.gson.GsonBuilder;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -24,20 +26,32 @@ public class RetrofitSingleton {
     private static V2exApi sV2exApi = null;
     private static GankApi sGankApi = null;
     public static Context context;
+    public static final int TIME_MAX = 6;
 
     public static void init(Context context, String url) {
 
         Executor executor = Executors.newCachedThreadPool();
 
+
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.readTimeout(TIME_MAX, TimeUnit.SECONDS);
+        builder.connectTimeout(TIME_MAX, TimeUnit.SECONDS);
+        builder.writeTimeout(TIME_MAX, TimeUnit.SECONDS);
+        OkHttpClient client = builder.build();
+
         Gson gson = new GsonBuilder().create();
 
-        retrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create(gson))
+        retrofit = new Retrofit.Builder()
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl(url)
                 .callbackExecutor(executor)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
 
     }
+
+
 
     public static WeatherApi getWeatherApi(Context context, String url) {
         if (weatherApi != null) return weatherApi;
@@ -59,6 +73,7 @@ public class RetrofitSingleton {
         sV2exApi = retrofit.create(V2exApi.class);
         return getV2exApi(context, url);
     }
+
     public static GankApi getGankApi(Context context, String url) {
         if (sGankApi != null) return sGankApi;
         init(context, url);

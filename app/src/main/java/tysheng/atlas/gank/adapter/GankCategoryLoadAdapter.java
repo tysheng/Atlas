@@ -36,7 +36,7 @@ public class GankCategoryLoadAdapter
     @Override
     public long getHeaderId(int position) {
         if (getItem(position) != null)
-            return getItem(position).getPublish();
+            return getItem(position).getCreated();
         return 0;
     }
 
