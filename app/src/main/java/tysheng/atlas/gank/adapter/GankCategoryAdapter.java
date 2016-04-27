@@ -1,14 +1,14 @@
 package tysheng.atlas.gank.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -92,7 +92,10 @@ public class GankCategoryAdapter
                 data.get(position).desc));
 
         if (data.get(position).type.equals("福利")) {
-            mHolder.image.setImageURI(Uri.parse(data.get(position).url));
+            Glide.with(context)
+                    .load(data.get(position).url)
+                    .centerCrop()
+                    .into(mHolder.image);
             mHolder.image.setVisibility(View.VISIBLE);
         } else {
             mHolder.image.setVisibility(View.GONE);
@@ -118,7 +121,7 @@ public class GankCategoryAdapter
         @Bind(R.id.who)
         TextView who;
         @Bind(R.id.image)
-        SimpleDraweeView image;
+        ImageView image;
 
         public MyViewHolder(View itemView) {
             super(itemView);

@@ -29,7 +29,7 @@ import tysheng.atlas.utils.ACache;
 /**
  * Created by shengtianyang on 16/4/7.
  */
-public class GankIndexFragment extends BaseFragment {
+public class GankDailyFragment extends BaseFragment {
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
     @Bind(R.id.fab)
@@ -130,7 +130,7 @@ public class GankIndexFragment extends BaseFragment {
     }
 
     private void getData(final int type, int page) {
-        subscriber.add(RetrofitSingleton.getGankApi(MyApplication.getInstance(), GankApi.BASE_URL)
+        mSubscription.add(RetrofitSingleton.getGankApi(MyApplication.getInstance(), GankApi.BASE_URL)
                 .getCategory("福利", 10, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

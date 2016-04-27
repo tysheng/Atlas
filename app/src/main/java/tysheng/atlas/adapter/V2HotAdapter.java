@@ -1,14 +1,14 @@
 package tysheng.atlas.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -28,11 +28,13 @@ public class V2HotAdapter extends RecyclerView.Adapter<V2HotAdapter.MyViewHolder
     private LayoutInflater layoutInflater;
     private List<V2HotBean> data;
     private OnItemClickListener onItemClickListener;
+    private Context mContext;
 
 
     public V2HotAdapter(Context context, List<V2HotBean> data) {
         this.data = data;
         this.layoutInflater = layoutInflater.from(context);
+        mContext = context;
     }
 
     public interface OnItemClickListener {
@@ -56,9 +58,11 @@ public class V2HotAdapter extends RecyclerView.Adapter<V2HotAdapter.MyViewHolder
         holder.tvNode.setText(data.get(position).getNode().getTitle());
         holder.tvAuthor.setText(data.get(position).getMember().getUsername());
         holder.tvReplies.setText(data.get(position).getReplies()+"");
-        holder.draweePortrait.setImageURI(Uri.parse("http:" + data.get(position).getMember().getAvatar_normal()));
         holder.tvTime.setText(TimeStamp.getFinalTimeDiffrence(data.get(position).getLast_modified()));
-
+        Glide.with(mContext)
+                .load("http:" + data.get(position).getMember().getAvatar_normal())
+                .centerCrop()
+                .into(holder.draweePortrait);
         if (onItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -79,7 +83,7 @@ public class V2HotAdapter extends RecyclerView.Adapter<V2HotAdapter.MyViewHolder
         @Bind(R.id.tv_title)
         TextView tvTitle;
         @Bind(R.id.drawee_portrait)
-        SimpleDraweeView draweePortrait;
+        ImageView draweePortrait;
         @Bind(R.id.tv_time)
         TextView tvTime;
         @Bind(R.id.tv_author)

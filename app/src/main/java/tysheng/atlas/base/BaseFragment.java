@@ -1,6 +1,5 @@
 package tysheng.atlas.base;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -29,7 +28,7 @@ public abstract class BaseFragment extends Fragment{
     protected View rootView;
     protected Context frmContext;
     protected Toast toast;
-    protected CompositeSubscription subscriber;
+    protected CompositeSubscription mSubscription;
 
     @Override
     public void onAttach(Context context) {
@@ -46,7 +45,7 @@ public abstract class BaseFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(getLayoutId(), container, false);
         ButterKnife.bind(this, rootView);
-        subscriber = new CompositeSubscription();
+        mSubscription = new CompositeSubscription();
 
         initData();
         return rootView;
@@ -94,7 +93,7 @@ public abstract class BaseFragment extends Fragment{
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        subscriber.unsubscribe();
+        mSubscription.clear();
         ButterKnife.unbind(this);
     }
     protected abstract int getLayoutId();

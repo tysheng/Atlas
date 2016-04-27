@@ -68,7 +68,7 @@
         </activity>
         <activity
             android:configChanges="orientation|screenSize"
-            android:name=".gank.ui.GankActivity"
+            android:name=".gank.ui.GankCategoryActivity"
             android:label="@string/fm_gank"
             android:screenOrientation="portrait">
         </activity>

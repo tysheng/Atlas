@@ -72,8 +72,9 @@ public class GankDailyAdapter extends RecyclerView.Adapter<GankDailyAdapter.MyVi
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         Glide.with(context)
                 .load(mItem.results.get(position).url)
+                .centerCrop()
                 .into(holder.image);
-        holder.tvDate.setText(mItem.results.get(position).formatData());
+        holder.tvDate.setText(mItem.results.get(position).formatPublish());
         if (onItemClickListener != null) {
             holder.image.setOnClickListener(new View.OnClickListener() {
                 @Override

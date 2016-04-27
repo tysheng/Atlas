@@ -1,8 +1,6 @@
 package tysheng.atlas.widget;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -75,7 +73,6 @@ public class WeatherCard extends LinearLayout {
     public WeatherCard(Context context) {
         super(context);
         initView(context);
-
     }
 
     private void initView(Context context) {
@@ -84,18 +81,10 @@ public class WeatherCard extends LinearLayout {
     }
 
     public WeatherCard(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initView(context);
+        this(context);
     }
 
     public WeatherCard(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        initView(context);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public WeatherCard(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        initView(context);
+        this(context, attrs);
     }
 }

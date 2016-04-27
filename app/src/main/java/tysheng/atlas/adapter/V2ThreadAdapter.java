@@ -2,14 +2,14 @@ package tysheng.atlas.adapter;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -32,12 +32,13 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private List<V2ReplyBean> data;
     private HeaderBean headerBean;
 //    private OnItemClickListener onItemClickListener;
-
+private Context mContext;
 
     public V2ThreadAdapter(Context context, List<V2ReplyBean> data, HeaderBean headerBean) {
         this.data = data;
         this.layoutInflater = LayoutInflater.from(context);
         this.headerBean = headerBean;
+        mContext = context;
     }
 
 //    public interface OnItemClickListener {
@@ -80,7 +81,10 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof VHHeader) {
             VHHeader vhHeader = (VHHeader) holder;
-            vhHeader.draweeTopic.setImageURI(Uri.parse("http:" + headerBean.getDraweeTopic()));
+            Glide.with(mContext)
+                    .load("http:" + headerBean.getDraweeTopic())
+                    .centerCrop()
+                    .into(vhHeader.draweeTopic);
             vhHeader.tvTopicAuthor.setText(headerBean.getTvTopicAuthor());
             vhHeader.tvTopicContent.setText(headerBean.getTvTopicContent());
             vhHeader.tvTopicNode.setText(headerBean.getTvTopicNode());
@@ -90,7 +94,10 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             VHItem vhItem = (VHItem) holder;
             vhItem.tvReplyContent.setText(data.get(position - 1).getContent());
             vhItem.tvReplyAuthor.setText(data.get(position - 1).getMember().getUsername());
-            vhItem.draweeReply.setImageURI(Uri.parse("http:" + data.get(position - 1).getMember().getAvatar_normal()));
+            Glide.with(mContext)
+                    .load("http:" + data.get(position - 1).getMember().getAvatar_normal())
+                    .centerCrop()
+                    .into(vhItem.draweeReply);
             vhItem.tvReplyTime.setText(TimeStamp.getFinalTimeDiffrence(data.get(position - 1).getLast_modified()));
             vhItem.tvReplyFloor.setText(position + "");
             showItemAnimation(vhItem,position);
@@ -125,7 +132,7 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     static class VHItem extends RecyclerView.ViewHolder {
         @Bind(R.id.drawee_reply)
-        SimpleDraweeView draweeReply;
+        ImageView draweeReply;
         @Bind(R.id.tv_reply_author)
         TextView tvReplyAuthor;
         @Bind(R.id.tv_reply_time)
@@ -145,7 +152,7 @@ public class V2ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     static class VHHeader extends RecyclerView.ViewHolder {
         @Bind(R.id.drawee_topic)
-        SimpleDraweeView draweeTopic;
+        ImageView draweeTopic;
         @Bind(R.id.tv_topic_author)
         TextView tvTopicAuthor;
         @Bind(R.id.tv_topic_node)

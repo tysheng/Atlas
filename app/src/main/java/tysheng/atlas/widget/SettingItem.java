@@ -2,6 +2,7 @@ package tysheng.atlas.widget;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
@@ -63,4 +64,9 @@ public class SettingItem extends LinearLayout {
         setSub(tsub);
     }
 
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+    }
 }

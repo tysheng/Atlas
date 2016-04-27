@@ -20,7 +20,7 @@
             app:contentScrim="?attr/themeColor"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <com.facebook.drawee.view.SimpleDraweeView
+            <ImageView
                 android:id="@+id/iv_head"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

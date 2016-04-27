@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import rx.Single;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -33,7 +32,7 @@ import tysheng.atlas.utils.ACache;
 /**
  * Created by shengtianyang on 16/3/26.
  */
-public class GankFragment extends BaseFragment {
+public class GankCategoryFragment extends BaseFragment {
     @Bind(R.id.rv)
     RecyclerView rv;
     @Bind(R.id.swipe)
@@ -53,15 +52,15 @@ public class GankFragment extends BaseFragment {
         getActivity().setTitle("Gank");
     }
 
-    public GankFragment() {
+    public GankCategoryFragment() {
     }
 
-    public GankFragment(String typeName) {
+    public GankCategoryFragment(String typeName) {
         this.typeName = typeName;
     }
 
-    public static GankFragment newInstance(String typeName) {
-        return new GankFragment(typeName);
+    public static GankCategoryFragment newInstance(String typeName) {
+        return new GankCategoryFragment(typeName);
     }
 
     @Override
@@ -122,7 +121,7 @@ public class GankFragment extends BaseFragment {
     }
 
     private void getData(String category, final int page) {
-        subscriber.add(RetrofitSingleton.getGankApi(MyApplication.getInstance(), GankApi.BASE_URL)
+        mSubscription.add(RetrofitSingleton.getGankApi(MyApplication.getInstance(), GankApi.BASE_URL)
                 .getCategory(category, 10, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

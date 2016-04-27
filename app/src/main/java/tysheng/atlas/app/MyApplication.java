@@ -3,7 +3,6 @@ package tysheng.atlas.app;
 import android.app.Application;
 import android.content.Context;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.tencent.mm.sdk.openapi.IWXAPI;
@@ -26,7 +25,6 @@ public class MyApplication extends Application {
         super.onCreate();
         instance = this;
 
-        Fresco.initialize(this);
 //        setupDatabase();
         regTowX();
         refWatcher = LeakCanary.install(this);

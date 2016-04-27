@@ -5,10 +5,12 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.File;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -31,13 +33,37 @@ public class RetrofitSingleton {
     public static void init(Context context, String url) {
 
         Executor executor = Executors.newCachedThreadPool();
+//        Interceptor interceptor = new Interceptor() {
+//            @Override
+//            public Response intercept(Chain chain) throws IOException {
+//                Request request = chain.request();
+//                Response response = chain.proceed(request);
+//
+//                String cacheControl = request.cacheControl().toString();
+//                if (TextUtils.isEmpty(cacheControl)) {
+//                    cacheControl = "public, max-age=60";
+//                }
+//                return response.newBuilder()
+//                        .header("Cache-Control", cacheControl)
+//                        .removeHeader("Pragma")
+//                        .build();
+//            }
+//        };
+        final File baseDir = context.getCacheDir();
+        Cache cache = null;
+        if (baseDir != null) {
+            final File cacheDir = new File(baseDir, "HttpResponseCache");
+            cache = new Cache(cacheDir, 10 * 1024 * 1024);
+        }
+        //设置缓存 10M
 
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.readTimeout(TIME_MAX, TimeUnit.SECONDS);
         builder.connectTimeout(TIME_MAX, TimeUnit.SECONDS);
         builder.writeTimeout(TIME_MAX, TimeUnit.SECONDS);
-        OkHttpClient client = builder.build();
+        OkHttpClient client = builder.cache(cache).build();
+
 
         Gson gson = new GsonBuilder().create();
 
@@ -50,7 +76,6 @@ public class RetrofitSingleton {
                 .build();
 
     }
-
 
 
     public static WeatherApi getWeatherApi(Context context, String url) {

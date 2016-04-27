@@ -20,7 +20,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import tysheng.atlas.R;
 import tysheng.atlas.app.Constant;
 import tysheng.atlas.base.BaseActivity;
-import tysheng.atlas.gank.ui.GankActivity;
+import tysheng.atlas.gank.ui.GankCategoryActivity;
 import tysheng.atlas.gank.ui.GankDailyActivity;
 import tysheng.atlas.gank.utils.GankUtils;
 import tysheng.atlas.hupu.ui.ForumFragment;
@@ -121,7 +121,7 @@ public class MainActivity extends BaseActivity
                 currentFragment = v2HotFragment;
                 break;
             case R.id.nav_new:
-                jumpActivity(GankActivity.class, false);
+                jumpActivity(GankCategoryActivity.class, false);
                 break;
             case R.id.nav_node:
                 jumpActivity(GankDailyActivity.class, false);

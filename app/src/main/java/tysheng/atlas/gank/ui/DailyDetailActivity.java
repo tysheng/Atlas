@@ -1,13 +1,13 @@
 package tysheng.atlas.gank.ui;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.bumptech.glide.Glide;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -28,7 +28,7 @@ import tysheng.atlas.gank.view.SectionsDecoration;
  */
 public class DailyDetailActivity extends BaseActivity {
     @Bind(R.id.iv_head)
-    SimpleDraweeView ivHead;
+    ImageView ivHead;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.rv_gank)
@@ -44,7 +44,10 @@ public class DailyDetailActivity extends BaseActivity {
     public void initData() {
         date = getIntent().getStringArrayExtra(DATE);
         url = getIntent().getStringExtra(URL);
-        ivHead.setImageURI(Uri.parse(url));
+        Glide.with(this)
+                .load(url)
+                .centerCrop()
+                .into(ivHead);
         toolbar.setTitle(date[1] + "/" + date[2]);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

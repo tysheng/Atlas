@@ -91,7 +91,7 @@ public class V2ThreadFragment extends BaseFragment {
     }
 
     private void getData() {
-        subscriber.add(
+        mSubscription.add(
                 RetrofitSingleton.getV2exApi(MyApplication.getInstance(), V2exApi.BASE_URL)
                         .getV2Reply(id)
                         .subscribeOn(Schedulers.io())

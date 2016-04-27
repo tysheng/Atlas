@@ -5,9 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
@@ -99,7 +98,7 @@ public class GankCategoryLoadAdapter
         @Bind(R.id.who)
         TextView who;
         @Bind(R.id.image)
-        SimpleDraweeView image;
+        ImageView image;
 
         public MyViewHolder(View itemView) {
             super(itemView);

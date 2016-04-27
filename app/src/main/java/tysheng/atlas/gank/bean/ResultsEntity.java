@@ -24,6 +24,12 @@ public class ResultsEntity implements Serializable{
         String str1 = strings[1].startsWith("0") ? strings[1].replace("0", "") : strings[1];
         return strings[0].replace("0", "") + "月" + str1 + "日";
     }
+    public String formatPublish(){
+        String monthAndDay = publishedAt.substring(5,10);
+        String[] strings = monthAndDay.split("-");
+        String str1 = strings[1].startsWith("0") ? strings[1].replace("0", "") : strings[1];
+        return strings[0].replace("0", "") + "月" + str1 + "日";
+    }
 
     public long getCreated() {
         return GankUtils.getDataTime(createdAt);

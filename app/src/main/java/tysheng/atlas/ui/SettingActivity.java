@@ -1,5 +1,6 @@
 package tysheng.atlas.ui;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
@@ -18,8 +19,6 @@ import com.afollestad.materialdialogs.util.DialogUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.imagepipeline.core.ImagePipeline;
 
 import butterknife.Bind;
 import tysheng.atlas.R;
@@ -37,7 +36,7 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
     CoordinatorLayout cl;
 
     private int primaryPreselect;
-    Intent intent;
+
     @Bind(R.id.tl_setting)
     Toolbar tbSetting;
     SPHelper mSPHelper;
@@ -53,7 +52,7 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            mSPHelper.setSpBoolean(Constant.IS_SETTING,true);
+                            mSPHelper.setSpBoolean(Constant.IS_SETTING, true);
                             Glide.with(actContext)
                                     .loadFromMediaStore(data.getData())
                                     .asBitmap()
@@ -110,7 +109,7 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
                 exit();
             }
         });
-        intent = new Intent(this, MainActivity.class);
+
         primaryPreselect = DialogUtils.resolveColor(this, R.attr.themeColor);
         mCache = ACache.get(actContext);
         getFragmentManager().beginTransaction()
@@ -138,17 +137,24 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
     }
 
     private void exit() {
-        if (!mSPHelper.getSpBoolean(Constant.IS_SETTING,false))
+        if (!mSPHelper.getSpBoolean(Constant.IS_SETTING, false))
             finish();
         else
             jumpIntent();
     }
 
     private void jumpIntent() {
-        mSPHelper.setSpBoolean(Constant.IS_SETTING,false);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+        mSPHelper.setSpBoolean(Constant.IS_SETTING, false);
+        //重启方法 1
+        Intent intentToBeNewRoot = new Intent(this, MainActivity.class);
+        ComponentName cn = intentToBeNewRoot.getComponent();
+        Intent mainIntent = IntentCompat.makeRestartActivityTask(cn);
+        startActivity(mainIntent);
+        //重启方法 2
+//        Intent intent = new Intent(this, MainActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+//        startActivity(intent);
+//        finish();
     }
 
     @Override
@@ -168,8 +174,8 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
                         .input("", "", false, new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                                mSPHelper.setSpString(Constant.USER_NAME,input.toString());
-                                mSPHelper.setSpBoolean(Constant.IS_SETTING,true);
+                                mSPHelper.setSpString(Constant.USER_NAME, input.toString());
+                                mSPHelper.setSpBoolean(Constant.IS_SETTING, true);
                             }
                         }).show();
 
@@ -183,8 +189,8 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
                         .input("", "", false, new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                                mSPHelper.setSpString(Constant.USER_EMAIL,input.toString());
-                                mSPHelper.setSpBoolean(Constant.IS_SETTING,true);
+                                mSPHelper.setSpString(Constant.USER_EMAIL, input.toString());
+                                mSPHelper.setSpBoolean(Constant.IS_SETTING, true);
                             }
                         }).show();
                 break;
@@ -198,8 +204,8 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
                         .show();
                 break;
             case "cache":
-                ImagePipeline imagePipeline = Fresco.getImagePipeline();
-                imagePipeline.clearCaches();
+//                Glide.get(this).clearDiskCache();
+                Glide.get(this).clearMemory();
                 showSnackbar(cl, "已清除缓存");
                 break;
         }

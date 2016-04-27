@@ -57,7 +57,7 @@ public class V2HotFragment extends BaseFragment {
         Log.d("sty","show");
     }
     private void getHotThread(String mUrl) {
-        subscriber.add(
+        mSubscription.add(
                 RetrofitSingleton.getV2exApi(frmContext, V2exApi.BASE_URL)
                         .getV2Hot(mUrl)
                         .subscribeOn(Schedulers.io())

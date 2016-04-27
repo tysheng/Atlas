@@ -4,33 +4,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.facebook.common.executors.CallerThreadExecutor;
-import com.facebook.common.references.CloseableReference;
-import com.facebook.datasource.DataSource;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
-import com.facebook.drawee.controller.BaseControllerListener;
-import com.facebook.imagepipeline.core.ImagePipeline;
-import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
-import com.facebook.imagepipeline.image.CloseableImage;
-import com.facebook.imagepipeline.image.ImageInfo;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -49,15 +39,14 @@ import tysheng.atlas.base.BaseActivity;
 import tysheng.atlas.gank.utils.GankUtils;
 import tysheng.atlas.ui.fragment.MyPreferenceFragment;
 import tysheng.atlas.utils.SPHelper;
-import tysheng.atlas.utils.phtodraweeview.OnViewTapListener;
-import tysheng.atlas.utils.phtodraweeview.PhotoDraweeView;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by shengtianyang on 16/3/27.
  */
-public class PictureActivity extends BaseActivity {
+public class PictureActivity extends BaseActivity implements PhotoViewAttacher.OnViewTapListener, View.OnLongClickListener {
     @Bind(R.id.picture)
-    PhotoDraweeView picture;
+    ImageView picture;
     public static final String EXTRA_IMAGE_URL = "image_url";
     public static final String EXTRA_IMAGE_TITLE = "image_title";
     @Bind(R.id.toolbar)
@@ -65,11 +54,13 @@ public class PictureActivity extends BaseActivity {
     private String mImageUrl;
     private String mImageTitle;
     protected boolean mIsHidden = false;
+    private PhotoViewAttacher mAttacher;
+    private Bitmap mBitmap;
 
     @Override
     public void initData() {
         SPHelper spHelper = new SPHelper(actContext);
-        if (spHelper.getSpString(Constant.GANK_TIP,MyPreferenceFragment.ON).equals(MyPreferenceFragment.ON))
+        if (spHelper.getSpString(Constant.GANK_TIP, MyPreferenceFragment.ON).equals(MyPreferenceFragment.ON))
             initSnackBar();
         parseIntent();
         initToolbar();
@@ -94,42 +85,21 @@ public class PictureActivity extends BaseActivity {
     }
 
     private void initPicture() {
-        PipelineDraweeControllerBuilder controller = Fresco.newDraweeControllerBuilder();
-        controller.setOldController(picture.getController());
-        controller.setUri(Uri.parse(mImageUrl));
-        controller.setControllerListener(new BaseControllerListener<ImageInfo>() {
-            @Override
-            public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {
-                super.onFinalImageSet(id, imageInfo, animatable);
-                if (imageInfo == null) {
-                    return;
-                }
-                picture.update(imageInfo.getWidth(), imageInfo.getHeight());
-            }
-        });
-        picture.setController(controller.build());
-        picture.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                new MaterialDialog.Builder(actContext)
-                        .title("是否保存图片")
-                        .positiveText("好的,就要她啦!")
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                saveImageToGallery();
-                            }
-                        }).show();
-
-                return true;
-            }
-        });
-        picture.setOnViewTapListener(new OnViewTapListener() {
-            @Override
-            public void onViewTap(View view, float x, float y) {
-                hideOrShowToolbar();
-            }
-        });
+        mAttacher = new PhotoViewAttacher(picture);
+        mAttacher.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        Glide.with(this)
+                .load(mImageUrl)
+                .asBitmap()
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        mBitmap = resource;
+                        picture.setImageBitmap(mBitmap);
+                        mAttacher.update();
+                    }
+                });
+        mAttacher.setOnLongClickListener(this);
+        mAttacher.setOnViewTapListener(this);
     }
 
     private void initToolbar() {
@@ -145,7 +115,7 @@ public class PictureActivity extends BaseActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch(item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.action_save:
                         saveImageToGallery();
                         break;
@@ -159,6 +129,7 @@ public class PictureActivity extends BaseActivity {
         });
         toolbar.setBackgroundColor(Color.TRANSPARENT);
     }
+
     private void hideOrShowToolbar() {
         toolbar.animate()
                 .translationY(mIsHidden ? 0 : -toolbar.getHeight())
@@ -167,34 +138,11 @@ public class PictureActivity extends BaseActivity {
 
         mIsHidden = !mIsHidden;
     }
+
     private Bitmap getBitmap() {
-        final Bitmap[] mBitmap = new Bitmap[1];
-        ImageRequest imageRequest = ImageRequestBuilder
-                .newBuilderWithSource(Uri.parse(mImageUrl))
-                .setProgressiveRenderingEnabled(true)
-                .build();
-
-        ImagePipeline imagePipeline = Fresco.getImagePipeline();
-        DataSource<CloseableReference<CloseableImage>>
-                dataSource = imagePipeline.fetchDecodedImage(imageRequest, actContext);
-
-        dataSource.subscribe(new BaseBitmapDataSubscriber() {
-
-                                 @Override
-                                 public void onNewResultImpl(@Nullable Bitmap bitmap) {
-                                     // You can use the bitmap in only limited ways
-                                     // No need to do any cleanup.
-                                     mBitmap[0] = bitmap;
-
-                                 }
-
-                                 @Override
-                                 public void onFailureImpl(DataSource dataSource) {
-                                     // No cleanup required here.
-                                 }
-                             },
-                CallerThreadExecutor.getInstance());
-        return mBitmap[0];
+        if (mBitmap != null)
+            return mBitmap;
+        return null;
     }
 
     @Override
@@ -207,6 +155,13 @@ public class PictureActivity extends BaseActivity {
         intent.putExtra(PictureActivity.EXTRA_IMAGE_URL, url);
         intent.putExtra(PictureActivity.EXTRA_IMAGE_TITLE, desc);
         return intent;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mBitmap != null)
+            mBitmap = null;
     }
 
     private void parseIntent() {
@@ -223,7 +178,7 @@ public class PictureActivity extends BaseActivity {
                         File appDir = new File(Environment.getExternalStorageDirectory(), "Meizhi");
                         String msg = String.format(getString(R.string.picture_has_save_to),
                                 appDir.getAbsolutePath());
-                        showToast(msg);
+                        showSnackbar(picture, msg);
                     }
                 });
 
@@ -233,8 +188,9 @@ public class PictureActivity extends BaseActivity {
         return Observable.create(new Observable.OnSubscribe<Bitmap>() {
             @Override
             public void call(Subscriber<? super Bitmap> subscriber) {
-                Bitmap bitmap = getBitmap();
-                subscriber.onNext(bitmap);
+                if (getBitmap() == null)
+                    return;
+                subscriber.onNext(getBitmap());
                 subscriber.onCompleted();
             }
         }).flatMap(new Func1<Bitmap, Observable<? extends Uri>>() {
@@ -265,4 +221,23 @@ public class PictureActivity extends BaseActivity {
         }).subscribeOn(Schedulers.io());
     }
 
+    @Override
+    public void onViewTap(View view, float v, float v1) {
+        hideOrShowToolbar();
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        new MaterialDialog.Builder(actContext)
+                .title("是否保存图片")
+                .positiveText("好的,就要她啦!")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        saveImageToGallery();
+                    }
+                }).show();
+
+        return true;
+    }
 }

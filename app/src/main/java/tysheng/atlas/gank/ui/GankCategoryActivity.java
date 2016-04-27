@@ -12,14 +12,14 @@ import tysheng.atlas.R;
 import tysheng.atlas.base.BaseActivity;
 import tysheng.atlas.gank.adapter.GankViewPagerAdapter;
 import tysheng.atlas.gank.bean.GankViewPagerItem;
-import tysheng.atlas.gank.ui.fragment.GankFragment;
+import tysheng.atlas.gank.ui.fragment.GankCategoryFragment;
 import tysheng.atlas.utils.ACache;
 import tysheng.atlas.utils.RecyclerTransformAnimation;
 
 /**
  * Created by shengtianyang on 16/4/1.
  */
-public class GankActivity extends BaseActivity {
+public class GankCategoryActivity extends BaseActivity {
     @Bind(R.id.tabLayout)
     TabLayout tabLayout;
     @Bind(R.id.viewPager)
@@ -45,11 +45,11 @@ public class GankActivity extends BaseActivity {
         getCache();
         mAdapter = new GankViewPagerAdapter(getSupportFragmentManager());
         for (String str : mItem.mList) {
-            mAdapter.addFragment(GankFragment.newInstance(str), str);
+            mAdapter.addFragment(GankCategoryFragment.newInstance(str), str);
         }
         viewPager.setPageTransformer(true, new RecyclerTransformAnimation());
         viewPager.setAdapter(mAdapter);
-        viewPager.setOffscreenPageLimit(1);
+//        viewPager.setOffscreenPageLimit(1);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
     }
@@ -85,7 +85,7 @@ public class GankActivity extends BaseActivity {
         tabLayout.removeAllTabs();
         viewPager.removeAllViews();
         for (String str : mItem.mList) {
-            mAdapter.addFragment(GankFragment.newInstance(str), str);
+            mAdapter.addFragment(GankCategoryFragment.newInstance(str), str);
         }
         viewPager.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();

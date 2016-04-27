@@ -7,7 +7,7 @@ import android.view.View;
 import butterknife.Bind;
 import tysheng.atlas.R;
 import tysheng.atlas.base.BaseActivity;
-import tysheng.atlas.gank.ui.fragment.GankIndexFragment;
+import tysheng.atlas.gank.ui.fragment.GankDailyFragment;
 
 /**
  * Created by shengtianyang on 16/4/1.
@@ -27,7 +27,7 @@ public class GankDailyActivity extends BaseActivity {
                 finish();
             }
         });
-        jumpFragment(null, new GankIndexFragment(), R.id.fl, "");
+        jumpFragment(null, new GankDailyFragment(), R.id.fl, "");
     }
 
     @Override

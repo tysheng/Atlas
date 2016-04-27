@@ -1,16 +1,16 @@
 package tysheng.atlas.ui.fragment;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.bumptech.glide.Glide;
 
 import butterknife.Bind;
 import tysheng.atlas.R;
@@ -41,7 +41,7 @@ public class WeatherFragment extends BaseFragment implements VPost {
     @Bind(R.id.tv_textaqi)
     TextView tv_textaqi;
     @Bind(R.id.drawee_weather_city)
-    SimpleDraweeView drawee_weather_city;
+    ImageView drawee_weather_city;
     @Bind(R.id.et_search_city)
     EditText etSearchCity;
     @Bind(R.id.ll_aqi)
@@ -102,7 +102,10 @@ public class WeatherFragment extends BaseFragment implements VPost {
 
     private void getWeather(final String cityname) {
         if (!city_url.equals("")) {
-            drawee_weather_city.setImageURI(Uri.parse(city_url));
+            Glide.with(frmContext)
+                    .load(city_url)
+                    .centerCrop()
+                    .into(drawee_weather_city);
         } else {
             drawee_weather_city.setVisibility(View.GONE);
         }
