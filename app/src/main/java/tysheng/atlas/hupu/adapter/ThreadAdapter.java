@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import tysheng.atlas.R;
 import tysheng.atlas.hupu.bean.ThreadListResult;
@@ -98,15 +98,15 @@ public class ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     static class Item extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.title)
+        @BindView(R.id.title)
         TextView title;
-        @Bind(R.id.time)
+        @BindView(R.id.time)
         TextView time;
-        @Bind(R.id.name)
+        @BindView(R.id.name)
         TextView name;
-        @Bind(R.id.reply)
+        @BindView(R.id.reply)
         TextView reply;
-        @Bind(R.id.light)
+        @BindView(R.id.light)
         TextView light;
 
         public Item(View itemView) {
@@ -118,7 +118,7 @@ public class ThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     static class Footer extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.pb)
+        @BindView(R.id.pb)
         ProgressBar pb;
 
         public Footer(View itemView) {

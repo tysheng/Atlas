@@ -18,7 +18,9 @@
         <meta-data
             android:name="tysheng.atlas.weixin"
             android:value="85e31053269d6d5dba4cc3d37c9d33eb"/>
-
+        <meta-data
+            android:name="tysheng.atlas.utils.SimpleGlideModule"
+            android:value="GlideModule" />
         <activity
             android:name=".ui.MainActivity"
             android:label="@string/app_name"
@@ -85,12 +87,17 @@
             android:screenOrientation="landscape">
         </activity>
         <activity
-            android:configChanges="orientation"
-            android:name=".wxapi.WXEntryActivity"
-            android:exported="true"
-            android:launchMode="singleTop"
-            android:theme="@android:style/Theme.NoDisplay">
+            android:name=".ui.GalleryActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait">
         </activity>
+        <!--<activity-->
+            <!--android:configChanges="orientation"-->
+            <!--android:name=".wxapi.WXEntryActivity"-->
+            <!--android:exported="true"-->
+            <!--android:launchMode="singleTop"-->
+            <!--android:theme="@android:style/Theme.NoDisplay">-->
+        <!--</activity>-->
 
         <service
             android:name=".service.DownloadService"

@@ -1,6 +1,6 @@
 package tysheng.atlas.ui;
 
-import android.os.Bundle;
+import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -9,14 +9,18 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import butterknife.Bind;
-import de.hdodenhof.circleimageview.CircleImageView;
+import com.bumptech.glide.Glide;
+
+import java.lang.reflect.Field;
+
+import butterknife.BindView;
 import tysheng.atlas.R;
 import tysheng.atlas.app.Constant;
 import tysheng.atlas.base.BaseActivity;
@@ -27,18 +31,19 @@ import tysheng.atlas.hupu.ui.ForumFragment;
 import tysheng.atlas.ui.fragment.FragmentCallback;
 import tysheng.atlas.ui.fragment.V2HotFragment;
 import tysheng.atlas.utils.ACache;
+import tysheng.atlas.utils.GlideCircleTransform;
 import tysheng.atlas.utils.SPHelper;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener,FragmentCallback {
+        implements NavigationView.OnNavigationItemSelectedListener, FragmentCallback {
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.drawer_layout)
+    @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
-    @Bind(R.id.nav_view)
+    @BindView(R.id.nav_view)
     NavigationView navigationView;
-    @Bind(R.id.cl)
+    @BindView(R.id.cl)
     CoordinatorLayout cl;
 
     private long exitTime;
@@ -46,6 +51,7 @@ public class MainActivity extends BaseActivity
     V2HotFragment v2HotFragment;
     ForumFragment forumFragment;
     Fragment currentFragment;
+    private GlideCircleTransform mGlideCircleTransform;
 
     @Override
     public void initData() {
@@ -67,29 +73,31 @@ public class MainActivity extends BaseActivity
 
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.d("sty",outState.toString());
-    }
-
     private void initNav() {
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
 
-        CircleImageView imageView = (CircleImageView) headerView.findViewById(R.id.imageView);
+        ImageView imageView = (ImageView) headerView.findViewById(R.id.imageView);
         TextView name = (TextView) headerView.findViewById(R.id.tv_name);
         TextView email = (TextView) headerView.findViewById(R.id.tv_email);
         navigationView.getMenu().findItem(R.id.nav_node).setIcon(GankUtils.getWeekIcon());
-
-        if (ACache.get(actContext).getAsBitmap(Constant.AVATAR_BITMAP) == null) {
-            imageView.setImageDrawable(getResources().getDrawable(R.drawable.menu_myavatar));
-        } else
-            imageView.setImageBitmap(ACache.get(actContext).getAsBitmap(Constant.AVATAR_BITMAP));
+        byte[] bitmap = ACache.get(actContext).getAsBinary(Constant.AVATAR_BITMAP);
+        mGlideCircleTransform = new GlideCircleTransform(actContext);
+        if (bitmap == null) {
+            Glide.with(actContext)
+                    .load(R.drawable.menu_myavatar)
+                    .bitmapTransform(mGlideCircleTransform)
+                    .into(imageView);
+        } else {
+            Glide.with(actContext)
+                    .load(bitmap)
+                    .bitmapTransform(mGlideCircleTransform)
+                    .into(imageView);
+        }
 
         SPHelper spHelper = new SPHelper(actContext);
-        name.setText(spHelper.getSpString(Constant.USER_NAME,getString(R.string.user_name)));
-        email.setText(spHelper.getSpString(Constant.USER_EMAIL,getString(R.string.user_email)));
+        name.setText(spHelper.getSpString(Constant.USER_NAME, getString(R.string.user_name)));
+        email.setText(spHelper.getSpString(Constant.USER_EMAIL, getString(R.string.user_email)));
 
     }
 
@@ -127,6 +135,7 @@ public class MainActivity extends BaseActivity
                 jumpActivity(GankDailyActivity.class, false);
                 break;
             case R.id.nav_flash:
+//                jumpActivity(GalleryActivity.class,false);
                 if (forumFragment == null)
                     forumFragment = ForumFragment.getInstance();
                 if (!(currentFragment instanceof ForumFragment))
@@ -169,11 +178,62 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void func1(String s) {
-        if (s.equals("")){
+        if (s.equals("")) {
             V2HotFragment fragment = (V2HotFragment) fragmentManager.findFragmentByTag(V2HotFragment.class.getName());
-            if (fragment!=null){
+            if (fragment != null) {
                 fragment.show();
             }
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        fixInputMethodManagerLeak(this);
+    }
+
+    public static void fixInputMethodManagerLeak(Context context) {
+        if (context == null) {
+            return;
+        }
+        try {
+            // 对 mCurRootView mServedView mNextServedView 进行置空...
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm == null) {
+                return;
+            }// author:sodino mail:sodino@qq.com
+
+            Object obj_get = null;
+            Field f_mCurRootView = imm.getClass().getDeclaredField("mCurRootView");
+            Field f_mServedView = imm.getClass().getDeclaredField("mServedView");
+            Field f_mNextServedView = imm.getClass().getDeclaredField("mNextServedView");
+
+            if (f_mCurRootView.isAccessible() == false) {
+                f_mCurRootView.setAccessible(true);
+            }
+            obj_get = f_mCurRootView.get(imm);
+            if (obj_get != null) { // 不为null则置为空
+                f_mCurRootView.set(imm, null);
+            }
+
+            if (f_mServedView.isAccessible() == false) {
+                f_mServedView.setAccessible(true);
+            }
+            obj_get = f_mServedView.get(imm);
+            if (obj_get != null) { // 不为null则置为空
+                f_mServedView.set(imm, null);
+            }
+
+            if (f_mNextServedView.isAccessible() == false) {
+                f_mNextServedView.setAccessible(true);
+            }
+            obj_get = f_mNextServedView.get(imm);
+            if (obj_get != null) { // 不为null则置为空
+                f_mNextServedView.set(imm, null);
+            }
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+    }
+
 }

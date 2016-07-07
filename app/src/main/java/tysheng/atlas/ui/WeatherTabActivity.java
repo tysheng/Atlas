@@ -9,8 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 
-import butterknife.Bind;
 import butterknife.BindString;
+import butterknife.BindView;
 import tysheng.atlas.R;
 import tysheng.atlas.base.BaseActivity;
 import tysheng.atlas.ui.fragment.WeatherFragment;
@@ -19,9 +19,9 @@ import tysheng.atlas.ui.fragment.WeatherFragment;
  * Created by shengtianyang on 16/2/29.
  */
 public class WeatherTabActivity extends BaseActivity {
-    @Bind(R.id.tablayout)
+    @BindView(R.id.tablayout)
     TabLayout tabLayout;
-    @Bind(R.id.vp_weathertab)
+    @BindView(R.id.vp_weathertab)
     ViewPager viewPager;
     @BindString(R.string.weather_city_shaoxing_url)
     String weather_city_shaoxing_url;
@@ -35,7 +35,7 @@ public class WeatherTabActivity extends BaseActivity {
     String ningbo;
     @BindString(R.string.xian)
     String xian;
-    @Bind(R.id.tb_weathertab)
+    @BindView(R.id.tb_weathertab)
     Toolbar toolbar;
 
     @Override

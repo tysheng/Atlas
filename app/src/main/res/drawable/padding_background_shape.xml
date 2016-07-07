@@ -4,7 +4,5 @@
     <item android:top="250dp"
           android:drawable="@drawable/background_shape"
           >
-
-
     </item>
 </layer-list>

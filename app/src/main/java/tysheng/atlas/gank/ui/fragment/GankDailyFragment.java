@@ -9,13 +9,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import tysheng.atlas.R;
-import tysheng.atlas.api.RetrofitSingleton;
+import tysheng.atlas.api.MyRetrofit;
 import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseFragment;
 import tysheng.atlas.gank.adapter.EndlessRecyclerOnScrollListener;
@@ -23,27 +23,27 @@ import tysheng.atlas.gank.adapter.GankDailyAdapter;
 import tysheng.atlas.gank.api.GankApi;
 import tysheng.atlas.gank.bean.GankCategory;
 import tysheng.atlas.gank.ui.DailyDetailActivity;
-import tysheng.atlas.gank.ui.PictureActivity;
+import tysheng.atlas.ui.GalleryActivity;
 import tysheng.atlas.utils.ACache;
 
 /**
  * Created by shengtianyang on 16/4/7.
  */
 public class GankDailyFragment extends BaseFragment {
-    @Bind(R.id.recyclerView)
+    @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @Bind(R.id.fab)
+    @BindView(R.id.fab)
     FloatingActionButton fab;
     ACache mCache;
-    GankCategory gankCategory;
-    @Bind(R.id.cl)
+    GankCategory gankCategory,gank10;
+    @BindView(R.id.cl)
     CoordinatorLayout cl;
     int page = 1;
     GankDailyAdapter mAdapter;
     final int REFRESH = 0;
     final int MORE = 1;
     LinearLayoutManager layoutManager;
-    @Bind(R.id.swipe)
+    @BindView(R.id.swipe)
     SwipeRefreshLayout swipe;
 
     @Override
@@ -64,6 +64,7 @@ public class GankDailyFragment extends BaseFragment {
         gankCategory = (GankCategory) mCache.getAsObject("index_category");
         if (gankCategory == null)
             gankCategory = new GankCategory();
+        gank10 = gankCategory;
         mAdapter = new GankDailyAdapter(frmContext, gankCategory);
         initRecyclerView();
         setItemClick();
@@ -130,7 +131,7 @@ public class GankDailyFragment extends BaseFragment {
     }
 
     private void getData(final int type, int page) {
-        mSubscription.add(RetrofitSingleton.getGankApi(MyApplication.getInstance(), GankApi.BASE_URL)
+        mSubscription.add(MyRetrofit.getGankApi(MyApplication.getInstance(), GankApi.BASE_URL)
                 .getCategory("福利", 10, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -155,7 +156,7 @@ public class GankDailyFragment extends BaseFragment {
                             } else {
                                 mAdapter.add(bean);
                             }
-
+                            gank10=bean;
                         } else
                             showSnackbar(cl, "获取出错...");
 
@@ -177,13 +178,12 @@ public class GankDailyFragment extends BaseFragment {
             @Override
             public void OnItemClick(View view, int position) {
                 if (view.getId() == R.id.image) {
-                    Intent intent = PictureActivity.newIntent(frmContext, gankCategory.results.get(position).url,
-                            gankCategory.results.get(position).desc);
+//                    Intent intent = PictureActivity.newIntent(frmContext, gankCategory.results.get(position).url,
+//                            gankCategory.results.get(position).desc);
+                    Intent intent = GalleryActivity.newIntent(frmContext, mAdapter.getItem(), position);
                     startActivity(intent);
                 } else if (view.getId() == R.id.tv_date) {
-                    Intent intent = new Intent(frmContext, DailyDetailActivity.class);
-                    intent.putExtra(DailyDetailActivity.DATE, mAdapter.getYMD(position));
-                    intent.putExtra(DailyDetailActivity.URL, mAdapter.getUrl(position));
+                    Intent intent = DailyDetailActivity.newIntent(frmContext,mAdapter.getYMD(position),mAdapter.getUrl(position));
                     startActivity(intent);
                 }
             }

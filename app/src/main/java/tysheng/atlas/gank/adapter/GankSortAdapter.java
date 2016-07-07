@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import tysheng.atlas.R;
 import tysheng.atlas.gank.bean.GankViewPagerItem;
@@ -50,7 +50,7 @@ public class GankSortAdapter extends RecyclerView.Adapter<GankSortAdapter.MyView
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.tv)
+        @BindView(R.id.tv)
         TextView tv;
 
         public MyViewHolder(View itemView) {

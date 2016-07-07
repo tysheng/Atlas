@@ -2,33 +2,29 @@ package tysheng.atlas.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
-import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
-import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import tysheng.atlas.R;
 import tysheng.atlas.adapter.V2ThreadAdapter;
-import tysheng.atlas.api.RetrofitSingleton;
+import tysheng.atlas.api.MyRetrofit;
 import tysheng.atlas.api.V2exApi;
 import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseFragment;
 import tysheng.atlas.bean.HeaderBean;
 import tysheng.atlas.bean.V2HotBean;
 import tysheng.atlas.bean.V2ReplyBean;
+import tysheng.atlas.gank.utils.GankUtils;
 import tysheng.atlas.ui.MainActivity;
 
 
@@ -37,7 +33,7 @@ import tysheng.atlas.ui.MainActivity;
  */
 public class V2ThreadFragment extends BaseFragment {
     public static final String TAG = V2ThreadFragment.class.getSimpleName();
-    @Bind(R.id.rc_thread)
+    @BindView(R.id.rc_thread)
     RecyclerView rcThread;
     private FragmentCallback callback;
 
@@ -92,7 +88,7 @@ public class V2ThreadFragment extends BaseFragment {
 
     private void getData() {
         mSubscription.add(
-                RetrofitSingleton.getV2exApi(MyApplication.getInstance(), V2exApi.BASE_URL)
+                MyRetrofit.getV2exApi(MyApplication.getInstance(), V2exApi.BASE_URL)
                         .getV2Reply(id)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -125,20 +121,21 @@ public class V2ThreadFragment extends BaseFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_session:
-                sendToWx(bundle.getString("url"), bundle.getString("title"), bundle.getString("content"), 0);
-                callback.func1("");
-                getFragmentManager().popBackStack();
+                GankUtils.share(frmContext,bundle.getString("url"),bundle.getString("title"));
+//                sendToWx(bundle.getString("url"), bundle.getString("title"), bundle.getString("content"), 0);
+//                callback.func1("");
+//                getFragmentManager().popBackStack();
                 return true;
             case R.id.action_timeline:
-                sendToWx(bundle.getString("url"), bundle.getString("title"), bundle.getString("content"), 1);
-                FragmentManager manager = getFragmentManager();
-                addFragment(manager,
-                        manager.findFragmentByTag(V2ThreadFragment.class.getName()),
-                        new ServiceAndBroadcastFragment(),R.id.fg_main,
-                        ServiceAndBroadcastFragment.class.getName());
+//                sendToWx(bundle.getString("url"), bundle.getString("title"), bundle.getString("content"), 1);
+//                FragmentManager manager = getFragmentManager();
+//                addFragment(manager,
+//                        manager.findFragmentByTag(V2ThreadFragment.class.getName()),
+//                        new ServiceAndBroadcastFragment(),R.id.fg_main,
+//                        ServiceAndBroadcastFragment.class.getName());
                 return true;
             case R.id.action_favorite:
-                sendToWx(bundle.getString("url"), bundle.getString("title"), bundle.getString("content"), 2);
+//                sendToWx(bundle.getString("url"), bundle.getString("title"), bundle.getString("content"), 2);
                 return true;
 
             default:
@@ -164,22 +161,22 @@ public class V2ThreadFragment extends BaseFragment {
         getReply();
     }
 
-    private void sendToWx(String url, String title, String content, int mode) {
-        WXWebpageObject web = new WXWebpageObject(url);
-        final WXMediaMessage msg = new WXMediaMessage(web);
-        msg.title = title;
-        msg.description = content;
-        SendMessageToWX.Req req = new SendMessageToWX.Req();
-        req.transaction = String.valueOf(System.currentTimeMillis());
-        req.message = msg;
-        if (mode == 0)
-            req.scene = SendMessageToWX.Req.WXSceneSession;
-        else if (mode == 1)
-            req.scene = SendMessageToWX.Req.WXSceneTimeline;
-        else if (mode == 2)
-            req.scene = SendMessageToWX.Req.WXSceneFavorite;
-
-        MyApplication.getWxApi().sendReq(req);
-    }
+//    private void sendToWx(String url, String title, String content, int mode) {
+//        WXWebpageObject web = new WXWebpageObject(url);
+//        final WXMediaMessage msg = new WXMediaMessage(web);
+//        msg.title = title;
+//        msg.description = content;
+//        SendMessageToWX.Req req = new SendMessageToWX.Req();
+//        req.transaction = String.valueOf(System.currentTimeMillis());
+//        req.message = msg;
+//        if (mode == 0)
+//            req.scene = SendMessageToWX.Req.WXSceneSession;
+//        else if (mode == 1)
+//            req.scene = SendMessageToWX.Req.WXSceneTimeline;
+//        else if (mode == 2)
+//            req.scene = SendMessageToWX.Req.WXSceneFavorite;
+//
+//        MyApplication.getWxApi().sendReq(req);
+//    }
 
 }

@@ -21,7 +21,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 import tysheng.atlas.R;
 import tysheng.atlas.base.BaseFragment;
@@ -34,9 +34,9 @@ import tysheng.atlas.utils.kbv.KenBurnsView;
  * Created by shengtianyang on 16/4/16.
  */
 public class DownLoadFragment extends BaseFragment {
-    @Bind(R.id.imageView)
+    @BindView(R.id.imageView)
     ImageView imageView;
-    @Bind(R.id.kView)
+    @BindView(R.id.kView)
     KenBurnsView mKenBurnsView;
     View view1;
     FileInfo mFileInfo;
@@ -65,13 +65,13 @@ public class DownLoadFragment extends BaseFragment {
         }
     };
 
-    @Bind(R.id.editText)
+    @BindView(R.id.editText)
     EditText mEditText;
-    @Bind(R.id.textLayout)
+    @BindView(R.id.textLayout)
     TextInputLayout mTextLayout;
-    @Bind(R.id.editText2)
+    @BindView(R.id.editText2)
     EditText mEditText2;
-    @Bind(R.id.textLayout2)
+    @BindView(R.id.textLayout2)
     TextInputLayout mTextLayout2;
     private MyTextWatcher mTextWatcher;
 

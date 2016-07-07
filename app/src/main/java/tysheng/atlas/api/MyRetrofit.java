@@ -21,7 +21,7 @@ import tysheng.atlas.hupu.api.ForumApi;
 /**
  * Created by shengtianyang on 16/3/19.
  */
-public class RetrofitSingleton {
+public class MyRetrofit {
     private static WeatherApi weatherApi = null;
     private static Retrofit retrofit = null;
     private static ForumApi forumApi = null;

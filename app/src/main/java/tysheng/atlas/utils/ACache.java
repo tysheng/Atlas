@@ -704,7 +704,7 @@ public class ACache {
 	 * @author 杨福海（michael） www.yangfuhai.com
 	 * @version 1.0
 	 */
-	private static class Utils {
+	public static class Utils {
 
 		/**
 		 * 判断缓存的String数据是否到期
@@ -814,7 +814,7 @@ public class ACache {
 		/*
 		 * Bitmap → byte[]
 		 */
-		private static byte[] Bitmap2Bytes(Bitmap bm) {
+		public static byte[] Bitmap2Bytes(Bitmap bm) {
 			if (bm == null) {
 				return null;
 			}

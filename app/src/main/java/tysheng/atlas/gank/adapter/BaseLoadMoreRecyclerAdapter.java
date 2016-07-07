@@ -9,7 +9,7 @@ import android.widget.ProgressBar;
 import java.util.LinkedList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import tysheng.atlas.R;
 
@@ -26,7 +26,7 @@ public abstract class BaseLoadMoreRecyclerAdapter<T, VH extends RecyclerView.Vie
 
 
     public static class FooterViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.pb)
+        @BindView(R.id.pb)
         ProgressBar pb;
 
         public FooterViewHolder(View view) {

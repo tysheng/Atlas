@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'realm-android'
+apply plugin: 'com.neenbedankt.android-apt'
+
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
@@ -8,17 +11,20 @@ android {
         applicationId "tysheng.atlas"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 5
-        versionName "1.1.3"
+        versionCode 7
+        versionName "1.1.5"
     }
     buildTypes {
         release {
             minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     lintOptions {
         disable 'InvalidPackage'
+        disable "ResourceType"
+        checkReleaseBuilds false
     }
     packagingOptions {
         exclude 'META-INF/services/javax.annotation.processing.Processor'
@@ -39,20 +45,19 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:' + androidSupportVersion
     compile 'com.android.support:support-v4:' + androidSupportVersion
     compile 'com.android.support:cardview-v7:' + androidSupportVersion
-    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.jakewharton:butterknife:8.0.1'
+    apt 'com.jakewharton:butterknife-compiler:8.0.1'
     compile('com.github.afollestad.material-dialogs:commons:0.8.5.8@aar') {
         transitive = true
     }
-    compile files('libs/libammsdk.jar')
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1' // or 1.4-beta1
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1' // or 1.4-beta1
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2' // or 1.4-beta1
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2' // or 1.4-beta1
     compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'io.reactivex:rxjava:1.1.0'
-    compile 'com.squareup.retrofit2:retrofit:2.0.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0'
+    compile 'io.reactivex:rxjava:1.1.3'
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.github.chrisbanes:PhotoView:1.2.6'
 }

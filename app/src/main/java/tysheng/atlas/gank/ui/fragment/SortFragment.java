@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 import tysheng.atlas.R;
 import tysheng.atlas.base.BaseFragment;
@@ -18,7 +18,7 @@ import tysheng.atlas.utils.ACache;
  * Created by shengtianyang on 16/4/2.
  */
 public class SortFragment extends BaseFragment {
-    @Bind(R.id.recyclerView)
+    @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     GankSortAdapter mAdapter;
     private GankViewPagerItem mItem;
@@ -26,7 +26,6 @@ public class SortFragment extends BaseFragment {
 
     @Override
     protected void setTitle() {
-
     }
 
     @Override

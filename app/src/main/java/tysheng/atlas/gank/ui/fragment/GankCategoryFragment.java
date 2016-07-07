@@ -10,19 +10,19 @@ import android.view.ViewTreeObserver;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import tysheng.atlas.R;
-import tysheng.atlas.api.RetrofitSingleton;
+import tysheng.atlas.api.MyRetrofit;
 import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseFragment;
 import tysheng.atlas.gank.adapter.EndlessRecyclerOnScrollListener;
 import tysheng.atlas.gank.adapter.GankCategoryAdapter;
 import tysheng.atlas.gank.api.GankApi;
 import tysheng.atlas.gank.bean.GankCategory;
-import tysheng.atlas.gank.bean.ResultsEntity;
+import tysheng.atlas.gank.bean.GankResult;
 import tysheng.atlas.gank.ui.PictureActivity;
 import tysheng.atlas.gank.ui.WebviewActivity;
 import tysheng.atlas.gank.view.SectionsDecoration;
@@ -33,15 +33,15 @@ import tysheng.atlas.utils.ACache;
  * Created by shengtianyang on 16/3/26.
  */
 public class GankCategoryFragment extends BaseFragment {
-    @Bind(R.id.rv)
+    @BindView(R.id.rv)
     RecyclerView rv;
-    @Bind(R.id.swipe)
+    @BindView(R.id.swipe)
     SwipeRefreshLayout swipe;
 
     GankCategoryAdapter mAdapter;
 
     GankCategory mGankCategory;
-    private List<ResultsEntity> data;
+    private List<GankResult> data;
     int page = 1;
     ACache mCache;
     String typeName;
@@ -121,7 +121,7 @@ public class GankCategoryFragment extends BaseFragment {
     }
 
     private void getData(String category, final int page) {
-        mSubscription.add(RetrofitSingleton.getGankApi(MyApplication.getInstance(), GankApi.BASE_URL)
+        mSubscription.add(MyRetrofit.getGankApi(MyApplication.getInstance(), GankApi.BASE_URL)
                 .getCategory(category, 10, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

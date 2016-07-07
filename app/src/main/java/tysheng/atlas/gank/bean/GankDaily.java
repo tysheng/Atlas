@@ -23,13 +23,13 @@ public class GankDaily implements Serializable {
 
 
     public static class DailyEntity implements Serializable {
-        @SerializedName("Android") public List<ResultsEntity> androidList=new ArrayList<>();
-        @SerializedName("休息视频") public List<ResultsEntity> 休息视频List;
-        @SerializedName("iOS") public List<ResultsEntity> iOSList;
-        @SerializedName("福利") public List<ResultsEntity> 妹纸List;
-        @SerializedName("拓展资源") public List<ResultsEntity> 拓展资源List;
-        @SerializedName("瞎推荐") public List<ResultsEntity> 瞎推荐List;
-        @SerializedName("App") public List<ResultsEntity> appList;
-        @SerializedName("前端") public List<ResultsEntity> 前端List;
+        @SerializedName("Android") public List<GankResult> androidList=new ArrayList<>();
+        @SerializedName("休息视频") public List<GankResult> 休息视频List;
+        @SerializedName("iOS") public List<GankResult> iOSList;
+        @SerializedName("福利") public List<GankResult> 妹纸List;
+        @SerializedName("拓展资源") public List<GankResult> 拓展资源List;
+        @SerializedName("瞎推荐") public List<GankResult> 瞎推荐List;
+        @SerializedName("App") public List<GankResult> appList;
+        @SerializedName("前端") public List<GankResult> 前端List;
     }
 }

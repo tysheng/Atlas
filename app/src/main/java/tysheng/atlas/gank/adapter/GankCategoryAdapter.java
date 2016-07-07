@@ -12,11 +12,11 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import tysheng.atlas.R;
 import tysheng.atlas.gank.bean.GankDaily;
-import tysheng.atlas.gank.bean.ResultsEntity;
+import tysheng.atlas.gank.bean.GankResult;
 import tysheng.atlas.gank.utils.GankUtils;
 import tysheng.atlas.gank.view.SectionsDecoration;
 
@@ -28,12 +28,12 @@ public class GankCategoryAdapter
         implements SectionsDecoration.Adapter<GankCategoryAdapter.SectionHeaderView> {
 
 
-    private List<ResultsEntity> data;
+    private List<GankResult> data;
     private OnItemClickListener onItemClickListener;
     private Context context;
 
 
-    public GankCategoryAdapter(Context context, List<ResultsEntity> data) {
+    public GankCategoryAdapter(Context context, List<GankResult> data) {
         this.data = data;
         this.context = context;
     }
@@ -118,9 +118,9 @@ public class GankCategoryAdapter
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.who)
+        @BindView(R.id.who)
         TextView who;
-        @Bind(R.id.image)
+        @BindView(R.id.image)
         ImageView image;
 
         public MyViewHolder(View itemView) {
@@ -131,7 +131,7 @@ public class GankCategoryAdapter
     }
 
     static class SectionHeaderView extends RecyclerView.ViewHolder {
-        @Bind(R.id.tv)
+        @BindView(R.id.tv)
         TextView tv;
 
         public SectionHeaderView(View itemView) {

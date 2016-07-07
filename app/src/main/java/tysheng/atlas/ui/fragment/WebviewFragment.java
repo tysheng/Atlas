@@ -1,5 +1,6 @@
 package tysheng.atlas.ui.fragment;
 
+import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,7 +12,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import tysheng.atlas.R;
 import tysheng.atlas.base.BaseFragment;
 import tysheng.atlas.gank.utils.GankUtils;
@@ -20,31 +21,35 @@ import tysheng.atlas.gank.utils.GankUtils;
  * Created by shengtianyang on 16/2/1.
  */
 public class WebviewFragment extends BaseFragment {
-    @Bind(R.id.webview)
+    @BindView(R.id.webview)
     WebView webview;
-    @Bind(R.id.progress_bar)
+    @BindView(R.id.progress_bar)
     ProgressBar progressBar;
 
-    public WebviewFragment() {
-    }
+    public static final String URL = "URL";
+    public static final String TITLE="TITLE";
+    private String mUrl;
+    private String mTitle = "";
 
-    private String url;
-    private String title = "";
+    public static WebviewFragment newInstance(String url, String title) {
+        WebviewFragment fragment = new WebviewFragment();
+        Bundle args = new Bundle();
+        args.putString(URL, url);
+        args.putString(TITLE, title);
 
-    public WebviewFragment(String url) {
-        this.url = url;
-    }
-
-    public WebviewFragment(String url, String title) {
-        this.url = url;
-        this.title = title;
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     protected void setTitle() {
-        getActivity().setTitle(title);
+        getActivity().setTitle(mTitle);
     }
-
+    private void parseArguments() {
+        Bundle bundle = getArguments();
+        mUrl = bundle.getString(URL);
+        mTitle = bundle.getString(TITLE);
+    }
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_webview;
@@ -52,6 +57,7 @@ public class WebviewFragment extends BaseFragment {
 
     @Override
     protected void initData() {
+        parseArguments();
         setHasOptionsMenu(true);
         webview.getSettings().setJavaScriptEnabled(true);
         webview.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
@@ -90,7 +96,7 @@ public class WebviewFragment extends BaseFragment {
                 return false;
             }
         });
-        webview.loadUrl(url);
+        webview.loadUrl(mUrl);
     }
 
     @Override
@@ -103,7 +109,7 @@ public class WebviewFragment extends BaseFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_share:
-                GankUtils.share(frmContext, url, title);
+                GankUtils.share(frmContext, mUrl, mTitle);
                 return true;
             case R.id.action_back:
                 if (webview.canGoBack())
@@ -117,7 +123,7 @@ public class WebviewFragment extends BaseFragment {
                 webview.reload();
                 return true;
             case R.id.action_open:
-                GankUtils.openUrlByBrowser(frmContext, url);
+                GankUtils.openUrlByBrowser(frmContext, mUrl);
                 return true;
             default:
                 break;

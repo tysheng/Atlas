@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import tysheng.atlas.R;
 import tysheng.atlas.base.BaseFragment;
 import tysheng.atlas.bean.RWeatherBean;
@@ -24,27 +24,27 @@ import tysheng.atlas.mvp.retrofit.VPost;
  */
 public class WeatherFragment extends BaseFragment implements VPost {
 
-    @Bind(R.id.tv_aqi)
+    @BindView(R.id.tv_aqi)
     TextView tvAqi;
-    @Bind(R.id.tc_qlty)
+    @BindView(R.id.tc_qlty)
     TextView tcQlty;
-    @Bind(R.id.tv_city)
+    @BindView(R.id.tv_city)
     TextView tvCity;
-    @Bind(R.id.tv_brf)
+    @BindView(R.id.tv_brf)
     TextView tvBrf;
-    @Bind(R.id.tv_txt)
+    @BindView(R.id.tv_txt)
     TextView tvTxt;
-    @Bind(R.id.tv_tmp)
+    @BindView(R.id.tv_tmp)
     TextView tvTmp;
-    @Bind(R.id.tv_cond)
+    @BindView(R.id.tv_cond)
     TextView tvCond;
-    @Bind(R.id.tv_textaqi)
+    @BindView(R.id.tv_textaqi)
     TextView tv_textaqi;
-    @Bind(R.id.drawee_weather_city)
+    @BindView(R.id.drawee_weather_city)
     ImageView drawee_weather_city;
-    @Bind(R.id.et_search_city)
+    @BindView(R.id.et_search_city)
     EditText etSearchCity;
-    @Bind(R.id.ll_aqi)
+    @BindView(R.id.ll_aqi)
     LinearLayout ll_aqi;
     private String cityname;
     private String city_url;

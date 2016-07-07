@@ -2,6 +2,7 @@ package tysheng.atlas.ui;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -29,7 +30,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import tysheng.atlas.R;
 import tysheng.atlas.adapter.WeatherRVAdapter;
-import tysheng.atlas.api.RetrofitSingleton;
+import tysheng.atlas.api.MyRetrofit;
 import tysheng.atlas.api.WeatherApi;
 import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseActivity;
@@ -41,13 +42,15 @@ import tysheng.atlas.bean.RWeatherBean;
  * Created by shengtianyang on 16/2/29.
  */
 public class WeatherListActivity extends BaseActivity {
-    @Bind(R.id.rv_v2)
+    @BindView(R.id.rv_v2)
     RecyclerView recyclerView;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.fab)
+    @BindView(R.id.fab)
     FloatingActionButton fab;
-    MaterialDialog dialog;
+    @BindView(R.id.progress_bar)
+    ContentLoadingProgressBar mProgressBar;
+//    MaterialDialog dialog;
     WeatherRVAdapter adapter;
     int sum = 0;
     int count = 0;
@@ -71,7 +74,7 @@ public class WeatherListActivity extends BaseActivity {
             }
         });
         realmQuery();
-
+        mProgressBar.show();
         adapter = new WeatherRVAdapter(actContext, sum);
         adapter.setOnItemClickListener(onItemClickListener);
         recyclerView.setLayoutManager(new LinearLayoutManager(actContext));
@@ -105,12 +108,12 @@ public class WeatherListActivity extends BaseActivity {
     }
 
     private void firstGetData() {
-        MaterialDialog.Builder builder = new MaterialDialog.Builder(actContext)
-                .progress(true, 0)
-                .content(R.string.loading_chn)
-                .progressIndeterminateStyle(false);
-        dialog = builder.build();
-        dialog.show();
+//        MaterialDialog.Builder builder = new MaterialDialog.Builder(actContext)
+//                .progress(true, 0)
+//                .content(R.string.loading_chn)
+//                .progressIndeterminateStyle(false);
+//        dialog = builder.build();
+//        dialog.show();
         for (int i = 0; i < sum; i++) {
             getData(cities.get(i), NOT_ADD);
         }
@@ -170,7 +173,7 @@ public class WeatherListActivity extends BaseActivity {
 
     private void getData(final String cityName, final int type) {
         subscriber.add(
-                RetrofitSingleton.getWeatherApi(MyApplication.getInstance(), WeatherApi.BASE_URL)
+                MyRetrofit.getWeatherApi(MyApplication.getInstance(), WeatherApi.BASE_URL)
                         .getParams(cityName)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -225,7 +228,8 @@ public class WeatherListActivity extends BaseActivity {
                                                 adapter.addItem(i, map);
                                                 count++;
                                                 if (count >= sum) {
-                                                    dialog.dismiss();
+//                                                    dialog.dismiss();
+                                                    mProgressBar.hide();
                                                 }
                                             }
                                         }

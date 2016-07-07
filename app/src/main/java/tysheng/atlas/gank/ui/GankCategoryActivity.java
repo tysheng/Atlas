@@ -6,7 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 import tysheng.atlas.R;
 import tysheng.atlas.base.BaseActivity;
@@ -20,13 +20,13 @@ import tysheng.atlas.utils.RecyclerTransformAnimation;
  * Created by shengtianyang on 16/4/1.
  */
 public class GankCategoryActivity extends BaseActivity {
-    @Bind(R.id.tabLayout)
+    @BindView(R.id.tabLayout)
     TabLayout tabLayout;
-    @Bind(R.id.viewPager)
+    @BindView(R.id.viewPager)
     ViewPager viewPager;
     GankViewPagerItem mItem;
     ACache mCache;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
     public static final int REQUEST_CODE = 80;
     private GankViewPagerAdapter mAdapter;

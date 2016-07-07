@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import tysheng.atlas.R;
 import tysheng.atlas.gank.bean.GankCategory;
@@ -44,6 +44,9 @@ public class GankDailyAdapter extends RecyclerView.Adapter<GankDailyAdapter.MyVi
         mItem.results.clear();
         notifyDataSetChanged();
     }
+    public GankCategory getItem(){
+        return mItem;
+    }
 
     public String[] getYMD(int pos) {
         String str = mItem.results.get(pos).publishedAt.substring(0, 10);
@@ -69,7 +72,7 @@ public class GankDailyAdapter extends RecyclerView.Adapter<GankDailyAdapter.MyVi
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
         Glide.with(context)
                 .load(mItem.results.get(position).url)
                 .centerCrop()
@@ -79,13 +82,13 @@ public class GankDailyAdapter extends RecyclerView.Adapter<GankDailyAdapter.MyVi
             holder.image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.OnItemClick(v, position);
+                    onItemClickListener.OnItemClick(v, holder.getLayoutPosition());
                 }
             });
             holder.tvDate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.OnItemClick(v, position);
+                    onItemClickListener.OnItemClick(v, holder.getLayoutPosition());
                 }
             });
 
@@ -110,11 +113,10 @@ public class GankDailyAdapter extends RecyclerView.Adapter<GankDailyAdapter.MyVi
         return mItem == null ? 0 : mItem.results.size();
     }
 
-
-    static class MyViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.image)
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.image)
         ImageView image;
-        @Bind(R.id.tv_date)
+        @BindView(R.id.tv_date)
         TextView tvDate;
         View mView;
 
@@ -122,6 +124,7 @@ public class GankDailyAdapter extends RecyclerView.Adapter<GankDailyAdapter.MyVi
             super(itemView);
             mView = itemView;
             ButterKnife.bind(this, itemView);
+
         }
     }
 }

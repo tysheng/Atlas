@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import tysheng.atlas.R;
 import tysheng.atlas.hupu.bean.ForumsData;
@@ -68,9 +68,9 @@ mContext = context;    }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.name)
+        @BindView(R.id.name)
         TextView name;
-        @Bind(R.id.logo)
+        @BindView(R.id.logo)
         ImageView logo;
 
         public MyViewHolder(View itemView) {

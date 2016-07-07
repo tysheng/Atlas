@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import tysheng.atlas.R;
 import tysheng.atlas.bean.HeaderBean;
@@ -131,15 +131,15 @@ private Context mContext;
 
 
     static class VHItem extends RecyclerView.ViewHolder {
-        @Bind(R.id.drawee_reply)
+        @BindView(R.id.drawee_reply)
         ImageView draweeReply;
-        @Bind(R.id.tv_reply_author)
+        @BindView(R.id.tv_reply_author)
         TextView tvReplyAuthor;
-        @Bind(R.id.tv_reply_time)
+        @BindView(R.id.tv_reply_time)
         TextView tvReplyTime;
-        @Bind(R.id.tv_reply_content)
+        @BindView(R.id.tv_reply_content)
         TextView tvReplyContent;
-        @Bind(R.id.tv_reply_floor)
+        @BindView(R.id.tv_reply_floor)
         TextView tvReplyFloor;
         View mView;
         public VHItem(View itemView) {
@@ -151,17 +151,17 @@ private Context mContext;
     }
 
     static class VHHeader extends RecyclerView.ViewHolder {
-        @Bind(R.id.drawee_topic)
+        @BindView(R.id.drawee_topic)
         ImageView draweeTopic;
-        @Bind(R.id.tv_topic_author)
+        @BindView(R.id.tv_topic_author)
         TextView tvTopicAuthor;
-        @Bind(R.id.tv_topic_node)
+        @BindView(R.id.tv_topic_node)
         TextView tvTopicNode;
-        @Bind(R.id.tv_topic_time)
+        @BindView(R.id.tv_topic_time)
         TextView tvTopicTime;
-        @Bind(R.id.tv_topic_title)
+        @BindView(R.id.tv_topic_title)
         TextView tvTopicTitle;
-        @Bind(R.id.tv_topic_content)
+        @BindView(R.id.tv_topic_content)
         TextView tvTopicContent;
 
         public VHHeader(View itemView) {

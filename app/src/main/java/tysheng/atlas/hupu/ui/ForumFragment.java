@@ -20,12 +20,12 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import tysheng.atlas.R;
-import tysheng.atlas.api.RetrofitSingleton;
+import tysheng.atlas.api.MyRetrofit;
 import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseFragment;
 import tysheng.atlas.hupu.adapter.ThreadAdapter;
@@ -39,9 +39,9 @@ import tysheng.atlas.ui.fragment.WebviewFragment;
  * Created by shengtianyang on 16/3/24.
  */
 public class ForumFragment extends BaseFragment {
-    @Bind(R.id.rv)
+    @BindView(R.id.rv)
     RecyclerView rv;
-    @Bind(R.id.swipe)
+    @BindView(R.id.swipe)
     SwipeRefreshLayout swipe;
     Fragment forumFragment;
 
@@ -91,7 +91,7 @@ public class ForumFragment extends BaseFragment {
                 FragmentManager manager = getActivity().getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
                 forumFragment = manager.findFragmentByTag(ForumFragment.class.getName());
-                WebviewFragment webviewFragment = new WebviewFragment("http://bbs.hupu.com/"+threadData.data.get(position).tid+".html");
+                WebviewFragment webviewFragment = WebviewFragment.newInstance("http://bbs.hupu.com/"+threadData.data.get(position).tid+".html","");
                 transaction.hide(forumFragment)
                         .addToBackStack(null)
                         .setCustomAnimations(0, 0, R.anim.abc_fade_in, R.anim.abc_fade_out)
@@ -155,7 +155,7 @@ public class ForumFragment extends BaseFragment {
         params.put("type", "2");
 
         String sign = getRequestSign(params);
-        RetrofitSingleton.getForumApi(MyApplication.getInstance(), ForumApi.BASE_URL)
+        MyRetrofit.getForumApi(MyApplication.getInstance(), ForumApi.BASE_URL)
                 .getThreadsList(sign, params)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -192,7 +192,7 @@ public class ForumFragment extends BaseFragment {
         params.put("page", "1");
         params.put("client", getDeviceId());
 
-        RetrofitSingleton.getForumApi(MyApplication.getInstance(), ForumApi.BASE_URL_6)
+        MyRetrofit.getForumApi(MyApplication.getInstance(), ForumApi.BASE_URL_6)
                 .getThreadPostList(params)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -219,7 +219,7 @@ public class ForumFragment extends BaseFragment {
     private void getForum() {
         Map<String, String> params = getHttpRequestMap();
         String sign = getRequestSign(params);
-        RetrofitSingleton.getForumApi(MyApplication.getInstance(), ForumApi.BASE_URL)
+        MyRetrofit.getForumApi(MyApplication.getInstance(), ForumApi.BASE_URL)
                 .getForums(sign, params)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

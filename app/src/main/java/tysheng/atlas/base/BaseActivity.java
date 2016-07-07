@@ -18,6 +18,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import tysheng.atlas.utils.SPHelper;
 
 /**
@@ -26,7 +27,7 @@ import tysheng.atlas.utils.SPHelper;
 public abstract class BaseActivity extends AppCompatActivity {
     protected Context actContext;
     protected Toast toast;
-
+    protected Unbinder unbinder;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
         actContext = this;
-        ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(this);
         initData();
 
 
@@ -67,7 +68,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     /**

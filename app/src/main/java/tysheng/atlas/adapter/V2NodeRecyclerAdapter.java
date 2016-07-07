@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import tysheng.atlas.R;
 import tysheng.atlas.bean.V2NodesBean;
@@ -65,7 +65,7 @@ public class V2NodeRecyclerAdapter extends RecyclerView.Adapter<V2NodeRecyclerAd
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.tv_node_title)
+        @BindView(R.id.tv_node_title)
         TextView tvNodeTitle;
 
 

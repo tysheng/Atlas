@@ -7,7 +7,7 @@ import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import tysheng.atlas.R;
 import tysheng.atlas.base.BaseActivity;
 import tysheng.atlas.gank.widget.LoveVideoView;
@@ -16,7 +16,7 @@ import tysheng.atlas.gank.widget.LoveVideoView;
  * Created by shengtianyang on 16/4/8.
  */
 public class WebVideoActivity extends BaseActivity {
-    @Bind(R.id.video)
+    @BindView(R.id.video)
     LoveVideoView webVideo;
     String url;
 public static final String URL="url";

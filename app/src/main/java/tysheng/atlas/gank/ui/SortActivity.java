@@ -3,7 +3,7 @@ package tysheng.atlas.gank.ui;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import tysheng.atlas.R;
 import tysheng.atlas.base.BaseActivity;
 import tysheng.atlas.gank.ui.fragment.SortFragment;
@@ -12,7 +12,7 @@ import tysheng.atlas.gank.ui.fragment.SortFragment;
  * Created by shengtianyang on 16/4/6.
  */
 public class SortActivity extends BaseActivity {
-    @Bind(R.id.tl_setting)
+    @BindView(R.id.tl_setting)
     Toolbar toolbar;
 
 

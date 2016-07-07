@@ -16,13 +16,13 @@ import android.view.ViewTreeObserver;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import tysheng.atlas.R;
 import tysheng.atlas.adapter.V2HotAdapter;
-import tysheng.atlas.api.RetrofitSingleton;
+import tysheng.atlas.api.MyRetrofit;
 import tysheng.atlas.api.V2exApi;
 import tysheng.atlas.base.BaseFragment;
 import tysheng.atlas.bean.V2HotBean;
@@ -33,9 +33,9 @@ import tysheng.atlas.bean.V2HotBean;
 public class V2HotFragment extends BaseFragment {
     public static final String HOT = "hot";
     public static final String LATEST = "latest";
-    @Bind(R.id.rv_v2)
+    @BindView(R.id.rv_v2)
     RecyclerView rvV2;
-    @Bind(R.id.swipe)
+    @BindView(R.id.swipe)
     SwipeRefreshLayout swipe;
     private List<V2HotBean> data;
     Fragment fragment;
@@ -58,7 +58,7 @@ public class V2HotFragment extends BaseFragment {
     }
     private void getHotThread(String mUrl) {
         mSubscription.add(
-                RetrofitSingleton.getV2exApi(frmContext, V2exApi.BASE_URL)
+                MyRetrofit.getV2exApi(frmContext, V2exApi.BASE_URL)
                         .getV2Hot(mUrl)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())

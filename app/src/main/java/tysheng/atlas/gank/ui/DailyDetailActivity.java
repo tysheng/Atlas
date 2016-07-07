@@ -1,5 +1,6 @@
 package tysheng.atlas.gank.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,13 +10,13 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import tysheng.atlas.R;
-import tysheng.atlas.api.RetrofitSingleton;
+import tysheng.atlas.api.MyRetrofit;
 import tysheng.atlas.app.MyApplication;
 import tysheng.atlas.base.BaseActivity;
 import tysheng.atlas.gank.adapter.GankDailyDetailAdapter;
@@ -27,11 +28,11 @@ import tysheng.atlas.gank.view.SectionsDecoration;
  * Created by shengtianyang on 16/4/7.
  */
 public class DailyDetailActivity extends BaseActivity {
-    @Bind(R.id.iv_head)
+    @BindView(R.id.iv_head)
     ImageView ivHead;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.rv_gank)
+    @BindView(R.id.rv_gank)
     RecyclerView recyclerView;
     public static final String DATE = "date";
     public static final String URL = "url";
@@ -77,7 +78,7 @@ public class DailyDetailActivity extends BaseActivity {
     }
 
     private void getData(String[] date) {
-        RetrofitSingleton.getGankApi(MyApplication.getInstance(), GankApi.BASE_URL)
+        MyRetrofit.getGankApi(MyApplication.getInstance(), GankApi.BASE_URL)
                 .getDaily(date[0], date[1], date[2])
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -105,7 +106,12 @@ public class DailyDetailActivity extends BaseActivity {
     public int getLayoutId() {
         return R.layout.activity_gank_daily_detail;
     }
-
+    public static Intent newIntent(Context context, String[] date, String url) {
+        Intent intent = new Intent(context, DailyDetailActivity.class);
+        intent.putExtra(DATE, date);
+        intent.putExtra(URL, url);
+        return intent;
+    }
 
     @OnClick(R.id.fab)
     public void onClick() {

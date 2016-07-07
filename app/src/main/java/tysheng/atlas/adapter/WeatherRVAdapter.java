@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import tysheng.atlas.R;
 
@@ -110,23 +110,23 @@ public class WeatherRVAdapter extends RecyclerView.Adapter<WeatherRVAdapter.MyVi
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.tv_city)
+        @BindView(R.id.tv_city)
         TextView tvCity;
-        @Bind(R.id.tv_aqi)
+        @BindView(R.id.tv_aqi)
         TextView tvAqi;
-        @Bind(R.id.tv_textaqi)
+        @BindView(R.id.tv_textaqi)
         TextView tvTextaqi;
-        @Bind(R.id.tc_qlty)
+        @BindView(R.id.tc_qlty)
         TextView tcQlty;
-        @Bind(R.id.ll_aqi)
+        @BindView(R.id.ll_aqi)
         LinearLayout llAqi;
-        @Bind(R.id.tv_brf)
+        @BindView(R.id.tv_brf)
         TextView tvBrf;
-        @Bind(R.id.tv_txt)
+        @BindView(R.id.tv_txt)
         TextView tvTxt;
-        @Bind(R.id.tv_tmp)
+        @BindView(R.id.tv_tmp)
         TextView tvTmp;
-        @Bind(R.id.tv_cond)
+        @BindView(R.id.tv_cond)
         TextView tvCond;
 
 

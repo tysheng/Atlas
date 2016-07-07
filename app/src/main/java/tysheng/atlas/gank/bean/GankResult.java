@@ -7,7 +7,7 @@ import tysheng.atlas.gank.utils.GankUtils;
 /**
  * Created by shengtianyang on 16/4/7.
  */
-public class ResultsEntity implements Serializable{
+public class GankResult implements Serializable{
     public String _id;
     public String _ns;
     public String createdAt;

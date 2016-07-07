@@ -9,11 +9,11 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import tysheng.atlas.R;
 import tysheng.atlas.gank.bean.GankDaily;
-import tysheng.atlas.gank.bean.ResultsEntity;
+import tysheng.atlas.gank.bean.GankResult;
 import tysheng.atlas.gank.utils.GankUtils;
 import tysheng.atlas.gank.view.SectionsDecoration;
 
@@ -25,12 +25,12 @@ public class GankDailyDetailAdapter
         implements SectionsDecoration.Adapter<GankDailyDetailAdapter.SectionHeaderView> {
 
 
-    private List<ResultsEntity> data;
+    private List<GankResult> data;
     private OnItemClickListener onItemClickListener;
     private Context context;
 
 
-    public GankDailyDetailAdapter(Context context, List<ResultsEntity> data) {
+    public GankDailyDetailAdapter(Context context, List<GankResult> data) {
         this.data = data;
         this.context = context;
     }
@@ -46,7 +46,7 @@ public class GankDailyDetailAdapter
         notifyDataSetChanged();
     }
 
-    public ResultsEntity getDataItem(int pos) {
+    public GankResult getDataItem(int pos) {
         return data.get(pos);
     }
 
@@ -116,7 +116,7 @@ public class GankDailyDetailAdapter
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.who)
+        @BindView(R.id.who)
         TextView who;
 
 
@@ -128,7 +128,7 @@ public class GankDailyDetailAdapter
     }
 
     static class SectionHeaderView extends RecyclerView.ViewHolder {
-        @Bind(R.id.tv)
+        @BindView(R.id.tv)
         TextView tv;
 
         public SectionHeaderView(View itemView) {

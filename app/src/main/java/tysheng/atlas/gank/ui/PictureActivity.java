@@ -26,7 +26,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -45,11 +45,11 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  * Created by shengtianyang on 16/3/27.
  */
 public class PictureActivity extends BaseActivity implements PhotoViewAttacher.OnViewTapListener, View.OnLongClickListener {
-    @Bind(R.id.picture)
+    @BindView(R.id.picture)
     ImageView picture;
     public static final String EXTRA_IMAGE_URL = "image_url";
     public static final String EXTRA_IMAGE_TITLE = "image_title";
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
     private String mImageUrl;
     private String mImageTitle;

@@ -5,8 +5,6 @@ import android.content.Context;
 
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
-import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -15,7 +13,7 @@ public class MyApplication extends Application {
     //    SQLiteDatabase db;
 //    DaoMaster daoMaster;
 //    public static DaoSession daoSession;
-    private static IWXAPI api;
+//    private static IWXAPI api;
     private static MyApplication instance;
     private RefWatcher refWatcher;
 
@@ -26,8 +24,10 @@ public class MyApplication extends Application {
         instance = this;
 
 //        setupDatabase();
-        regTowX();
+//        regTowX();
         refWatcher = LeakCanary.install(this);
+        //release
+//        refWatcher = installLeakCanary();
 
         Realm.setDefaultConfiguration(new RealmConfiguration.Builder(this).build());
     }
@@ -35,6 +35,9 @@ public class MyApplication extends Application {
     public static RefWatcher getRefWatcher(Context context) {
         MyApplication application = (MyApplication) context.getApplicationContext();
         return application.refWatcher;
+    }
+    protected RefWatcher installLeakCanary() {
+        return RefWatcher.DISABLED;
     }
 //    public void setupDatabase() {
 //        // 通过 DaoMaster 的内部类 DevOpenHelper，你可以得到一个便利的 SQLiteOpenHelper 对象。
@@ -56,13 +59,13 @@ public class MyApplication extends Application {
         return instance;
     }
 
-    public static IWXAPI getWxApi() {
-        return api;
-    }
-
-    private void regTowX() {
-        api = WXAPIFactory.createWXAPI(this, Constant.WX_APP_ID, true);
-        api.registerApp(Constant.WX_APP_ID);
-    }
+//    public static IWXAPI getWxApi() {
+//        return api;
+//    }
+//
+//    private void regTowX() {
+//        api = WXAPIFactory.createWXAPI(this, Constant.WX_APP_ID, true);
+//        api.registerApp(Constant.WX_APP_ID);
+//    }
 
 }

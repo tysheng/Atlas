@@ -4,7 +4,7 @@ import android.graphics.Color;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import tysheng.atlas.R;
 import tysheng.atlas.base.BaseActivity;
 import tysheng.atlas.gank.ui.fragment.GankDailyFragment;
@@ -13,7 +13,7 @@ import tysheng.atlas.gank.ui.fragment.GankDailyFragment;
  * Created by shengtianyang on 16/4/1.
  */
 public class GankDailyActivity extends BaseActivity {
-    @Bind(R.id.tl_setting)
+    @BindView(R.id.tl_setting)
     Toolbar toolbar;
 
     @Override

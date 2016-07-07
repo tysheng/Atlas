@@ -20,7 +20,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import tysheng.atlas.R;
 import tysheng.atlas.app.Constant;
 import tysheng.atlas.base.BaseActivity;
@@ -32,12 +32,12 @@ import tysheng.atlas.utils.SPHelper;
 public class SettingActivity extends BaseActivity implements ColorChooserDialog.ColorCallback, FragmentCallback {
 
     private static final int RESULT_LOAD_IMAGE = 100;
-    @Bind(R.id.cl)
+    @BindView(R.id.cl)
     CoordinatorLayout cl;
 
     private int primaryPreselect;
 
-    @Bind(R.id.tl_setting)
+    @BindView(R.id.tl_setting)
     Toolbar tbSetting;
     SPHelper mSPHelper;
     ACache mCache;
@@ -59,7 +59,7 @@ public class SettingActivity extends BaseActivity implements ColorChooserDialog.
                                     .into(new SimpleTarget<Bitmap>(75, 75) {
                                         @Override
                                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                                            mCache.put(Constant.AVATAR_BITMAP, resource, ACache.TIME_DAY * 30);
+                                            mCache.put(Constant.AVATAR_BITMAP, ACache.Utils.Bitmap2Bytes(resource), ACache.TIME_DAY * 30);
                                         }
                                     });
 

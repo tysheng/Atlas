@@ -28,6 +28,6 @@ public class GankCategory implements Serializable {
      * who : 花开堪折枝
      */
 
-    public List<ResultsEntity> results = new ArrayList<>();
+    public List<GankResult> results = new ArrayList<>();
 
 }

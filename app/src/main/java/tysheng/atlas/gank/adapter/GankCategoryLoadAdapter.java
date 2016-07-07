@@ -10,24 +10,24 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import tysheng.atlas.R;
-import tysheng.atlas.gank.bean.ResultsEntity;
+import tysheng.atlas.gank.bean.GankResult;
 import tysheng.atlas.gank.view.SectionsDecoration;
 
 /**
  * Created by shengtianyang on 16/1/28.
  */
 public class GankCategoryLoadAdapter
-        extends BaseLoadMoreRecyclerAdapter<ResultsEntity, GankCategoryLoadAdapter.MyViewHolder>
+        extends BaseLoadMoreRecyclerAdapter<GankResult, GankCategoryLoadAdapter.MyViewHolder>
         implements SectionsDecoration.Adapter<GankCategoryLoadAdapter.SectionHeaderView> {
 
 
     private OnItemClickListener onItemClickListener;
     Context context;
 
-    public GankCategoryLoadAdapter(Context context, List<ResultsEntity> data) {
+    public GankCategoryLoadAdapter(Context context, List<GankResult> data) {
         appendToList(data);
         this.context = context;
     }
@@ -95,9 +95,9 @@ public class GankCategoryLoadAdapter
     static class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView type;
-        @Bind(R.id.who)
+        @BindView(R.id.who)
         TextView who;
-        @Bind(R.id.image)
+        @BindView(R.id.image)
         ImageView image;
 
         public MyViewHolder(View itemView) {
@@ -108,7 +108,7 @@ public class GankCategoryLoadAdapter
     }
 
     static class SectionHeaderView extends RecyclerView.ViewHolder {
-        @Bind(R.id.tv)
+        @BindView(R.id.tv)
         TextView tv;
 
         public SectionHeaderView(View itemView) {

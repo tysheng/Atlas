@@ -5,7 +5,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import tysheng.atlas.R;
 import tysheng.atlas.base.BaseActivity;
 import tysheng.atlas.ui.fragment.WebviewFragment;
@@ -18,9 +18,9 @@ public class WebviewActivity extends BaseActivity {
     public static final String TITLE = "title";
     String url;
     String title;
-    @Bind(R.id.tl_setting)
+    @BindView(R.id.tl_setting)
     Toolbar toolbar;
-    @Bind(R.id.cl)
+    @BindView(R.id.cl)
     CoordinatorLayout cl;
 
     @Override
@@ -37,7 +37,7 @@ public class WebviewActivity extends BaseActivity {
         Intent intent = getIntent();
         url = intent.getStringExtra(WebviewActivity.URL);
         title = intent.getStringExtra(WebviewActivity.TITLE);
-        jumpFragment(null, new WebviewFragment(url,title), R.id.fl, "");
+        jumpFragment(null, WebviewFragment.newInstance(url,title), R.id.fl, "");
 
 
     }

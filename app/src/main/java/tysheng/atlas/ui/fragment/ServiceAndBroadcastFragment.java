@@ -11,7 +11,7 @@ import android.os.IBinder;
 import android.view.View;
 import android.widget.Button;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 import tysheng.atlas.R;
 import tysheng.atlas.base.BaseFragment;
@@ -24,7 +24,7 @@ import tysheng.atlas.service.MyService;
 public class ServiceAndBroadcastFragment extends BaseFragment {
 
     MyService.MyBinder mBinder;
-    @Bind(R.id.bind)
+    @BindView(R.id.bind)
     Button mBind;
 
     Intent intent;

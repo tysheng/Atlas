@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.squareup.leakcanary.RefWatcher;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import rx.subscriptions.CompositeSubscription;
 import tysheng.atlas.app.MyApplication;
 
@@ -29,7 +30,7 @@ public abstract class BaseFragment extends Fragment{
     protected Context frmContext;
     protected Toast toast;
     protected CompositeSubscription mSubscription;
-
+    protected Unbinder unbinder;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -44,7 +45,7 @@ public abstract class BaseFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(getLayoutId(), container, false);
-        ButterKnife.bind(this, rootView);
+        unbinder=ButterKnife.bind(this, rootView);
         mSubscription = new CompositeSubscription();
 
         initData();
@@ -94,7 +95,7 @@ public abstract class BaseFragment extends Fragment{
     public void onDestroyView() {
         super.onDestroyView();
         mSubscription.clear();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
     protected abstract int getLayoutId();
     protected abstract void initData();

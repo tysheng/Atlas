@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import tysheng.atlas.R;
 import tysheng.atlas.bean.V2HotBean;
@@ -80,17 +80,17 @@ public class V2HotAdapter extends RecyclerView.Adapter<V2HotAdapter.MyViewHolder
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.tv_title)
+        @BindView(R.id.tv_title)
         TextView tvTitle;
-        @Bind(R.id.drawee_portrait)
+        @BindView(R.id.drawee_portrait)
         ImageView draweePortrait;
-        @Bind(R.id.tv_time)
+        @BindView(R.id.tv_time)
         TextView tvTime;
-        @Bind(R.id.tv_author)
+        @BindView(R.id.tv_author)
         TextView tvAuthor;
-        @Bind(R.id.tv_node)
+        @BindView(R.id.tv_node)
         TextView tvNode;
-        @Bind(R.id.tv_replies)
+        @BindView(R.id.tv_replies)
         TextView tvReplies;
 
         public MyViewHolder(View itemView) {
