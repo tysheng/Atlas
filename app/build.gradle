@@ -60,4 +60,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.github.chrisbanes:PhotoView:1.2.6'
+
+    compile 'com.roughike:bottom-bar:1.4.0'
+
 }

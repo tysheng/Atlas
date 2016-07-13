@@ -91,6 +91,12 @@
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name=".ui.BottomBarActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait">
+
+        </activity>
         <!--<activity-->
             <!--android:configChanges="orientation"-->
             <!--android:name=".wxapi.WXEntryActivity"-->

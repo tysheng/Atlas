@@ -200,7 +200,7 @@ public class WeatherListActivity extends BaseActivity {
 
                             @Override
                             public void onError(Throwable e) {
-
+                                mProgressBar.hide();
                             }
 
                             @Override
@@ -229,7 +229,7 @@ public class WeatherListActivity extends BaseActivity {
                                                 count++;
                                                 if (count >= sum) {
 //                                                    dialog.dismiss();
-                                                    mProgressBar.hide();
+
                                                 }
                                             }
                                         }
@@ -237,7 +237,7 @@ public class WeatherListActivity extends BaseActivity {
                                 } else {
                                     showSnackbar(toolbar, "国外城市暂不提供:(");
                                 }
-
+                                mProgressBar.hide();
                             }
                         })
         );
@@ -247,6 +247,7 @@ public class WeatherListActivity extends BaseActivity {
     protected void onStop() {
         super.onStop();
         subscriber.unsubscribe();
+        mProgressBar.onDetachedFromWindow();
     }
 
 

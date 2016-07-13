@@ -35,7 +35,7 @@ public class GankDailyFragment extends BaseFragment {
     @BindView(R.id.fab)
     FloatingActionButton fab;
     ACache mCache;
-    GankCategory gankCategory,gank10;
+    GankCategory gankCategory, gank10;
     @BindView(R.id.cl)
     CoordinatorLayout cl;
     int page = 1;
@@ -122,7 +122,7 @@ public class GankDailyFragment extends BaseFragment {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    if (!fab.isShown())
+                    if (!fab.isShown() && fab != null)
                         fab.show();
                 }
             }
@@ -156,7 +156,7 @@ public class GankDailyFragment extends BaseFragment {
                             } else {
                                 mAdapter.add(bean);
                             }
-                            gank10=bean;
+                            gank10 = bean;
                         } else
                             showSnackbar(cl, "获取出错...");
 
@@ -183,7 +183,7 @@ public class GankDailyFragment extends BaseFragment {
                     Intent intent = GalleryActivity.newIntent(frmContext, mAdapter.getItem(), position);
                     startActivity(intent);
                 } else if (view.getId() == R.id.tv_date) {
-                    Intent intent = DailyDetailActivity.newIntent(frmContext,mAdapter.getYMD(position),mAdapter.getUrl(position));
+                    Intent intent = DailyDetailActivity.newIntent(frmContext, mAdapter.getYMD(position), mAdapter.getUrl(position));
                     startActivity(intent);
                 }
             }
