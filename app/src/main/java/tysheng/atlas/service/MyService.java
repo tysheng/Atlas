@@ -28,6 +28,7 @@ public class MyService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         System.out.println("MyService onStartCommand()：");
+
         return super.onStartCommand(intent, flags, startId);
     }
 

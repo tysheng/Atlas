@@ -42,7 +42,7 @@ private Context mContext;
     }
 
 //    public interface OnItemClickListener {
-//        void onClickListener(View view, int position);
+//        void onClick(View view, int position);
 //    }
 //
 //    public void setOnItemClickListener(OnItemClickListener listener) {
@@ -108,7 +108,7 @@ private Context mContext;
 //            holder.itemView.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
-//                    onItemClickListener.onClickListener(v, holder.getLayoutPosition());
+//                    onItemClickListener.onClick(v, holder.getLayoutPosition());
 //                }
 //            });
 //        }

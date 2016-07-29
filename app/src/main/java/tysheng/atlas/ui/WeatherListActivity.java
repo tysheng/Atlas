@@ -50,7 +50,7 @@ public class WeatherListActivity extends BaseActivity {
     FloatingActionButton fab;
     @BindView(R.id.progress_bar)
     ContentLoadingProgressBar mProgressBar;
-//    MaterialDialog dialog;
+    //    MaterialDialog dialog;
     WeatherRVAdapter adapter;
     int sum = 0;
     int count = 0;

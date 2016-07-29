@@ -91,7 +91,7 @@ public class WeatherTabActivity extends BaseActivity {
         ViewCompat.setElevation(tabLayout, getResources().getDimension(R.dimen.appbar_elevation));
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setupWithViewPager(viewPager);
-
+startActivity();
     }
 
     @Override

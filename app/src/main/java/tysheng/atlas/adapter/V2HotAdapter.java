@@ -24,7 +24,6 @@ import tysheng.atlas.utils.TimeStamp;
 public class V2HotAdapter extends RecyclerView.Adapter<V2HotAdapter.MyViewHolder> {
 
 
-
     private LayoutInflater layoutInflater;
     private List<V2HotBean> data;
     private OnItemClickListener onItemClickListener;
@@ -33,12 +32,12 @@ public class V2HotAdapter extends RecyclerView.Adapter<V2HotAdapter.MyViewHolder
 
     public V2HotAdapter(Context context, List<V2HotBean> data) {
         this.data = data;
-        this.layoutInflater = layoutInflater.from(context);
+        this.layoutInflater = LayoutInflater.from(context);
         mContext = context;
     }
 
     public interface OnItemClickListener {
-        void onClickListener(View view, int position);
+        void onClick(View view, int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -48,8 +47,7 @@ public class V2HotAdapter extends RecyclerView.Adapter<V2HotAdapter.MyViewHolder
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = layoutInflater.inflate(R.layout.item_v2hot, parent, false);
-        MyViewHolder viewHolder = new MyViewHolder(view);
-        return viewHolder;
+        return new MyViewHolder(view);
     }
 
     @Override
@@ -57,7 +55,7 @@ public class V2HotAdapter extends RecyclerView.Adapter<V2HotAdapter.MyViewHolder
         holder.tvTitle.setText(data.get(position).getTitle());
         holder.tvNode.setText(data.get(position).getNode().getTitle());
         holder.tvAuthor.setText(data.get(position).getMember().getUsername());
-        holder.tvReplies.setText(data.get(position).getReplies()+"");
+        holder.tvReplies.setText(data.get(position).getReplies() + "");
         holder.tvTime.setText(TimeStamp.getFinalTimeDiffrence(data.get(position).getLast_modified()));
         Glide.with(mContext)
                 .load("http:" + data.get(position).getMember().getAvatar_normal())
@@ -67,7 +65,7 @@ public class V2HotAdapter extends RecyclerView.Adapter<V2HotAdapter.MyViewHolder
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onClickListener(v, holder.getLayoutPosition());
+                    onItemClickListener.onClick(v, holder.getLayoutPosition());
                 }
             });
         }

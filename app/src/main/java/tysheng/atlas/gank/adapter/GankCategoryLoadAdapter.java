@@ -85,7 +85,7 @@ public class GankCategoryLoadAdapter
 //            mHolder.itemView.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
-//                    onItemClickListener.onClickListener(v, mHolder.getLayoutPosition());
+//                    onItemClickListener.onClick(v, mHolder.getLayoutPosition());
 //                }
 //            });
 //        }

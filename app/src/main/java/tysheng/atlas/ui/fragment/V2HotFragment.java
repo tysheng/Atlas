@@ -98,7 +98,7 @@ public class V2HotFragment extends BaseFragment {
         mAdapter = new V2HotAdapter(frmContext, data);
         mAdapter.setOnItemClickListener(new V2HotAdapter.OnItemClickListener() {
             @Override
-            public void onClickListener(View view, int position) {
+            public void onClick(View view, int position) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(V2ThreadFragment.TAG, data.get(position));
                 V2ThreadFragment v2ThreadFragment = V2ThreadFragment.newInstance(data.get(position).getId());

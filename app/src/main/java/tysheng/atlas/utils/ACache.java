@@ -485,7 +485,7 @@ public class ACache {
 		if (getAsBinary(key) == null) {
 			return null;
 		}
-		return Utils.Bytes2Bimap(getAsBinary(key));
+		return Utils.Bytes2Bitmap(getAsBinary(key));
 	}
 
 	// =======================================
@@ -527,7 +527,7 @@ public class ACache {
 		if (getAsBinary(key) == null) {
 			return null;
 		}
-		return Utils.bitmap2Drawable(Utils.Bytes2Bimap(getAsBinary(key)));
+		return Utils.bitmap2Drawable(Utils.Bytes2Bitmap(getAsBinary(key)));
 	}
 
 	/**
@@ -826,7 +826,7 @@ public class ACache {
 		/*
 		 * byte[] → Bitmap
 		 */
-		private static Bitmap Bytes2Bimap(byte[] b) {
+		private static Bitmap Bytes2Bitmap(byte[] b) {
 			if (b.length == 0) {
 				return null;
 			}
